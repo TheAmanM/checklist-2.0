@@ -1,0 +1,180 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.moo.firebase_todo_second"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="16"
+9        android:targetSdkVersion="28" />
+10    <!--
+11         Flutter needs it to communicate with the running application
+12         to allow setting breakpoints, to provide hot reload, etc.
+13    -->
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:5-67
+14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:22-64
+15    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+16    <!-- <uses-sdk android:minSdkVersion="14" /> -->
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:22-76
+18
+19    <application
+19-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:9:5-47:19
+20        android:name="io.flutter.app.FlutterApplication"
+20-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:10:9-57
+21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+21-->[androidx.core:core:1.1.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\03de50801950aab64f0548832a05435c\core-1.1.0\AndroidManifest.xml:24:18-86
+22        android:debuggable="true"
+23        android:icon="@mipmap/ic_launcher"
+23-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:12:9-43
+24        android:label="Checklist 2.0" >
+24-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:11:9-38
+25        <activity
+25-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:13:9-41:20
+26            android:name="com.example.firebase_todo_second.MainActivity"
+26-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:14:13-41
+27            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+27-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:17:13-163
+28            android:hardwareAccelerated="true"
+28-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:18:13-47
+29            android:launchMode="singleTop"
+29-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:15:13-43
+30            android:theme="@style/LaunchTheme"
+30-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:16:13-47
+31            android:windowSoftInputMode="adjustResize" >
+31-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:19:13-55
+32
+33            <!--
+34                 Specifies an Android theme to apply to this Activity as soon as
+35                 the Android process has started. This theme is visible to the user
+36                 while the Flutter UI initializes. After that, this theme continues
+37                 to determine the Window background behind the Flutter UI.
+38            -->
+39            <meta-data
+39-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:24:13-27:17
+40                android:name="io.flutter.embedding.android.NormalTheme"
+40-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:25:15-70
+41                android:resource="@style/NormalTheme" />
+41-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:26:15-52
+42            <!--
+43                 Displays an Android View that continues showing the launch screen
+44                 Drawable until Flutter paints its first frame, then this splash
+45                 screen fades out. A splash screen is useful to avoid any visual
+46                 gap between the end of Android's launch screen and the painting of
+47                 Flutter's first frame.
+48            -->
+49            <meta-data
+49-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:33:13-36:17
+50                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+50-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:34:15-79
+51                android:resource="@drawable/launch_background" />
+51-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:35:15-61
+52
+53            <intent-filter>
+53-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:37:13-40:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:38:17-68
+54-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:38:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:39:17-76
+56-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:39:27-74
+57            </intent-filter>
+58        </activity>
+59        <!--
+60             Don't delete the meta-data below.
+61             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+62        -->
+63        <meta-data
+63-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:9-46:33
+64            android:name="flutterEmbedding"
+64-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:45:13-44
+65            android:value="2" />
+65-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:46:13-30
+66
+67        <service
+67-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+68            android:name="com.google.firebase.components.ComponentDiscoveryService"
+68-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
+69            android:directBootAware="true"
+69-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+70            android:exported="false" >
+70-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:35:13-37
+71            <meta-data
+71-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+72                android:name="com.google.firebase.components:io.flutter.plugins.firebaseauth.FlutterFirebaseAppRegistrar"
+72-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-122
+73                android:value="com.google.firebase.components.ComponentRegistrar" />
+73-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+74            <meta-data
+74-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+75                android:name="com.google.firebase.components:io.flutter.plugins.firebase.cloudfirestore.FlutterFirebaseAppRegistrar"
+75-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-133
+76                android:value="com.google.firebase.components.ComponentRegistrar" />
+76-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+77            <meta-data
+77-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+78                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseAppRegistrar"
+78-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-123
+79                android:value="com.google.firebase.components.ComponentRegistrar" />
+79-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+80            <meta-data
+80-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:36:13-38:85
+81                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+81-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:37:17-109
+82                android:value="com.google.firebase.components.ComponentRegistrar" />
+82-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:38:17-82
+83            <meta-data
+83-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
+84                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+84-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
+85                android:value="com.google.firebase.components.ComponentRegistrar" />
+85-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
+86        </service>
+87
+88        <activity
+88-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:24:9-31:50
+89            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+89-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:25:13-85
+90            android:excludeFromRecents="true"
+90-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:26:13-46
+91            android:exported="true"
+91-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:27:13-36
+92            android:launchMode="singleTask"
+92-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:28:13-44
+93            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
+93-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:29:13-102
+94            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+94-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:30:13-72
+95
+96        <provider
+96-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+97            android:name="com.google.firebase.provider.FirebaseInitProvider"
+97-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+98            android:authorities="com.moo.firebase_todo_second.firebaseinitprovider"
+98-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+99            android:exported="false"
+99-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+100            android:initOrder="100" />
+100-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+101
+102        <activity
+102-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+103            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+103-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+104            android:exported="false"
+104-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+105            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+105-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+106
+107        <meta-data
+107-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+108            android:name="com.google.android.gms.version"
+108-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+109            android:value="@integer/google_play_services_version" />
+109-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+110    </application>
+111
+112</manifest>
