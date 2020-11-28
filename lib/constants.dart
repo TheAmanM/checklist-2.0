@@ -55,3 +55,5 @@ Color getColor(int num) {
       ? Colors.white
       : Colors.black;
 }
+
+double backArrowSize = 20.0;

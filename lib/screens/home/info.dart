@@ -83,8 +83,13 @@ class _InfoState extends State<Info> {
                     elevation: 0,
                     expandedHeight: 200,
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                      ),
+                      iconSize: backArrowSize,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                     flexibleSpace: Container(
                       decoration: BoxDecoration(

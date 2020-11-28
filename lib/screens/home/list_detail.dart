@@ -88,7 +88,10 @@ class _NotesDetailState extends State<NotesDetail> {
                           ),
                         ),
                         leading: IconButton(
-                          icon: Icon(Icons.arrow_back_ios),
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                          ),
+                          iconSize: backArrowSize,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -402,6 +405,7 @@ class _NotesDetailState extends State<NotesDetail> {
                                                   .hideCurrentSnackBar();
                                             },
                                           ),
+                                          duration: Duration(seconds: 1),
                                         ),
                                       );
                                     }
@@ -471,272 +475,284 @@ class _NotesDetailState extends State<NotesDetail> {
                               ? streamSnapshot.data.documents.length != 0
                                   ? Padding(
                                       padding: EdgeInsets.all(0),
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 0,
-                                          vertical: 16,
+                                      child: Theme(
+                                        data: Theme.of(context).copyWith(
+                                          accentColor: mainColor,
                                         ),
-                                        itemBuilder: (context, index) {
-                                          return Dismissible(
-                                            onDismissed:
-                                                (DismissDirection d) async {
-                                              /* await Firestore.instance
-                                      .collection('notes')
-                                      .document(
-                                        streamSnapshot
-                                            .data.documents[index].documentID,
-                                      )
-                                      .delete(); */
-
-                                              //TODO: DO I NEED THIS FUNCTION?
-
-                                              await Firestore.instance
-                                                  .collection('notes')
-                                                  .document(
-                                                    widget.docID,
-                                                  )
-                                                  .collection('items')
-                                                  .document(
-                                                    streamSnapshot
-                                                        .data
-                                                        .documents[index]
-                                                        .documentID,
-                                                  )
-                                                  .delete();
-                                              setState(() {});
-                                            },
-                                            confirmDismiss:
-                                                (DismissDirection d) async {
-                                              if (sortSnapshot
-                                                  .data['sortByName']) {
-                                                if (d ==
-                                                    DismissDirection
-                                                        .startToEnd) {
-                                                  bool returnBool = false;
-                                                  await showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        backgroundColor:
-                                                            backColor,
-                                                        content: Text(
-                                                          'Are you sure you want to delete this task?',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontSize: 18,
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          FlatButton(
-                                                            child: Text(
-                                                              'NO',
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                            ),
-                                                            onPressed: () {
-                                                              returnBool =
-                                                                  false;
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                          FlatButton(
-                                                            child: Text(
-                                                              'YES',
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                            ),
-                                                            onPressed: () {
-                                                              returnBool = true;
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                  return returnBool;
-                                                } else {
-                                                  bool completedBool = false;
-                                                  /* await showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          backgroundColor: backColor,
-                                          content: Text(
-                                            'Has this task been completed?',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 18,
-                                            ),
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 0,
+                                            vertical: 16,
                                           ),
-                                          actions: [
-                                            FlatButton(
-                                              child: Text(
-                                                'NO',
-                                                style:
-                                                    TextStyle(color: mainColor),
-                                              ),
-                                              onPressed: () {
-                                                completedBool = false;
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            FlatButton(
-                                              child: Text(
-                                                'YES',
-                                                style:
-                                                    TextStyle(color: mainColor),
-                                              ),
-                                              onPressed: () {
-                                                completedBool = true;
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                      ); */
+                                          itemBuilder: (context, index) {
+                                            return Dismissible(
+                                              onDismissed:
+                                                  (DismissDirection d) async {
+                                                /* await Firestore.instance
+                                        .collection('notes')
+                                        .document(
+                                          streamSnapshot
+                                              .data.documents[index].documentID,
+                                        )
+                                        .delete(); */
 
-                                                  Firestore.instance
-                                                      .collection('notes')
-                                                      .document(widget.docID)
-                                                      .collection('items')
-                                                      .document(streamSnapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .documentID)
-                                                      .updateData(
-                                                    {
-                                                      "done": !streamSnapshot
-                                                              .data
-                                                              .documents[index]
-                                                          ["done"],
-                                                    },
-                                                  );
-                                                  print(streamSnapshot
-                                                      .data
-                                                      .documents[index]
-                                                      .documentID);
-                                                  return false;
-                                                }
-                                              } else {
-                                                newScaffoldKey.currentState
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    action: SnackBarAction(
-                                                      label: 'OK',
-                                                      onPressed: () {
-                                                        newScaffoldKey
-                                                            .currentState
-                                                            .hideCurrentSnackBar();
-                                                      },
-                                                    ),
-                                                    content: Text(
-                                                        'You can only toggle items when the list is sorted alphabetically!'),
-                                                  ),
-                                                );
-                                                return false;
-                                              }
-                                            },
-                                            key: Key(
-                                              streamSnapshot.data
-                                                  .documents[index].documentID,
-                                            ),
-                                            secondaryBackground: Container(
-                                              color:
-                                                  Colors.white.withOpacity(0.1),
-                                              alignment: Alignment.centerRight,
-                                              child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 20),
-                                                child: Icon(Icons.edit,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            background: Container(
-                                              color: Colors.red,
-                                              alignment: Alignment.centerLeft,
-                                              child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 20),
-                                                child: Icon(Icons.delete,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            child: ListTile(
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                horizontal: 28,
-                                                vertical: 0,
-                                              ),
-                                              title: Text(
-                                                streamSnapshot.data
-                                                    .documents[index]["name"]
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color: streamSnapshot.data
-                                                              .documents[index]
-                                                          ["done"]
-                                                      ? Colors.white
-                                                          .withOpacity(0.5)
-                                                      : Colors.white,
-                                                  decoration: streamSnapshot
-                                                              .data
-                                                              .documents[index]
-                                                          ["done"]
-                                                      ? TextDecoration
-                                                          .lineThrough
-                                                      : TextDecoration.none,
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                initialValue = streamSnapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ["done"] ??
-                                                    false;
-                                                editItemController.text =
-                                                    streamSnapshot.data
-                                                            .documents[index]
-                                                        ["name"];
-                                                //enableOK = false;
-                                                setState(() {
-                                                  keyboardVisible = true;
-                                                });
-                                                await showDialog(
-                                                  //barrierDismissible: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    print(
-                                                        'initialValue = $initialValue');
-                                                    return EditItemWidget(
-                                                      docID: widget.docID,
-                                                      itemID: streamSnapshot
+                                                //TODO: DO I NEED THIS FUNCTION?
+
+                                                await Firestore.instance
+                                                    .collection('notes')
+                                                    .document(
+                                                      widget.docID,
+                                                    )
+                                                    .collection('items')
+                                                    .document(
+                                                      streamSnapshot
                                                           .data
                                                           .documents[index]
                                                           .documentID,
-                                                    );
-                                                  },
-                                                );
-                                                setState(() {
-                                                  keyboardVisible = false;
-                                                });
-                                                enableOK = false;
+                                                    )
+                                                    .delete();
+                                                setState(() {});
                                               },
+                                              confirmDismiss:
+                                                  (DismissDirection d) async {
+                                                if (sortSnapshot
+                                                    .data['sortByName']) {
+                                                  if (d ==
+                                                      DismissDirection
+                                                          .startToEnd) {
+                                                    bool returnBool = false;
+                                                    await showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          backgroundColor:
+                                                              backColor,
+                                                          content: Text(
+                                                            'Are you sure you want to delete this task?',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            FlatButton(
+                                                              child: Text(
+                                                                'NO',
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        mainColor),
+                                                              ),
+                                                              onPressed: () {
+                                                                returnBool =
+                                                                    false;
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            FlatButton(
+                                                              child: Text(
+                                                                'YES',
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        mainColor),
+                                                              ),
+                                                              onPressed: () {
+                                                                returnBool =
+                                                                    true;
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                    return returnBool;
+                                                  } else {
+                                                    bool completedBool = false;
+                                                    /* await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            backgroundColor: backColor,
+                                            content: Text(
+                                              'Has this task been completed?',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 18,
+                                              ),
                                             ),
+                                            actions: [
+                                              FlatButton(
+                                                child: Text(
+                                                  'NO',
+                                                  style:
+                                                      TextStyle(color: mainColor),
+                                                ),
+                                                onPressed: () {
+                                                  completedBool = false;
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              FlatButton(
+                                                child: Text(
+                                                  'YES',
+                                                  style:
+                                                      TextStyle(color: mainColor),
+                                                ),
+                                                onPressed: () {
+                                                  completedBool = true;
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
                                           );
                                         },
-                                        itemCount: streamSnapshot.hasData
-                                            ? streamSnapshot
-                                                .data.documents.length
-                                            : 0,
+                                        ); */
+
+                                                    Firestore.instance
+                                                        .collection('notes')
+                                                        .document(widget.docID)
+                                                        .collection('items')
+                                                        .document(streamSnapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .documentID)
+                                                        .updateData(
+                                                      {
+                                                        "done": !streamSnapshot
+                                                                .data.documents[
+                                                            index]["done"],
+                                                      },
+                                                    );
+                                                    print(streamSnapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .documentID);
+                                                    return false;
+                                                  }
+                                                } else {
+                                                  newScaffoldKey.currentState
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      action: SnackBarAction(
+                                                        label: 'OK',
+                                                        onPressed: () {
+                                                          newScaffoldKey
+                                                              .currentState
+                                                              .hideCurrentSnackBar();
+                                                        },
+                                                      ),
+                                                      content: Text(
+                                                        'You can only toggle items when the list is sorted alphabetically!',
+                                                      ),
+                                                      duration:
+                                                          Duration(seconds: 1),
+                                                    ),
+                                                  );
+                                                  return false;
+                                                }
+                                              },
+                                              key: Key(
+                                                streamSnapshot
+                                                    .data
+                                                    .documents[index]
+                                                    .documentID,
+                                              ),
+                                              secondaryBackground: Container(
+                                                color: Colors.white
+                                                    .withOpacity(0.1),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 20),
+                                                  child: Icon(Icons.edit,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              background: Container(
+                                                color: Colors.red,
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 20),
+                                                  child: Icon(Icons.delete,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              child: ListTile(
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                  horizontal: 28,
+                                                  vertical: 0,
+                                                ),
+                                                title: Text(
+                                                  streamSnapshot.data
+                                                      .documents[index]["name"]
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: streamSnapshot
+                                                                .data.documents[
+                                                            index]["done"]
+                                                        ? Colors.white
+                                                            .withOpacity(0.5)
+                                                        : Colors.white,
+                                                    decoration: streamSnapshot
+                                                                .data.documents[
+                                                            index]["done"]
+                                                        ? TextDecoration
+                                                            .lineThrough
+                                                        : TextDecoration.none,
+                                                  ),
+                                                ),
+                                                onTap: () async {
+                                                  initialValue = streamSnapshot
+                                                              .data
+                                                              .documents[index]
+                                                          ["done"] ??
+                                                      false;
+                                                  editItemController.text =
+                                                      streamSnapshot.data
+                                                              .documents[index]
+                                                          ["name"];
+                                                  //enableOK = false;
+                                                  setState(() {
+                                                    keyboardVisible = true;
+                                                  });
+                                                  await showDialog(
+                                                    //barrierDismissible: false,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      print(
+                                                          'initialValue = $initialValue');
+                                                      return EditItemWidget(
+                                                        docID: widget.docID,
+                                                        itemID: streamSnapshot
+                                                            .data
+                                                            .documents[index]
+                                                            .documentID,
+                                                      );
+                                                    },
+                                                  );
+                                                  setState(() {
+                                                    keyboardVisible = false;
+                                                  });
+                                                  enableOK = false;
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          itemCount: streamSnapshot.hasData
+                                              ? streamSnapshot
+                                                  .data.documents.length
+                                              : 0,
+                                        ),
                                       ),
                                     )
                                   : Center(

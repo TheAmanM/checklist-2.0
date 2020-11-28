@@ -49,6 +49,7 @@ class _AuthenticateState extends State<Authenticate> {
           loading = false;
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('An unexpected error occured'),
+            duration: Duration(seconds: 1),
           ));
         });
       } else {
@@ -93,6 +94,7 @@ class _AuthenticateState extends State<Authenticate> {
           loading = false;
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('An unexpected error occured'),
+            duration: Duration(seconds: 1),
           ));
         });
       } else {

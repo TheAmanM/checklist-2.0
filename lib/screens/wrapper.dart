@@ -17,11 +17,13 @@ class _WrapperState extends State<Wrapper> {
     final user = Provider.of<FirebaseUser>(context);
     print('User: $user');
     return MaterialApp(
-      title: '',
+      title: 'Checklist 2.0',
       color: mainColor,
       theme: ThemeData(
         primaryColor: mainColor,
         primarySwatch: Colors.blue,
+        accentColor: mainColor,
+        // brightness: Brightness.dark,
       ),
       debugShowCheckedModeBanner: false,
       home: user == null ? Authenticate() : Home(),

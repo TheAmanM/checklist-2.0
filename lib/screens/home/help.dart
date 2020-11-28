@@ -12,6 +12,15 @@ class _HelpState extends State<Help> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+          ),
+          iconSize: backArrowSize,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         elevation: 0,
         title: Text('Help'),
         backgroundColor: Colors.blue,
@@ -100,7 +109,7 @@ class _HelpState extends State<Help> {
                 SliverAppBar(
                   expandedHeight: MediaQuery.of(context).size.height * 0.2,
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: backArrow,
                     onPressed: () => Navigator.pop(context),
                   ),
                   flexibleSpace: Container(
