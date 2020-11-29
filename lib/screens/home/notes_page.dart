@@ -23,7 +23,8 @@ bool keyboardVisible = false;
 bool enableNoteNameSaving = false;
 GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
 
-class _NotesPageState extends State<NotesPage> {
+class _NotesPageState extends State<NotesPage>
+    with SingleTickerProviderStateMixin {
   AuthServices _auth = new AuthServices();
   DatabaseServices _db = new DatabaseServices();
   double sliderValue = 0;
@@ -34,6 +35,8 @@ class _NotesPageState extends State<NotesPage> {
   TextEditingController _nameController = new TextEditingController();
   int currentIndex = 0;
   bool enableOK = false;
+
+  TabController tabBarController;
 
   Future<void> getUserID() async {
     userID = await _auth.getCurrentUserID();
@@ -51,6 +54,11 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   void initState() {
+    tabBarController = new TabController(
+      initialIndex: 0,
+      length: 2,
+      vsync: this,
+    );
     getUserID();
     super.initState();
   }
@@ -66,7 +74,7 @@ class _NotesPageState extends State<NotesPage> {
       child: Padding(
         padding: const EdgeInsets.only(
           bottom: 8,
-          top: 6,
+          top: 8,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -213,6 +221,16 @@ class _NotesPageState extends State<NotesPage> {
                         },
                       ),
                     ],
+                    bottom: TabBar(
+                      controller: tabBarController,
+                      unselectedLabelColor: Colors.white.withOpacity(0.5),
+                      labelColor: Colors.white,
+                      indicatorColor: Colors.white,
+                      tabs: <Tab>[
+                        Tab(text: 'ALL LISTS'),
+                        Tab(text: 'MY LISTS'),
+                      ],
+                    ),
                   )
                 : null,
             key: scaffoldKey,
@@ -922,399 +940,26 @@ class _NotesPageState extends State<NotesPage> {
                               ), */
             body: currentIndex == 0
                 ? !keyboardVisible
-                    ? Container(
-                        color: backColor,
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: Firestore.instance
-                              .collection('notes')
-                              .orderBy("name")
-                              .snapshots(),
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            List<Widget> returnList = [];
-                            if (snapshot.hasData)
-                              snapshot.data.documents.forEach(
-                                (DocumentSnapshot element) {
-                                  returnList.add(
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14, vertical: 12),
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: backColor,
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 5,
-                                                spreadRadius: 0.1,
-                                                color: Colors.grey,
-                                              ),
-                                            ],
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                element["name"].toString(),
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            return snapshot.hasData
-                                ? Theme(
-                                    data: Theme.of(context).copyWith(
-                                      accentColor: mainColor,
-                                    ),
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2),
-                                      semanticChildCount: 2,
-                                      padding: EdgeInsets.all(8),
-                                      itemCount: snapshot.data.documents.length,
-                                      itemBuilder: (context, index) {
-                                        String currentDocID = snapshot
-                                            .data.documents[index].documentID;
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 14, vertical: 12),
-                                          child: InkWell(
-                                            onTap: () async {
-                                              await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return NotesDetail(
-                                                      snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .documentID,
-                                                      snapshot.data
-                                                              .documents[index]
-                                                          ["name"],
-                                                    );
-                                                  },
-                                                ),
-                                              );
-                                              setState(() {});
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: lightBackColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16),
-                                                child: NotificationListener<
-                                                    OverscrollIndicatorNotification>(
-                                                  onNotification: (overScroll) {
-                                                    overScroll.disallowGlow();
-                                                  },
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Flexible(
-                                                              child: Text(
-                                                                snapshot
-                                                                    .data
-                                                                    .documents[
-                                                                        index]
-                                                                        ["name"]
-                                                                    .toString(),
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            GestureDetector(
-                                                              child: Container(
-                                                                color:
-                                                                    lightBackColor,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .more_vert,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                              onTap: () async {
-                                                                setState(() {
-                                                                  keyboardVisible =
-                                                                      true;
-                                                                });
-                                                                noteNameController
-                                                                        .text =
-                                                                    snapshot
-                                                                        .data
-                                                                        .documents[
-                                                                            index]
-                                                                            [
-                                                                            'name']
-                                                                        .toString();
-                                                                enableNoteNameSaving =
-                                                                    snapshot.data.documents[index]['name'] ==
-                                                                            ''
-                                                                        ? false
-                                                                        : true;
-                                                                await showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (context) {
-                                                                    return NoteEditDelete(
-                                                                      snapshot:
-                                                                          snapshot,
-                                                                      index:
-                                                                          index,
-                                                                    );
-                                                                  },
-                                                                );
-                                                                noteNameController
-                                                                    .text = '';
-                                                                await Future
-                                                                    .delayed(
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          500),
-                                                                );
-                                                                setState(() {
-                                                                  keyboardVisible =
-                                                                      false;
-                                                                });
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        SizedBox(height: 25),
-                                                        StreamBuilder(
-                                                          stream: Firestore
-                                                              .instance
-                                                              .collection(
-                                                                  'notes')
-                                                              .document(
-                                                                  currentDocID)
-                                                              .snapshots(),
-                                                          builder: (context,
-                                                                  AsyncSnapshot<
-                                                                          DocumentSnapshot>
-                                                                      orderSnapshot) =>
-                                                              StreamBuilder<
-                                                                  QuerySnapshot>(
-                                                            stream: Firestore
-                                                                .instance
-                                                                .collection(
-                                                                    'notes')
-                                                                .document(
-                                                                    currentDocID)
-                                                                .collection(
-                                                                    'items')
-                                                                .orderBy(orderSnapshot
-                                                                        .hasData
-                                                                    ? orderSnapshot.data['sortByName'] ==
-                                                                            true
-                                                                        ? "name"
-                                                                        : "done"
-                                                                    : "name")
-                                                                .snapshots(),
-                                                            builder: (context,
-                                                                AsyncSnapshot<
-                                                                        QuerySnapshot>
-                                                                    secondSnapshot) {
-                                                              List<Widget>
-                                                                  widgetList =
-                                                                  [];
-                                                              try {
-                                                                secondSnapshot
-                                                                    .data
-                                                                    .documents
-                                                                    .forEach(
-                                                                  (DocumentSnapshot
-                                                                      element) {
-                                                                    if (element
-                                                                        .data[
-                                                                            'name']
-                                                                        .toString()
-                                                                        .isNotEmpty) {
-                                                                      widgetList
-                                                                          .add(
-                                                                        Text(
-                                                                          element
-                                                                              .data['name'],
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color: element.data['done'] == true
-                                                                                ? Colors.white.withOpacity(0.5)
-                                                                                : Colors.white,
-                                                                            fontWeight:
-                                                                                FontWeight.w300,
-                                                                            decoration: element.data['done'] == true
-                                                                                ? TextDecoration.lineThrough
-                                                                                : TextDecoration.none,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.fade,
-                                                                        ),
-                                                                      );
-                                                                      widgetList
-                                                                          .add(
-                                                                        SizedBox(
-                                                                            height:
-                                                                                8),
-                                                                      );
-                                                                    }
-                                                                  },
-                                                                );
-                                                                if (widgetList
-                                                                    .isEmpty) {
-                                                                  widgetList = [
-                                                                    Text(
-                                                                      'This list is empty!',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white
-                                                                            .withOpacity(0.9),
-                                                                        fontWeight:
-                                                                            FontWeight.w300,
-                                                                      ),
-                                                                    ),
-                                                                  ];
-                                                                }
-                                                              } catch (e) {
-                                                                widgetList = [];
-                                                              }
-                                                              Stream<DocumentSnapshot>
-                                                                  sortRef =
-                                                                  Firestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          "notes")
-                                                                      .document(
-                                                                          currentDocID)
-                                                                      .snapshots();
-                                                              return Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children:
-                                                                    widgetList,
-                                                              );
-                                                            },
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      /* itemBuilder: (context, int index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 0,
-                                            bottom: 20,
-                                            left: 15,
-                                            right: 15,
-                                          ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: backColor,
-                                              borderRadius: BorderRadius.circular(30),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 5,
-                                                  spreadRadius: 0.2,
-                                                  color: Colors.grey,
-                                                ),
-                                              ],
-                                            ),
-                                            height: 100,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              '${snapshot.data.documents[index]["name"].toString()}',
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                          ),
-                                        );
-                                      }, */
-                                    ),
-                                  )
-                                : Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                            /* return snapshot.hasData
-                                ? ListView.builder(
-                                    itemBuilder: (context, int index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 0,
-                                          bottom: 20,
-                                          left: 15,
-                                          right: 15,
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: backColor,
-                                            borderRadius: BorderRadius.circular(30),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 5,
-                                                spreadRadius: 0.2,
-                                                color: Colors.grey,
-                                              ),
-                                            ],
-                                          ),
-                                          height: 100,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            '${snapshot.data.documents[index]["name"].toString()}',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    itemCount: snapshot.data.documents.length,
-                                  )
-                                : Center(
-                                    child: CircularProgressIndicator(),
-                                  ); */
-                          },
-                        ),
+                    ? TabBarView(
+                        controller: tabBarController,
+                        children: [
+                          MainGridDisplay(
+                            stream: Firestore.instance
+                                .collection('notes')
+                                .orderBy("name")
+                                .snapshots(),
+                          ),
+                          MainGridDisplay(
+                            stream: Firestore.instance
+                                .collection('notes')
+                                .where(
+                                  'ownerID',
+                                  isEqualTo: userID,
+                                )
+                                .orderBy("name")
+                                .snapshots(),
+                          ),
+                        ],
                       )
                     : Container(
                         color: backColor,
@@ -1426,6 +1071,348 @@ class _NotesPageState extends State<NotesPage> {
     setState(() {
       keyboardVisible = false;
     });
+  }
+}
+
+class MainGridDisplay extends StatefulWidget {
+  final Stream<QuerySnapshot> stream;
+  MainGridDisplay({this.stream});
+
+  @override
+  _MainGridDisplayState createState() => _MainGridDisplayState();
+}
+
+class _MainGridDisplayState extends State<MainGridDisplay> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backColor,
+      child: StreamBuilder<QuerySnapshot>(
+        stream: widget.stream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          List<Widget> returnList = [];
+          if (snapshot.hasData)
+            snapshot.data.documents.forEach(
+              (DocumentSnapshot element) {
+                returnList.add(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 12),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: backColor,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 5,
+                              spreadRadius: 0.1,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              element["name"].toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          return snapshot.hasData
+              ? Theme(
+                  data: Theme.of(context).copyWith(
+                    accentColor: mainColor,
+                  ),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    semanticChildCount: 2,
+                    padding: EdgeInsets.all(8),
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) {
+                      String currentDocID =
+                          snapshot.data.documents[index].documentID;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 12),
+                        child: InkWell(
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return NotesDetail(
+                                    snapshot.data.documents[index].documentID,
+                                    snapshot.data.documents[index]["name"],
+                                  );
+                                },
+                              ),
+                            );
+                            setState(() {});
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: lightBackColor,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: NotificationListener<
+                                  OverscrollIndicatorNotification>(
+                                onNotification: (overScroll) {
+                                  overScroll.disallowGlow();
+                                },
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              snapshot
+                                                  .data.documents[index]["name"]
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            child: Container(
+                                              color: lightBackColor,
+                                              child: Icon(
+                                                Icons.more_vert,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              setState(() {
+                                                keyboardVisible = true;
+                                              });
+                                              noteNameController.text = snapshot
+                                                  .data.documents[index]['name']
+                                                  .toString();
+                                              enableNoteNameSaving =
+                                                  snapshot.data.documents[index]
+                                                              ['name'] ==
+                                                          ''
+                                                      ? false
+                                                      : true;
+                                              await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return NoteEditDelete(
+                                                    snapshot: snapshot,
+                                                    index: index,
+                                                  );
+                                                },
+                                              );
+                                              noteNameController.text = '';
+                                              await Future.delayed(
+                                                Duration(milliseconds: 500),
+                                              );
+                                              setState(() {
+                                                keyboardVisible = false;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 25),
+                                      StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('notes')
+                                            .document(currentDocID)
+                                            .snapshots(),
+                                        builder: (context,
+                                                AsyncSnapshot<DocumentSnapshot>
+                                                    orderSnapshot) =>
+                                            StreamBuilder<QuerySnapshot>(
+                                          stream: Firestore.instance
+                                              .collection('notes')
+                                              .document(currentDocID)
+                                              .collection('items')
+                                              .orderBy(orderSnapshot.hasData
+                                                  ? orderSnapshot.data[
+                                                              'sortByName'] ==
+                                                          true
+                                                      ? "name"
+                                                      : "done"
+                                                  : "name")
+                                              .snapshots(),
+                                          builder: (context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  secondSnapshot) {
+                                            List<Widget> widgetList = [];
+                                            try {
+                                              secondSnapshot.data.documents
+                                                  .forEach(
+                                                (DocumentSnapshot element) {
+                                                  if (element.data['name']
+                                                      .toString()
+                                                      .isNotEmpty) {
+                                                    widgetList.add(
+                                                      Text(
+                                                        element.data['name'],
+                                                        style: TextStyle(
+                                                          color: element.data[
+                                                                      'done'] ==
+                                                                  true
+                                                              ? Colors.white
+                                                                  .withOpacity(
+                                                                      0.5)
+                                                              : Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                          decoration: element
+                                                                          .data[
+                                                                      'done'] ==
+                                                                  true
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : TextDecoration
+                                                                  .none,
+                                                        ),
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                      ),
+                                                    );
+                                                    widgetList.add(
+                                                      SizedBox(height: 8),
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                              if (widgetList.isEmpty) {
+                                                widgetList = [
+                                                  Text(
+                                                    'This list is empty!',
+                                                    style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.9),
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  ),
+                                                ];
+                                              }
+                                            } catch (e) {
+                                              widgetList = [];
+                                            }
+                                            Stream<DocumentSnapshot> sortRef =
+                                                Firestore.instance
+                                                    .collection("notes")
+                                                    .document(currentDocID)
+                                                    .snapshots();
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: widgetList,
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    /* itemBuilder: (context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            top: 0,
+                            bottom: 20,
+                            left: 15,
+                            right: 15,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: backColor,
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5,
+                                  spreadRadius: 0.2,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                            height: 100,
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${snapshot.data.documents[index]["name"].toString()}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }, */
+                  ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                );
+          /* return snapshot.hasData
+                ? ListView.builder(
+                    itemBuilder: (context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          top: 0,
+                          bottom: 20,
+                          left: 15,
+                          right: 15,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: backColor,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: 0.2,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
+                          height: 100,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${snapshot.data.documents[index]["name"].toString()}',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: snapshot.data.documents.length,
+                  )
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ); */
+        },
+      ),
+    );
   }
 }
 

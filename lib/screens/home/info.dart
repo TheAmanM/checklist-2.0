@@ -127,7 +127,7 @@ class _InfoState extends State<Info> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'About the creator',
+                                'About the Creator',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
