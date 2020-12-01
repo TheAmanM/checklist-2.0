@@ -940,26 +940,31 @@ class _NotesPageState extends State<NotesPage>
                               ), */
             body: currentIndex == 0
                 ? !keyboardVisible
-                    ? TabBarView(
-                        controller: tabBarController,
-                        children: [
-                          MainGridDisplay(
-                            stream: Firestore.instance
-                                .collection('notes')
-                                .orderBy("name")
-                                .snapshots(),
-                          ),
-                          MainGridDisplay(
-                            stream: Firestore.instance
-                                .collection('notes')
-                                .where(
-                                  'ownerID',
-                                  isEqualTo: userID,
-                                )
-                                .orderBy("name")
-                                .snapshots(),
-                          ),
-                        ],
+                    ? Theme(
+                        data: Theme.of(context).copyWith(
+                          accentColor: mainColor,
+                        ),
+                        child: TabBarView(
+                          controller: tabBarController,
+                          children: [
+                            MainGridDisplay(
+                              stream: Firestore.instance
+                                  .collection('notes')
+                                  .orderBy("name")
+                                  .snapshots(),
+                            ),
+                            MainGridDisplay(
+                              stream: Firestore.instance
+                                  .collection('notes')
+                                  .where(
+                                    'ownerID',
+                                    isEqualTo: userID,
+                                  )
+                                  .orderBy("name")
+                                  .snapshots(),
+                            ),
+                          ],
+                        ),
                       )
                     : Container(
                         color: backColor,

@@ -25,8 +25,29 @@ bool keyboardVisible = false;
 TextEditingController noteNameController = new TextEditingController();
 bool enableSave = false;
 GlobalKey<ScaffoldState> newScaffoldKey = new GlobalKey<ScaffoldState>();
+AnimationController controller;
+Animation<Offset> aniTween;
 
-class _NotesDetailState extends State<NotesDetail> {
+class _NotesDetailState extends State<NotesDetail>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    controller = new AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+    aniTween = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(1.5, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.elasticIn,
+      ),
+    );
+  }
+
   @override
   String sortQueryString = 'name';
   Widget build(BuildContext context) {
@@ -484,7 +505,10 @@ class _NotesDetailState extends State<NotesDetail> {
                                             horizontal: 0,
                                             vertical: 16,
                                           ),
-                                          itemBuilder: (context, index) {
+                                          itemBuilder: (
+                                            BuildContext context,
+                                            int index,
+                                          ) {
                                             return Dismissible(
                                               onDismissed:
                                                   (DismissDirection d) async {
@@ -492,7 +516,7 @@ class _NotesDetailState extends State<NotesDetail> {
                                         .collection('notes')
                                         .document(
                                           streamSnapshot
-                                              .data.documents[index].documentID,
+                                                .data.documents[index].documentID,
                                         )
                                         .delete(); */
 
@@ -578,39 +602,39 @@ class _NotesDetailState extends State<NotesDetail> {
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            backgroundColor: backColor,
-                                            content: Text(
-                                              'Has this task been completed?',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            actions: [
-                                              FlatButton(
-                                                child: Text(
-                                                  'NO',
-                                                  style:
-                                                      TextStyle(color: mainColor),
+                                              backgroundColor: backColor,
+                                              content: Text(
+                                                'Has this task been completed?',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18,
                                                 ),
-                                                onPressed: () {
-                                                  completedBool = false;
-                                                  Navigator.pop(context);
-                                                },
                                               ),
-                                              FlatButton(
-                                                child: Text(
-                                                  'YES',
-                                                  style:
-                                                      TextStyle(color: mainColor),
+                                              actions: [
+                                                FlatButton(
+                                                  child: Text(
+                                                    'NO',
+                                                    style:
+                                                        TextStyle(color: mainColor),
+                                                  ),
+                                                  onPressed: () {
+                                                    completedBool = false;
+                                                    Navigator.pop(context);
+                                                  },
                                                 ),
-                                                onPressed: () {
-                                                  completedBool = true;
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
+                                                FlatButton(
+                                                  child: Text(
+                                                    'YES',
+                                                    style:
+                                                        TextStyle(color: mainColor),
+                                                  ),
+                                                  onPressed: () {
+                                                    completedBool = true;
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                              ],
                                           );
                                         },
                                         ); */
