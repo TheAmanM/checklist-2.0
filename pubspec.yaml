@@ -27,6 +27,7 @@ dependencies:
   firebase_auth: ^0.14.0+5
   provider: 
   flutter_colorpicker: 
+  clipboard_manager:
 
 
   # The following adds the Cupertino Icons font to your application.

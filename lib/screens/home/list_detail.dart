@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo_second/constants.dart';
+import 'package:firebase_todo_second/screens/home/item_selector_screen.dart';
 import 'package:firebase_todo_second/screens/home/notes_page.dart';
 import 'package:firebase_todo_second/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -413,6 +414,21 @@ class _NotesDetailState extends State<NotesDetail>
                                           ),
                                         );
                                       }
+                                    } else if (value == 5) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return ItemSelectorScreen(
+                                              importedSnapshot: streamSnapshot,
+                                              isAlphabeticallySorted:
+                                                  sortSnapshot
+                                                          .data['sortByName'] ==
+                                                      true,
+                                            );
+                                          },
+                                        ),
+                                      );
                                     } else {
                                       newScaffoldKey.currentState.showSnackBar(
                                         SnackBar(
@@ -479,12 +495,21 @@ class _NotesDetailState extends State<NotesDetail>
                                       PopupMenuItem(
                                         value: 4,
                                         child: Text(
-                                          'Delete List',
+                                          'Delete list',
                                           style: TextStyle(
                                             color: Colors.white,
                                           ),
                                         ),
                                       ),
+                                      PopupMenuItem(
+                                        value: 5,
+                                        child: Text(
+                                          'Export items',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      )
                                     ];
                                   },
                                 );
