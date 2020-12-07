@@ -5,7 +5,6 @@ INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\m
 INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:1:1-48:12
 INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:1:1-48:12
 MERGED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:1:1-48:12
-MERGED from [:clipboard_manager] D:\Private Property\Flutter\firebase_todo_second\build\clipboard_manager\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-15:12
@@ -140,8 +139,6 @@ uses-sdk
 INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml
 INJECTED from D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml
-MERGED from [:clipboard_manager] D:\Private Property\Flutter\firebase_todo_second\build\clipboard_manager\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
-MERGED from [:clipboard_manager] D:\Private Property\Flutter\firebase_todo_second\build\clipboard_manager\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44

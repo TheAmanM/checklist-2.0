@@ -8,8 +8,9 @@ class ImportExport {
       "-",
     ];
 
-    //print(delims);
-    //print("");
+    print("");
+    print(delims);
+    print("");
 
     for (int m = 0; m < maps.length; m++) {
       for (int delim = 0; delim < delims.length; delim++) {

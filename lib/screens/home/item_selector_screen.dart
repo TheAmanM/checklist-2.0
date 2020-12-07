@@ -1,8 +1,10 @@
-import 'package:clipboard_manager/clipboard_manager.dart';
+//import 'package:clipboard_manager/clipboard_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_todo_second/services/import_export.dart';
 import 'package:firebase_todo_second/constants.dart';
+
+import 'package:clipboard/clipboard.dart';
 
 class ItemSelectorScreen extends StatefulWidget {
   AsyncSnapshot<QuerySnapshot> importedSnapshot;
@@ -91,24 +93,62 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
             ),
           ),
         ), */
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.content_copy,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 8,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
             ),
-            color: Colors.white,
-            onPressed: () {
-              ClipboardManager.copyToClipBoard(returnValue).then((_) {
-                Navigator.pop(context);
-                final snackBar = SnackBar(
-                  content: Text('Copied to Clipboard!'),
-                  duration: Duration(seconds: 1),
-                );
-                Scaffold.of(context).showSnackBar(snackBar);
-              });
-            },
-          ),
-        ],
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.content_copy,
+                  ),
+                  color: Colors.white,
+                  onPressed: () {
+                    //Navigator.pop(context);
+                    /* ClipboardManager.copyToClipBoard(returnValue).then((_) {
+                    Navigator.pop(context);
+                    final snackBar = SnackBar(
+                      content: Text('Copied to Clipboard!'),
+                      duration: Duration(seconds: 1),
+                    );
+                    Scaffold.of(context).showSnackBar(snackBar); 
+                  });
+                    */
+                    FlutterClipboard.copy(returnValue).then((value) {
+                      final snackBar = SnackBar(
+                        content: Text('Copied to Clipboard!'),
+                        duration: Duration(seconds: 1),
+                      );
+                      Scaffold.of(context).showSnackBar(snackBar);
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.share,
+                  ),
+                  color: Colors.white,
+                  onPressed: () {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Feature currently in development!'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -166,6 +206,7 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
               }
             },
           ),
+          SizedBox(width: 4),
         ],
         title: Text(
           'Export items',

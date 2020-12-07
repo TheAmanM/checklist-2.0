@@ -11,7 +11,7 @@ class _InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      /* floatingActionButton: FloatingActionButton(
         onPressed: null,
         backgroundColor: Colors.black.withOpacity(0.2),
         child: ClipRRect(
@@ -22,7 +22,7 @@ class _InfoState extends State<Info> {
           ),
         ),
         elevation: 0,
-      ),
+      ), */
       backgroundColor: backColor,
       body: StreamBuilder(
         stream: Firestore.instance
@@ -86,6 +86,7 @@ class _InfoState extends State<Info> {
                       icon: Icon(
                         Icons.arrow_back_ios,
                       ),
+                      color: backColor,
                       iconSize: backArrowSize,
                       onPressed: () {
                         Navigator.pop(context);

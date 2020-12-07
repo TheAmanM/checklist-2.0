@@ -1328,11 +1328,22 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                                     .collection("notes")
                                                     .document(currentDocID)
                                                     .snapshots();
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: widgetList,
-                                            );
+                                            return widgetList.isNotEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: widgetList,
+                                                  )
+                                                : Text(
+                                                    'Loading...',
+                                                    style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.9),
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  );
                                           },
                                         ),
                                       )

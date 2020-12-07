@@ -4,12 +4,6 @@
 
 #import "GeneratedPluginRegistrant.h"
 
-#if __has_include(<clipboard_manager/ClipboardManagerPlugin.h>)
-#import <clipboard_manager/ClipboardManagerPlugin.h>
-#else
-@import clipboard_manager;
-#endif
-
 #if __has_include(<cloud_firestore/CloudFirestorePlugin.h>)
 #import <cloud_firestore/CloudFirestorePlugin.h>
 #else
@@ -31,7 +25,6 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [ClipboardManagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"ClipboardManagerPlugin"]];
   [FLTCloudFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTCloudFirestorePlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
