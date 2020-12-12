@@ -1,3 +1,6 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo_second/constants.dart';
 import 'package:firebase_todo_second/screens/home/info.dart';
@@ -8,7 +11,12 @@ import 'package:firebase_todo_second/screens/home/users.dart';
 import 'package:firebase_todo_second/services/auth.dart';
 import 'package:firebase_todo_second/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotesPage extends StatefulWidget {
   @override
@@ -23,6 +31,11 @@ bool keyboardVisible = false;
 bool enableNoteNameSaving = false;
 GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey();
 
+ScrollController allListsScrollController = new ScrollController();
+ScrollController myListsScrollController = new ScrollController();
+
+String userID = '';
+
 class _NotesPageState extends State<NotesPage>
     with SingleTickerProviderStateMixin {
   AuthServices _auth = new AuthServices();
@@ -30,7 +43,6 @@ class _NotesPageState extends State<NotesPage>
   double sliderValue = 0;
   int color = 0;
   Color pickerColor;
-  String userID = '';
   double topContainerHeight = 0.15;
   TextEditingController _nameController = new TextEditingController();
   int currentIndex = 0;
@@ -59,7 +71,10 @@ class _NotesPageState extends State<NotesPage>
       length: 2,
       vsync: this,
     );
+
     getUserID();
+    checkForUpdates(context);
+
     super.initState();
   }
 
@@ -103,6 +118,14 @@ class _NotesPageState extends State<NotesPage>
   Widget build(BuildContext context) {
     print('keyboard visible? $keyboardVisible');
     return MaterialApp(
+      title: 'Checklist 2.0',
+      color: mainColor,
+      theme: ThemeData(
+        primaryColor: mainColor,
+        primarySwatch: Colors.blue,
+        accentColor: mainColor,
+        // brightness: Brightness.dark,
+      ),
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
         future: _auth.currentUser(),
@@ -948,20 +971,30 @@ class _NotesPageState extends State<NotesPage>
                           controller: tabBarController,
                           children: [
                             MainGridDisplay(
+                              isAll: true,
+                              /* 
                               stream: Firestore.instance
                                   .collection('notes')
                                   .orderBy("name")
                                   .snapshots(),
+                               */
+                              controller: allListsScrollController,
                             ),
                             MainGridDisplay(
+                              isAll: false,
+                              /* 
                               stream: Firestore.instance
                                   .collection('notes')
+                                  /*
                                   .where(
                                     'ownerID',
                                     isEqualTo: userID,
-                                  )
+                                  ) 
+                                  */
                                   .orderBy("name")
                                   .snapshots(),
+                              */
+                              controller: myListsScrollController,
                             ),
                           ],
                         ),
@@ -1080,8 +1113,14 @@ class _NotesPageState extends State<NotesPage>
 }
 
 class MainGridDisplay extends StatefulWidget {
-  final Stream<QuerySnapshot> stream;
-  MainGridDisplay({this.stream});
+  //final Stream<QuerySnapshot> stream;
+  final bool isAll;
+  final ScrollController controller;
+  MainGridDisplay({
+    //this.stream,
+    this.isAll,
+    this.controller,
+  });
 
   @override
   _MainGridDisplayState createState() => _MainGridDisplayState();
@@ -1090,10 +1129,22 @@ class MainGridDisplay extends StatefulWidget {
 class _MainGridDisplayState extends State<MainGridDisplay> {
   @override
   Widget build(BuildContext context) {
+    /* 
+    Stream<QuerySnapshot> stream = widget.isAll
+        ? Firestore.instance.collection('notes').orderBy("name").snapshots()
+        : Firestore.instance
+            .collection('notes')
+            .where("ownerID", isEqualTo: userID)
+            .orderBy("name")
+            .snapshots();
+     */
+    Stream<QuerySnapshot> stream =
+        Firestore.instance.collection('notes').orderBy("name").snapshots();
+
     return Container(
       color: backColor,
       child: StreamBuilder<QuerySnapshot>(
-        stream: widget.stream,
+        stream: stream,
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           List<Widget> returnList = [];
           if (snapshot.hasData)
@@ -1133,230 +1184,244 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                 );
               },
             );
-          return snapshot.hasData
-              ? Theme(
-                  data: Theme.of(context).copyWith(
-                    accentColor: mainColor,
-                  ),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    semanticChildCount: 2,
-                    padding: EdgeInsets.all(8),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      String currentDocID =
-                          snapshot.data.documents[index].documentID;
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 12),
-                        child: InkWell(
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return NotesDetail(
-                                    snapshot.data.documents[index].documentID,
-                                    snapshot.data.documents[index]["name"],
-                                  );
-                                },
-                              ),
-                            );
-                            setState(() {});
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: lightBackColor,
-                              borderRadius: BorderRadius.circular(30),
+          if (snapshot.hasData) {
+            if (!widget.isAll) {
+              print("");
+              print("TEST");
+              print("");
+              for (int i = 0; i < snapshot.data.documents.length; i++) {
+                print("${snapshot.data.documents[i].data["ownerID"]}, $userID");
+                if (snapshot.data.documents[i].data["ownerID"] != userID) {
+                  snapshot.data.documents.removeAt(i);
+                  print('removed!');
+                  i--;
+                }
+              }
+            }
+            print("");
+            print(snapshot.data.documents.length);
+            print("");
+            if (snapshot.data.documents.length != 0) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  accentColor: mainColor,
+                ),
+                child: GridView.builder(
+                  controller: widget.controller,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  semanticChildCount: 2,
+                  padding: EdgeInsets.all(8),
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    String currentDocID =
+                        snapshot.data.documents[index].documentID;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 12),
+                      child: InkWell(
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NotesDetail(
+                                  snapshot.data.documents[index].documentID,
+                                  snapshot.data.documents[index]["name"],
+                                );
+                              },
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: NotificationListener<
-                                  OverscrollIndicatorNotification>(
-                                onNotification: (overScroll) {
-                                  overScroll.disallowGlow();
-                                },
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              snapshot
-                                                  .data.documents[index]["name"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                          );
+                          setState(() {});
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: lightBackColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: NotificationListener<
+                                OverscrollIndicatorNotification>(
+                              onNotification: (overScroll) {
+                                overScroll.disallowGlow();
+                              },
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            snapshot
+                                                .data.documents[index]["name"]
+                                                .toString(),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                          GestureDetector(
-                                            child: Container(
-                                              color: lightBackColor,
-                                              child: Icon(
-                                                Icons.more_vert,
-                                                color: Colors.white,
-                                              ),
+                                        ),
+                                        GestureDetector(
+                                          child: Container(
+                                            color: lightBackColor,
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: Colors.white,
                                             ),
-                                            onTap: () async {
-                                              setState(() {
-                                                keyboardVisible = true;
-                                              });
-                                              noteNameController.text = snapshot
-                                                  .data.documents[index]['name']
-                                                  .toString();
-                                              enableNoteNameSaving =
-                                                  snapshot.data.documents[index]
-                                                              ['name'] ==
-                                                          ''
-                                                      ? false
-                                                      : true;
-                                              await showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return NoteEditDelete(
-                                                    snapshot: snapshot,
-                                                    index: index,
-                                                  );
-                                                },
-                                              );
-                                              noteNameController.text = '';
-                                              await Future.delayed(
-                                                Duration(milliseconds: 500),
-                                              );
-                                              setState(() {
-                                                keyboardVisible = false;
-                                              });
-                                            },
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 25),
-                                      StreamBuilder(
+                                          onTap: () async {
+                                            setState(() {
+                                              keyboardVisible = true;
+                                            });
+                                            noteNameController.text = snapshot
+                                                .data.documents[index]['name']
+                                                .toString();
+                                            enableNoteNameSaving =
+                                                snapshot.data.documents[index]
+                                                            ['name'] ==
+                                                        ''
+                                                    ? false
+                                                    : true;
+                                            await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return NoteEditDelete(
+                                                  snapshot: snapshot,
+                                                  index: index,
+                                                );
+                                              },
+                                            );
+                                            noteNameController.text = '';
+                                            await Future.delayed(
+                                              Duration(milliseconds: 500),
+                                            );
+                                            setState(() {
+                                              keyboardVisible = false;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 25),
+                                    StreamBuilder(
+                                      stream: Firestore.instance
+                                          .collection('notes')
+                                          .document(currentDocID)
+                                          .snapshots(),
+                                      builder: (context,
+                                              AsyncSnapshot<DocumentSnapshot>
+                                                  orderSnapshot) =>
+                                          StreamBuilder<QuerySnapshot>(
                                         stream: Firestore.instance
                                             .collection('notes')
                                             .document(currentDocID)
+                                            .collection('items')
+                                            .orderBy(orderSnapshot.hasData
+                                                ? orderSnapshot.data[
+                                                            'sortByName'] ==
+                                                        true
+                                                    ? "name"
+                                                    : "done"
+                                                : "name")
                                             .snapshots(),
                                         builder: (context,
-                                                AsyncSnapshot<DocumentSnapshot>
-                                                    orderSnapshot) =>
-                                            StreamBuilder<QuerySnapshot>(
-                                          stream: Firestore.instance
-                                              .collection('notes')
-                                              .document(currentDocID)
-                                              .collection('items')
-                                              .orderBy(orderSnapshot.hasData
-                                                  ? orderSnapshot.data[
-                                                              'sortByName'] ==
-                                                          true
-                                                      ? "name"
-                                                      : "done"
-                                                  : "name")
-                                              .snapshots(),
-                                          builder: (context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  secondSnapshot) {
-                                            List<Widget> widgetList = [];
-                                            try {
-                                              secondSnapshot.data.documents
-                                                  .forEach(
-                                                (DocumentSnapshot element) {
-                                                  if (element.data['name']
-                                                      .toString()
-                                                      .isNotEmpty) {
-                                                    widgetList.add(
-                                                      Text(
-                                                        element.data['name'],
-                                                        style: TextStyle(
-                                                          color: element.data[
-                                                                      'done'] ==
-                                                                  true
-                                                              ? Colors.white
-                                                                  .withOpacity(
-                                                                      0.5)
-                                                              : Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          decoration: element
-                                                                          .data[
-                                                                      'done'] ==
-                                                                  true
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : TextDecoration
-                                                                  .none,
-                                                        ),
-                                                        overflow:
-                                                            TextOverflow.fade,
+                                            AsyncSnapshot<QuerySnapshot>
+                                                secondSnapshot) {
+                                          List<Widget> widgetList = [];
+                                          try {
+                                            secondSnapshot.data.documents
+                                                .forEach(
+                                              (DocumentSnapshot element) {
+                                                if (element.data['name']
+                                                    .toString()
+                                                    .isNotEmpty) {
+                                                  widgetList.add(
+                                                    Text(
+                                                      element.data['name'],
+                                                      style: TextStyle(
+                                                        color: element.data[
+                                                                    'done'] ==
+                                                                true
+                                                            ? Colors.white
+                                                                .withOpacity(
+                                                                    0.5)
+                                                            : Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        decoration: element
+                                                                        .data[
+                                                                    'done'] ==
+                                                                true
+                                                            ? TextDecoration
+                                                                .lineThrough
+                                                            : TextDecoration
+                                                                .none,
                                                       ),
-                                                    );
-                                                    widgetList.add(
-                                                      SizedBox(height: 8),
-                                                    );
-                                                  }
-                                                },
-                                              );
-                                              if (widgetList.isEmpty) {
-                                                widgetList = [
-                                                  Text(
-                                                    'This list is empty!',
-                                                    style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(0.9),
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
-                                                  ),
-                                                ];
-                                              }
-                                            } catch (e) {
-                                              widgetList = [];
-                                            }
-                                            Stream<DocumentSnapshot> sortRef =
-                                                Firestore.instance
-                                                    .collection("notes")
-                                                    .document(currentDocID)
-                                                    .snapshots();
-                                            return widgetList.isNotEmpty
-                                                ? Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: widgetList,
-                                                  )
-                                                : Text(
-                                                    'Loading...',
-                                                    style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(0.9),
-                                                      fontWeight:
-                                                          FontWeight.w300,
+                                                      overflow:
+                                                          TextOverflow.fade,
                                                     ),
                                                   );
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                                  widgetList.add(
+                                                    SizedBox(height: 8),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                            if (widgetList.isEmpty) {
+                                              widgetList = [
+                                                Text(
+                                                  'This list is empty!',
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
+                                                ),
+                                              ];
+                                            }
+                                          } catch (e) {
+                                            widgetList = [];
+                                          }
+                                          Stream<DocumentSnapshot> sortRef =
+                                              Firestore.instance
+                                                  .collection("notes")
+                                                  .document(currentDocID)
+                                                  .snapshots();
+                                          return widgetList.isNotEmpty
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: widgetList,
+                                                )
+                                              : Text(
+                                                  'Loading...',
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.9),
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
+                                                );
+                                        },
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                    /* itemBuilder: (context, int index) {
+                      ),
+                    );
+                  },
+                  /* itemBuilder: (context, int index) {
                         return Padding(
                           padding: const EdgeInsets.only(
                             top: 0,
@@ -1385,11 +1450,23 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                           ),
                         );
                       }, */
+                ),
+              );
+            } else {
+              return Center(
+                child: Text(
+                  'No lists yet!',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           /* return snapshot.hasData
                 ? ListView.builder(
                     itemBuilder: (context, int index) {
@@ -2122,6 +2199,178 @@ class EditFolderNameState extends State<EditFolderName> {
           ),
         ],
       ),
+    );
+  }
+}
+
+ReceivePort recievePort = ReceivePort();
+double progressValue = 0;
+
+downloadCallback(id, status, progress) {
+  SendPort sendport = IsolateNameServer.lookupPortByName("downloading");
+  sendport.send([id, status, progress]);
+}
+
+void checkForUpdates(context) async {
+  double currentVersion = appVersion;
+  Map<String, dynamic> data = await DatabaseServices().getUpdates();
+  double minimumVersion = data["minimumVersion"];
+  double latestVersion = data["latestVersion"];
+  String downloadUrl = data["downloadUrl"];
+  String backupDownloadUrl = data["backupDownloadUrl"];
+
+  //minimumVersion =
+  //    0.8; //TODO: I SWEAR TO GOD IF I DON'T REMOVE THIS I WILL HATE MYSELF FOREVER :D
+
+  print("minimumVersion: $minimumVersion");
+  print("latestVersion: $latestVersion");
+  print("currentVersion: $currentVersion");
+
+  print(backupDownloadUrl);
+  print(downloadUrl);
+
+  if (currentVersion < minimumVersion) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return UpdateDialog(downloadUrl, backupDownloadUrl, true);
+      },
+    );
+  } else {
+    if (currentVersion < latestVersion) {
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return UpdateDialog(downloadUrl, backupDownloadUrl, false);
+        },
+      );
+    }
+  }
+}
+
+class UpdateDialog extends StatefulWidget {
+  final bool isRequired;
+  final String backupDownloadUrl;
+  final String downloadUrl;
+  UpdateDialog(
+    this.downloadUrl,
+    this.backupDownloadUrl,
+    this.isRequired,
+  );
+  @override
+  _UpdateDialogState createState() => _UpdateDialogState();
+}
+
+class _UpdateDialogState extends State<UpdateDialog> {
+  bool isRequired;
+  String updateInstructions;
+
+  @override
+  void initState() {
+    updateInstructions = widget.isRequired == true
+        ? "Please update the app to continue. Once the download is complete, "
+        : "The developer has released a new update! It is recommended that you update the app, and once the app is done downloading, ";
+    isRequired = widget.isRequired;
+    updateInstructions +=
+        "please follow through the instructions, allow all permissions and don't report to the Google Play Store!";
+
+    FlutterDownloader.registerCallback(downloadCallback);
+    IsolateNameServer.registerPortWithName(recievePort.sendPort, "downloading");
+
+    recievePort.listen((message) {
+      print(progressValue);
+      setState(() {
+        progressValue = message[2];
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: backColor,
+      title: Text(
+        'New update available',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      content: Text(
+        updateInstructions,
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.75),
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
+        ),
+      ),
+      actions: [
+        if (!isRequired)
+          FlatButton(
+            color: Colors.red,
+            child: Text(
+              'Later',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        /* FlatButton(
+          child: Text(
+            'Close App',
+            style: TextStyle(
+              color: mainColor,
+            ),
+          ),
+          onPressed: () {
+            SystemNavigator.pop();
+          },
+        ), */
+        FlatButton(
+          child: Text(
+            'Update App',
+            style: TextStyle(color: mainColor),
+          ),
+          /* onPressed: () async {
+            final status = await Permission.storage.request();
+            final externalDirectory = await getExternalStorageDirectory();
+
+            if (status.isGranted) {
+              final id = await FlutterDownloader.enqueue(
+                url: widget.downloadUrl,
+                savedDir: externalDirectory.path,
+                fileName: 'Updating app...',
+                showNotification: true,
+                openFileFromNotification: true,
+              );
+            } else {
+              print('Failed to grant storage permission');
+              SystemNavigator.pop();
+            }
+          }, */
+          onPressed: () async {
+            if (await canLaunch(widget.downloadUrl)) {
+              launch(widget.downloadUrl);
+            } else if (await canLaunch(widget.backupDownloadUrl)) {
+              launch(widget.backupDownloadUrl);
+            } else {
+              Navigator.pop(context);
+              SnackBar snackbar = new SnackBar(
+                content: Text("Sorry, an unexpected error occured"),
+                duration: Duration(seconds: 1),
+              );
+              scaffoldKey.currentState.showSnackBar(snackbar);
+            }
+          },
+        ),
+      ],
     );
   }
 }

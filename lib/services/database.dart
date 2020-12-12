@@ -64,4 +64,21 @@ class DatabaseServices {
     });
     print('executed updateColor');
   }
+
+  Future<Map<String, dynamic>> getUpdates() async {
+    Map<String, dynamic> docData = await Firestore.instance
+        .collection('settings')
+        .document('settings')
+        .get()
+        .then((DocumentSnapshot doc) {
+      return doc.data;
+    });
+    Map<String, dynamic> returnVal = {
+      "minimumVersion": docData["minimumVersion"].toDouble(),
+      "latestVersion": docData["latestVersion"].toDouble(),
+      "downloadUrl": docData["downloadUrl"],
+      "backupDownloadUrl": docData["backupDownloadUrl"],
+    };
+    return returnVal;
+  }
 }

@@ -50,7 +50,7 @@ class _HelpState extends State<Help> {
               ),
               itemBuilder: (context, index) {
                 return Text(
-                  helpSnapshot.data["usage"][index],
+                  "${index + 1}) ${helpSnapshot.data["usage"][index]}",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

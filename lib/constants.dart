@@ -5,6 +5,8 @@ Color accentColor = Color(0xFF4903ff);
 Color backColor = Color(0xFF0E121B);
 Color lightBackColor = Color(0xFF171C26);
 
+double appVersion = 1.0;
+
 class CheckListTile extends StatelessWidget {
   String title;
   Function onPress = () {};
@@ -57,3 +59,14 @@ Color getColor(int num) {
 }
 
 double backArrowSize = 20.0;
+
+/*
+  1.0)
+    Added lists, list items and folders
+    Added main menu, users menu and settings dialog
+    Added Info and Help menus
+    Added export data option
+    Added update callback
+
+  1.1)
+*/

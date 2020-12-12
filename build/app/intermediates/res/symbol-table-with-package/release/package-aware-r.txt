@@ -1,4 +1,11 @@
 com.moo.firebase_todo_second
+anim fragment_close_enter
+anim fragment_close_exit
+anim fragment_fade_enter
+anim fragment_fade_exit
+anim fragment_fast_out_extra_slow_in
+anim fragment_open_enter
+anim fragment_open_exit
 attr alpha
 attr buttonSize
 attr circleCrop
@@ -17,6 +24,12 @@ attr imageAspectRatio
 attr imageAspectRatioAdjust
 attr scopeUris
 attr ttcIndex
+bool enable_system_alarm_service_default
+bool enable_system_foreground_service_default
+bool enable_system_job_service_default
+bool workmanager_test_configuration
+color androidx_core_ripple_material_light
+color androidx_core_secondary_text_default_material_light
 color common_google_signin_btn_text_dark
 color common_google_signin_btn_text_dark_default
 color common_google_signin_btn_text_dark_disabled
@@ -30,8 +43,6 @@ color common_google_signin_btn_text_light_pressed
 color common_google_signin_btn_tint
 color notification_action_color_filter
 color notification_icon_bg_color
-color ripple_material_light
-color secondary_text_default_material_light
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -135,6 +146,7 @@ id chronometer
 id dark
 id dialog_button
 id forever
+id fragment_container_view_tag
 id icon
 id icon_group
 id icon_only
@@ -163,6 +175,7 @@ id text
 id text2
 id time
 id title
+id visible_removing_fragment_view_tag
 id wide
 integer google_play_services_version
 integer status_bar_notification_info_maxnum
@@ -194,6 +207,14 @@ string common_signin_button_text
 string common_signin_button_text_long
 string default_web_client_id
 string firebase_database_url
+string flutter_downloader_notification_canceled
+string flutter_downloader_notification_channel_description
+string flutter_downloader_notification_channel_name
+string flutter_downloader_notification_complete
+string flutter_downloader_notification_failed
+string flutter_downloader_notification_in_progress
+string flutter_downloader_notification_paused
+string flutter_downloader_notification_started
 string gcm_defaultSenderId
 string google_api_key
 string google_app_id
@@ -213,7 +234,10 @@ style Widget_Compat_NotificationActionText
 styleable ColorStateListItem android_color android_alpha alpha
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery
 styleable FontFamilyFont android_font android_fontWeight android_fontStyle android_ttcIndex android_fontVariationSettings font fontStyle fontVariationSettings fontWeight ttcIndex
+styleable Fragment android_name android_id android_tag
+styleable FragmentContainerView android_name android_tag
 styleable GradientColor android_startColor android_endColor android_type android_centerX android_centerY android_gradientRadius android_tileMode android_centerColor android_startX android_startY android_endX android_endY
 styleable GradientColorItem android_color android_offset
 styleable LoadingImageView circleCrop imageAspectRatio imageAspectRatioAdjust
 styleable SignInButton buttonSize colorScheme scopeUris
+xml provider_paths
