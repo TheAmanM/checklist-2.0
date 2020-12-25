@@ -16,11 +16,20 @@ class DatabaseServices {
   }
 
   Future<void> createList(String name, String ownerID) async {
+    Map data = {
+      "canReadAndExport": true,
+      "canEditName": false,
+      "canEditFolder": false,
+      "canEditItems": false,
+      "canMarkIncomplete": false,
+      "canDelete": false,
+    };
     await notesCollection.document().setData({
       "name": name,
       "sortByName": true,
       "folder": "",
       "ownerID": ownerID,
+      "security": data,
     });
   }
 
@@ -46,9 +55,10 @@ class DatabaseServices {
     });
   }
 
-  Future<void> getCurrentUsersName(uid) {
-    var userDoc = usersCollection.document(uid);
-    print(userDoc.snapshots());
+  Future<String> getCurrentUsersName(uid) async {
+    DocumentSnapshot userDoc = await usersCollection.document(uid).get();
+    // print(userDoc.snapshots());
+    return userDoc.data["name"].toString();
   }
 
   Future<void> updateColor(uid, int color) async {
@@ -58,11 +68,27 @@ class DatabaseServices {
     print('executed updateColor');
   }
 
+  Stream<DocumentSnapshot> getUserDataAsStream(String uid) {
+    return usersCollection.document(uid).snapshots();
+  }
+
+  Future<int> getColor(uid) async {
+    int color;
+    await usersCollection.document(uid).get().then((DocumentSnapshot value) {
+      color = value['color'];
+    });
+    return color;
+  }
+
   Future<void> updateName(uid, String name) async {
     await usersCollection.document(uid).updateData({
       "name": name,
     });
-    print('executed updateColor');
+    // print('executed updateColor');
+  }
+
+  Future<void> updateData(String uid, Map<String, dynamic> data) async {
+    await usersCollection.document(uid).updateData(data);
   }
 
   Future<Map<String, dynamic>> getUpdates() async {
@@ -80,5 +106,16 @@ class DatabaseServices {
       "backupDownloadUrl": docData["backupDownloadUrl"],
     };
     return returnVal;
+  }
+
+  Future setSecuritySettings(String documentID, Map securitySettings) {
+    notesCollection.document(documentID).updateData({
+      "security": securitySettings,
+    });
+  }
+
+  Stream<DocumentSnapshot> getPreferredTheme(String uid) {
+    print('uid given: $uid');
+    return Firestore.instance.collection('users').document(uid).snapshots();
   }
 }

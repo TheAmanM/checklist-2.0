@@ -9,9 +9,11 @@ import 'package:clipboard/clipboard.dart';
 class ItemSelectorScreen extends StatefulWidget {
   AsyncSnapshot<QuerySnapshot> importedSnapshot;
   bool isAlphabeticallySorted;
+  bool darkMode;
   ItemSelectorScreen({
     this.importedSnapshot,
     this.isAlphabeticallySorted,
+    this.darkMode,
   });
 
   @override
@@ -60,11 +62,11 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
     showDialog(
       context: customContext,
       child: AlertDialog(
-        backgroundColor: backColor,
+        backgroundColor: widget.darkMode ? backColor : lightModeBackColor,
         title: Text(
           'Data has been exported!',
           style: TextStyle(
-            color: Colors.white,
+            color: widget.darkMode ? Colors.white : Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w400,
           ),
@@ -110,7 +112,7 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
                   icon: Icon(
                     Icons.content_copy,
                   ),
-                  color: Colors.white,
+                  color: widget.darkMode ? Colors.white : Colors.black,
                   onPressed: () {
                     //Navigator.pop(context);
                     /* ClipboardManager.copyToClipBoard(returnValue).then((_) {
@@ -135,7 +137,7 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
                   icon: Icon(
                     Icons.share,
                   ),
-                  color: Colors.white,
+                  color: widget.darkMode ? Colors.white : Colors.black,
                   onPressed: () {
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
@@ -175,7 +177,7 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backColor,
+      backgroundColor: widget.darkMode ? backColor : lightModeBackColor,
       appBar: AppBar(
         leading: IconButton(
           iconSize: backArrowSize,
@@ -276,7 +278,8 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
             return ListTile(
               leading: Theme(
                 data: Theme.of(context).copyWith(
-                  unselectedWidgetColor: Colors.white,
+                  unselectedWidgetColor:
+                      widget.darkMode ? Colors.white : backColor,
                 ),
                 child: Checkbox(
                   activeColor: mainColor,
@@ -296,7 +299,7 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
               title: Text(
                 name,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: widget.darkMode ? Colors.white : Colors.black,
                 ),
               ),
             );

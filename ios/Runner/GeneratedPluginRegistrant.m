@@ -22,24 +22,6 @@
 @import firebase_core;
 #endif
 
-#if __has_include(<flutter_downloader/FlutterDownloaderPlugin.h>)
-#import <flutter_downloader/FlutterDownloaderPlugin.h>
-#else
-@import flutter_downloader;
-#endif
-
-#if __has_include(<path_provider/FLTPathProviderPlugin.h>)
-#import <path_provider/FLTPathProviderPlugin.h>
-#else
-@import path_provider;
-#endif
-
-#if __has_include(<permission_handler/PermissionHandlerPlugin.h>)
-#import <permission_handler/PermissionHandlerPlugin.h>
-#else
-@import permission_handler;
-#endif
-
 #if __has_include(<url_launcher/FLTURLLauncherPlugin.h>)
 #import <url_launcher/FLTURLLauncherPlugin.h>
 #else
@@ -52,9 +34,6 @@
   [FLTCloudFirestorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTCloudFirestorePlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
-  [FlutterDownloaderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterDownloaderPlugin"]];
-  [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
-  [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
 }
 

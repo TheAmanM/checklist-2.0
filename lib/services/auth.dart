@@ -58,23 +58,29 @@ class AuthServices {
       await db.createUserTemplate(user.uid, name);
       return user;
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
 
   //sign in
-  Future signIn(String email, String pass) async {
+  Future<Map> signIn(String email, String pass) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: pass,
       );
       FirebaseUser user = result.user;
-      return user;
+      return {
+        "data": user,
+        "error": null,
+      };
     } catch (e) {
       print('Error: ${e.toString()}');
-      return null;
+      return {
+        "data": null,
+        "error": e,
+      };
     }
   }
 

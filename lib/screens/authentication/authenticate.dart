@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_todo_second/constants.dart';
+import 'package:firebase_todo_second/screens/home/notes_page.dart';
 import 'package:firebase_todo_second/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -20,6 +22,8 @@ class _AuthenticateState extends State<Authenticate> {
   TextEditingController registerPasswordController =
       new TextEditingController();
   TextEditingController registerNameController = new TextEditingController();
+
+  GlobalKey<ScaffoldState> authScaffoldKey = new GlobalKey();
 
   signIn() async {
     if (loginEmailController.text == null) {
@@ -40,24 +44,28 @@ class _AuthenticateState extends State<Authenticate> {
         invalidText = false;
         loading = true;
       });
-      FirebaseUser result = await _auth.signIn(
+      var result = await _auth.signIn(
         loginEmailController.text,
         loginPasswordController.text,
       );
-      if (result == null) {
+      if (result["data"] == null) {
+        PlatformException exception = result["error"];
+        print(exception.message);
+        authScaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(exception.message),
+            duration: Duration(seconds: 1),
+          ),
+        );
         setState(() {
           loading = false;
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('An unexpected error occured'),
-            duration: Duration(seconds: 1),
-          ));
         });
       } else {
+        print('successful login!');
         setState(() {
           loading = false;
         });
       }
-      print('successful login!');
     }
   }
 
@@ -92,20 +100,23 @@ class _AuthenticateState extends State<Authenticate> {
       if (result == null) {
         setState(() {
           loading = false;
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('An unexpected error occured'),
-            duration: Duration(seconds: 1),
-          ));
+          authScaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: Text('An unexpected error occured'),
+              duration: Duration(seconds: 1),
+            ),
+          );
         });
       } else {
+        print('successful registration!');
         setState(() {
           loading = false;
         });
       }
-      print('successful registration!');
     }
   }
 
+  /* 
   register() {
     if (registerEmailController.text == null) {
       registerEmailController.text = '';
@@ -131,12 +142,24 @@ class _AuthenticateState extends State<Authenticate> {
       print('successful register!');
     }
   }
+ */
+
+  @override
+  void dispose() {
+    loginEmailController.dispose();
+    loginPasswordController.dispose();
+    registerEmailController.dispose();
+    registerNameController.dispose();
+    registerPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     keyboardOpen = MediaQuery.of(context).viewInsets.bottom == 0;
     return Scaffold(
         backgroundColor: backColor,
+        key: authScaffoldKey,
         body: !loading
             ? Padding(
                 padding: const EdgeInsets.only(
