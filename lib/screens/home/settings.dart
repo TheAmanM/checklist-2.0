@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_todo_second/constants.dart';
+import 'package:firebase_todo_second/screens/home/notes_page.dart';
 import 'package:firebase_todo_second/services/database.dart';
 import 'package:flutter/material.dart';
 
+TextEditingController nameController = new TextEditingController();
+
 class Settings extends StatefulWidget {
-  // final bool isDarkMode;
+  final bool isDarkMode;
   final String userID;
   Settings(
-    // this.isDarkMode,
+    this.isDarkMode,
     this.userID,
   );
 
@@ -58,7 +61,7 @@ class _SettingsState extends State<Settings> {
                       vertical: 0,
                     ),
                     title: Text(
-                      'Dark mode',
+                      isDarkMode ? 'Dark mode' : 'Dark mode (recommended)',
                       style: TextStyle(
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),
@@ -93,6 +96,7 @@ class _SettingsState extends State<Settings> {
                     trailing: getCustomSwitch(
                       userData["isDarkMode"],
                       (val) async {
+                        // setNavBarColor(!isDarkMode);
                         await DatabaseServices().updateData(
                           widget.userID,
                           {
@@ -132,7 +136,15 @@ class _SettingsState extends State<Settings> {
                         color: isDarkMode ? Colors.white : Colors.black,
                       ),
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      String prevName =
+                          await DatabaseServices().getCurrentUsersName(userID);
+                      changeNameDialog(
+                        context,
+                        isDarkMode,
+                        prevName,
+                      );
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.symmetric(
@@ -157,12 +169,52 @@ class _SettingsState extends State<Settings> {
                       );
                     },
                   ),
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 0,
+                    ),
+                    title: Text(
+                      'Help',
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return HelpMenu(isDarkMode);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
+            return Scaffold(
+              backgroundColor:
+                  widget.isDarkMode ? backColor : lightModeBackColor,
+              appBar: AppBar(
+                title: Text('Settings'),
+                elevation: 0,
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        mainColor,
+                        accentColor,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });
@@ -329,4 +381,123 @@ class _PickColorState extends State<PickColor> {
             ),
     );
   }
+}
+
+class ChangeNameDialog extends StatefulWidget {
+  final BuildContext context;
+  final bool isDarkMode;
+  // final String prevName;
+
+  ChangeNameDialog({
+    this.context,
+    this.isDarkMode,
+    // this.prevName,
+  });
+
+  @override
+  _ChangeNameDialogState createState() => _ChangeNameDialogState();
+}
+
+class _ChangeNameDialogState extends State<ChangeNameDialog> {
+  bool canUpdate = false;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      elevation: 8,
+      title: Text('Update name'),
+      titleTextStyle: TextStyle(
+        color: widget.isDarkMode ? Colors.white : Colors.black,
+        fontWeight: FontWeight.w400,
+        fontSize: 20,
+      ),
+      backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              autofocus: true,
+              textCapitalization: TextCapitalization.words,
+              controller: nameController,
+              onChanged: (v) {
+                setState(() {
+                  canUpdate = true;
+                });
+              },
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black,
+              ),
+              decoration: InputDecoration(
+                hintText: 'Name',
+                hintStyle: TextStyle(
+                  color: widget.isDarkMode
+                      ? Colors.white.withOpacity(0.4)
+                      : Colors.black.withOpacity(0.4),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                ),
+                disabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      actions: [
+        FlatButton(
+          child: Text(
+            'CANCEL',
+            style: TextStyle(color: mainColor),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            // nameController.text = '';
+          },
+        ),
+        FlatButton(
+          child: Text(
+            'UPDATE',
+            style: TextStyle(
+              color: nameController.text == '' || !canUpdate
+                  ? widget.isDarkMode
+                      ? Colors.white.withOpacity(0.2)
+                      : Colors.black.withOpacity(0.2)
+                  : mainColor,
+            ),
+          ),
+          onPressed: nameController.text != ''
+              ? () async {
+                  await DatabaseServices().updateName(
+                    userID,
+                    nameController.text.trim(),
+                  );
+                  Navigator.pop(context);
+                }
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+void changeNameDialog(BuildContext context, bool isDarkMode, String prevName) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      nameController.text = prevName;
+      return ChangeNameDialog(
+        context: context,
+        isDarkMode: isDarkMode,
+      );
+    },
+  );
 }

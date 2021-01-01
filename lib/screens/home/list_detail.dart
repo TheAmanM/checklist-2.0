@@ -8,22 +8,18 @@ import 'package:flutter/material.dart';
 import '../../services/database.dart';
 
 class NotesDetail extends StatefulWidget {
-  String docID;
-  String title;
-
-  String listOwnerID;
   String currentUserID;
-
-  Map securitySettings;
-
+  DocumentSnapshot data;
   bool isDarkMode;
 
   NotesDetail(
-    this.docID,
-    this.title,
-    this.listOwnerID,
+    // this.docID,
+    // this.title,
+    // this.listOwnerID,
     this.currentUserID,
-    this.securitySettings,
+    // this.securitySettings,
+
+    this.data,
     this.isDarkMode,
   );
 
@@ -41,6 +37,7 @@ bool enableSave = false;
 GlobalKey<ScaffoldState> newScaffoldKey = new GlobalKey<ScaffoldState>();
 AnimationController controller;
 Animation<Offset> aniTween;
+bool isDarkMode;
 
 bool isUsersList;
 bool canEditItems = false;
@@ -49,16 +46,36 @@ bool canDeleteList = false;
 bool canEditListName = false;
 bool canMarkIncomplete = false;
 
+String docID;
+String title;
+String folderID;
+
+String listOwnerID;
+String currentUserID;
+
+Map securitySettings;
+
 class _NotesDetailState extends State<NotesDetail>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
 
-    isUsersList = widget.currentUserID == widget.listOwnerID;
+    isDarkMode = widget.isDarkMode;
+    docID = widget.data.documentID;
+    title = widget.data["name"];
+    listOwnerID = widget.data["ownerID"];
+    currentUserID = widget.currentUserID;
+    securitySettings = widget.data["security"];
+    folderID = widget.data["folder"];
+
+    print('list name: $title');
+    print('document id: $docID');
+
+    isUsersList = currentUserID == listOwnerID;
     DatabaseServices()
         .notesCollection
-        .document(widget.docID)
+        .document(docID)
         .get()
         .then((DocumentSnapshot value) {
       Map security = value.data["security"];
@@ -89,31 +106,29 @@ class _NotesDetailState extends State<NotesDetail>
   Widget build(BuildContext context) {
     Firestore.instance
         .collection('notes')
-        .document(widget.docID)
+        .document(docID)
         .get()
         .then((DocumentSnapshot value) {
       sortQueryString = value.data['sortByName'] ? 'name' : 'done';
       //setState(() {});
     });
     return StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance
-          .collection('notes')
-          .document(widget.docID)
-          .snapshots(),
+      stream:
+          Firestore.instance.collection('notes').document(docID).snapshots(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> sortSnapshot) =>
           sortSnapshot.hasData
               ? StreamBuilder(
                   stream: sortSnapshot.data['sortByName'] == false
                       ? Firestore.instance
                           .collection('notes')
-                          .document(widget.docID)
+                          .document(docID)
                           .collection('items')
                           .orderBy("done")
                           .orderBy("name")
                           .snapshots()
                       : Firestore.instance
                           .collection('notes')
-                          .document(widget.docID)
+                          .document(docID)
                           .collection('items')
                           .orderBy("name")
                           .snapshots(),
@@ -121,7 +136,7 @@ class _NotesDetailState extends State<NotesDetail>
                       (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                     /* Firestore.instance
                 .collection('notes')
-                .document(widget.docID)
+                .document(docID)
                 .get()
                 .then((DocumentSnapshot value) {
               sortQueryString = value.data['sortByName'] ? 'name' : 'done';
@@ -133,7 +148,7 @@ class _NotesDetailState extends State<NotesDetail>
                     return Scaffold(
                       key: newScaffoldKey,
                       backgroundColor:
-                          widget.isDarkMode ? backColor : lightModeBackColor,
+                          isDarkMode ? backColor : lightModeBackColor,
                       appBar: AppBar(
                         elevation: 0,
                         flexibleSpace: Container(
@@ -154,7 +169,7 @@ class _NotesDetailState extends State<NotesDetail>
                             Navigator.pop(context);
                           },
                         ),
-                        title: Text(widget.title),
+                        title: Text(title),
                         actions: [
                           /* IconButton(
                             icon: Icon(
@@ -163,7 +178,7 @@ class _NotesDetailState extends State<NotesDetail>
                             onPressed: () {
                               Firestore.instance
                                   .collection('notes')
-                                  .document(widget.docID)
+                                  .document(docID)
                                   .updateData(
                                 {
                                   "sortByName":
@@ -204,8 +219,7 @@ class _NotesDetailState extends State<NotesDetail>
                                 await showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return AddItemDialog(
-                                        widget.docID, widget.isDarkMode);
+                                    return AddItemDialog(docID, isDarkMode);
                                   },
                                 );
                                 setState(() {
@@ -223,7 +237,7 @@ class _NotesDetailState extends State<NotesDetail>
                           StreamBuilder(
                               stream: Firestore.instance
                                   .collection('notes')
-                                  .document(widget.docID)
+                                  .document(docID)
                                   .snapshots(),
                               builder: (context,
                                   AsyncSnapshot<DocumentSnapshot>
@@ -231,19 +245,19 @@ class _NotesDetailState extends State<NotesDetail>
                                 return PopupMenuButton<int>(
                                   onSelected: (int value) async {
                                     /* popupMenuFunctionsList[value](
-                                      context, widget.title, widget.docID); */
+                                      context, title, docID); */
                                     if (value == 0) {
                                       setState(() {
                                         keyboardVisible = true;
                                       });
-                                      noteNameController.text = widget.title;
+                                      noteNameController.text = title;
                                       await showDialog(
                                         context: context,
                                         builder: (context) {
                                           return EditNoteName(
-                                            noteName: widget.title,
-                                            docID: widget.docID,
-                                            isDarkMode: widget.isDarkMode,
+                                            noteName: title,
+                                            docID: docID,
+                                            isDarkMode: isDarkMode,
                                           );
                                         },
                                       );
@@ -253,14 +267,14 @@ class _NotesDetailState extends State<NotesDetail>
                                       setState(() {
                                         Firestore.instance
                                             .collection('notes')
-                                            .document(widget.docID)
+                                            .document(docID)
                                             .get()
                                             .then(
                                               (DocumentSnapshot value) =>
-                                                  widget.title = value["name"],
+                                                  title = value["name"],
                                             );
                                       });
-                                      noteNameController.text = widget.title;
+                                      noteNameController.text = title;
                                     } else if (value == 1) {
                                       setState(() {
                                         keyboardVisible = true;
@@ -269,8 +283,8 @@ class _NotesDetailState extends State<NotesDetail>
                                         context: context,
                                         builder: (context) {
                                           return FolderSelectorMenu(
-                                            docID: widget.docID,
-                                            isDarkMode: widget.isDarkMode,
+                                            docID: docID,
+                                            isDarkMode: isDarkMode,
                                           );
                                         },
                                       );
@@ -280,7 +294,7 @@ class _NotesDetailState extends State<NotesDetail>
                                     } else if (value == 2) {
                                       Firestore.instance
                                           .collection('notes')
-                                          .document(widget.docID)
+                                          .document(docID)
                                           .updateData({
                                         "sortByName": !sortValueSnapshot
                                             .data['sortByName'],
@@ -291,13 +305,13 @@ class _NotesDetailState extends State<NotesDetail>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            backgroundColor: widget.isDarkMode
+                                            backgroundColor: isDarkMode
                                                 ? backColor
                                                 : lightModeBackColor,
                                             content: Text(
                                               'Are you sure you want to mark all items as incomplete?',
                                               style: TextStyle(
-                                                color: widget.isDarkMode
+                                                color: isDarkMode
                                                     ? Colors.white
                                                     : Colors.black,
                                               ),
@@ -326,7 +340,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   //Navigator.pop(context);
                                                   await Firestore.instance
                                                       .collection('notes')
-                                                      .document(widget.docID)
+                                                      .document(docID)
                                                       .collection('items')
                                                       .getDocuments()
                                                       .then(
@@ -354,7 +368,7 @@ class _NotesDetailState extends State<NotesDetail>
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            backgroundColor: widget.isDarkMode
+                                            backgroundColor: isDarkMode
                                                 ? backColor
                                                 : lightModeBackColor,
                                             content: Container(
@@ -368,7 +382,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   Text(
                                                     'Are you sure you want to delete the list?',
                                                     style: TextStyle(
-                                                      color: widget.isDarkMode
+                                                      color: isDarkMode
                                                           ? Colors.white
                                                           : Colors.black,
                                                     ),
@@ -377,7 +391,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   Text(
                                                     '(Note: This action can not be undone)',
                                                     style: TextStyle(
-                                                      color: widget.isDarkMode
+                                                      color: isDarkMode
                                                           ? Colors.white
                                                           : Colors.black,
                                                       fontSize: 12,
@@ -410,7 +424,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   Navigator.pop(context);
                                                   await Firestore.instance
                                                       .collection('notes')
-                                                      .document(widget.docID)
+                                                      .document(docID)
                                                       .delete();
                                                 },
                                               ),
@@ -429,7 +443,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   sortSnapshot
                                                           .data['sortByName'] ==
                                                       true,
-                                              darkMode: widget.isDarkMode,
+                                              darkMode: isDarkMode,
                                             );
                                           },
                                         ),
@@ -440,9 +454,9 @@ class _NotesDetailState extends State<NotesDetail>
                                         MaterialPageRoute(
                                           builder: (context) {
                                             return SecurityScreen(
-                                              widget.securitySettings,
-                                              widget.docID,
-                                              widget.isDarkMode,
+                                              securitySettings,
+                                              docID,
+                                              isDarkMode,
                                             );
                                           },
                                         ),
@@ -465,7 +479,7 @@ class _NotesDetailState extends State<NotesDetail>
                                       );
                                     }
                                   },
-                                  color: widget.isDarkMode
+                                  color: isDarkMode
                                       ? backColor
                                       : lightModeBackColor,
                                   itemBuilder: (context) {
@@ -476,7 +490,7 @@ class _NotesDetailState extends State<NotesDetail>
                                           child: Text(
                                             'Edit list name',
                                             style: TextStyle(
-                                              color: widget.isDarkMode
+                                              color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
@@ -488,7 +502,7 @@ class _NotesDetailState extends State<NotesDetail>
                                           child: Text(
                                             'Edit folder',
                                             style: TextStyle(
-                                              color: widget.isDarkMode
+                                              color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
@@ -505,7 +519,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                   : 'Sort alphabetically'
                                               : '',
                                           style: TextStyle(
-                                            color: widget.isDarkMode
+                                            color: isDarkMode
                                                 ? Colors.white
                                                 : Colors.black,
                                           ),
@@ -517,7 +531,7 @@ class _NotesDetailState extends State<NotesDetail>
                                           child: Text(
                                             'Mark all items incomplete',
                                             style: TextStyle(
-                                              color: widget.isDarkMode
+                                              color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
@@ -529,7 +543,7 @@ class _NotesDetailState extends State<NotesDetail>
                                           child: Text(
                                             'Delete list',
                                             style: TextStyle(
-                                              color: widget.isDarkMode
+                                              color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
@@ -540,7 +554,7 @@ class _NotesDetailState extends State<NotesDetail>
                                         child: Text(
                                           'Export items',
                                           style: TextStyle(
-                                            color: widget.isDarkMode
+                                            color: isDarkMode
                                                 ? Colors.white
                                                 : Colors.black,
                                           ),
@@ -552,7 +566,7 @@ class _NotesDetailState extends State<NotesDetail>
                                           child: Text(
                                             'Security',
                                             style: TextStyle(
-                                              color: widget.isDarkMode
+                                              color: isDarkMode
                                                   ? Colors.white
                                                   : Colors.black,
                                             ),
@@ -598,7 +612,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                 await Firestore.instance
                                                     .collection('notes')
                                                     .document(
-                                                      widget.docID,
+                                                      docID,
                                                     )
                                                     .collection('items')
                                                     .document(
@@ -735,7 +749,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                     /* Firestore.instance
                                                           .collection('notes')
                                                           .document(
-                                                              widget.docID)
+                                                              docID)
                                                           .collection('items')
                                                           .document(
                                                               streamSnapshot
@@ -809,7 +823,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                     .documentID,
                                               ),
                                               secondaryBackground: Container(
-                                                color: widget.isDarkMode
+                                                color: isDarkMode
                                                     ? Colors.white
                                                         .withOpacity(0.1)
                                                     : Colors.black
@@ -844,7 +858,7 @@ class _NotesDetailState extends State<NotesDetail>
                                                       .documents[index]["name"]
                                                       .toString(),
                                                   style: TextStyle(
-                                                    color: widget.isDarkMode
+                                                    color: isDarkMode
                                                         ? streamSnapshot.data
                                                                     .documents[
                                                                 index]["done"]
@@ -889,13 +903,13 @@ class _NotesDetailState extends State<NotesDetail>
                                                         print(
                                                             'initialValue = $initialValue');
                                                         return EditItemWidget(
-                                                          docID: widget.docID,
+                                                          docID: docID,
                                                           itemID: streamSnapshot
                                                               .data
                                                               .documents[index]
                                                               .documentID,
                                                           isDarkMode:
-                                                              widget.isDarkMode,
+                                                              isDarkMode,
                                                         );
                                                       },
                                                     );
@@ -929,7 +943,7 @@ class _NotesDetailState extends State<NotesDetail>
                                       child: Text(
                                         'Nothing here yet!',
                                         style: TextStyle(
-                                          color: widget.isDarkMode
+                                          color: isDarkMode
                                               ? Colors.white
                                               : Colors.black,
                                         ),
@@ -939,9 +953,8 @@ class _NotesDetailState extends State<NotesDetail>
                                   child: CircularProgressIndicator(),
                                 )
                           : Container(
-                              color: widget.isDarkMode
-                                  ? backColor
-                                  : lightModeBackColor,
+                              color:
+                                  isDarkMode ? backColor : lightModeBackColor,
                             ),
                     );
                   })
@@ -974,11 +987,11 @@ class _EditItemWidgetState extends State<EditItemWidget> {
       elevation: 8,
       title: Text('Edit Item'),
       titleTextStyle: TextStyle(
-        color: widget.isDarkMode ? Colors.white : Colors.black,
+        color: isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w400,
         fontSize: 20,
       ),
-      backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+      backgroundColor: isDarkMode ? backColor : lightModeBackColor,
       content: Container(
         width: MediaQuery.of(context).size.width * 0.8,
         child: Column(
@@ -995,22 +1008,21 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                 }
               },
               controller: editItemController,
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                 hintText: 'Item name',
                 hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
               ),
             ),
@@ -1021,13 +1033,13 @@ class _EditItemWidgetState extends State<EditItemWidget> {
                 Text(
                   'Task Completed?',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 Theme(
                   data: ThemeData(
                     unselectedWidgetColor:
-                        widget.isDarkMode ? Colors.white : backColor,
+                        isDarkMode ? Colors.white : backColor,
                   ),
                   child: Checkbox(
                     activeColor: mainColor,
@@ -1190,11 +1202,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
       elevation: 8,
       title: Text('Add new Item'),
       titleTextStyle: TextStyle(
-        color: widget.isDarkMode ? Colors.white : Colors.black,
+        color: isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w400,
         fontSize: 20,
       ),
-      backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+      backgroundColor: isDarkMode ? backColor : lightModeBackColor,
       content: Container(
         width: MediaQuery.of(context).size.width * 0.8,
         child: Column(
@@ -1207,26 +1219,25 @@ class _AddItemDialogState extends State<AddItemDialog> {
                 setState(() {});
               },
               controller: addItemController,
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                 hintText: 'Item name',
                 hintStyle: TextStyle(
-                  color: widget.isDarkMode
+                  color: isDarkMode
                       ? Colors.white.withOpacity(0.4)
                       : Colors.black.withOpacity(0.4),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.isDarkMode ? Colors.white : Colors.black),
+                      color: isDarkMode ? Colors.white : Colors.black),
                 ),
               ),
             )
@@ -1249,7 +1260,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
             'ADD',
             style: TextStyle(
               color: addItemController.text == ''
-                  ? widget.isDarkMode
+                  ? isDarkMode
                       ? Colors.white.withOpacity(0.2)
                       : Colors.black.withOpacity(0.2)
                   : mainColor,
@@ -1309,11 +1320,11 @@ class _EditNoteNameState extends State<EditNoteName> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+      backgroundColor: isDarkMode ? backColor : lightModeBackColor,
       title: Text(
         'Edit list name',
         style: TextStyle(
-          color: widget.isDarkMode ? Colors.white : Colors.black,
+          color: isDarkMode ? Colors.white : Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.w400,
         ),
@@ -1329,29 +1340,28 @@ class _EditNoteNameState extends State<EditNoteName> {
               },
               autofocus: true,
               controller: noteNameController,
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: 'List name',
                 hintStyle: TextStyle(
-                  color: widget.isDarkMode
+                  color: isDarkMode
                       ? Colors.white.withOpacity(0.4)
                       : Colors.black.withOpacity(0.4),
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -1364,7 +1374,7 @@ class _EditNoteNameState extends State<EditNoteName> {
                   'SAVE',
                   style: TextStyle(
                     color: noteNameController.text == ''
-                        ? widget.isDarkMode
+                        ? isDarkMode
                             ? Colors.white.withOpacity(0.2)
                             : Colors.black.withOpacity(0.4)
                         : mainColor,
@@ -1375,7 +1385,7 @@ class _EditNoteNameState extends State<EditNoteName> {
                     : () async {
                         await Firestore.instance
                             .collection('notes')
-                            .document(widget.docID)
+                            .document(docID)
                             .updateData(
                           {
                             "name": noteNameController.text,
@@ -1474,7 +1484,7 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
   Widget build(BuildContext context) {
     return AlertDialog(
       contentPadding: EdgeInsets.zero,
-      backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+      backgroundColor: isDarkMode ? backColor : lightModeBackColor,
       content: StreamBuilder(
         stream: Firestore.instance.collection('folders').snapshots(),
         builder:
@@ -1483,10 +1493,12 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
             List<Widget> returnList = folderSelectorSnapshot.data.documents
                 .map(
                   (DocumentSnapshot doc) => ListTile(
+                    // groupValue: "groupValue",
+                    // value: folderID == doc.documentID,
                     onTap: () async {
                       await Firestore.instance
                           .collection('notes')
-                          .document(widget.docID)
+                          .document(docID)
                           .updateData(
                         {
                           "folder": doc.documentID,
@@ -1498,8 +1510,7 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
                     title: Text(
                       doc['name'].toString(),
                       style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black),
+                          color: isDarkMode ? Colors.white : Colors.black),
                     ),
                   ),
                 )
@@ -1507,16 +1518,18 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
             returnList.insert(
               0,
               ListTile(
+                // groupValue: "groupValue",
+                // value: folderID == "",
                 title: Text(
                   'Uncategorized',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 onTap: () async {
                   await Firestore.instance
                       .collection('notes')
-                      .document(widget.docID)
+                      .document(docID)
                       .updateData({"folder": ""});
                   Navigator.pop(context);
                 },
@@ -1532,7 +1545,7 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
                               onTap: () async {
                                 await Firestore.instance
                                     .collection('notes')
-                                    .document(widget.docID)
+                                    .document(docID)
                                     .updateData(
                                   {
                                     "folder": doc.documentID,
@@ -1555,7 +1568,7 @@ class _FolderSelectorMenuState extends State<FolderSelectorMenu> {
                               onTap: () async {
                                 await Firestore.instance
                                     .collection('notes')
-                                    .document(widget.docID)
+                                    .document(docID)
                                     .updateData({"folder": ""});
                                 Navigator.pop(context);
                               },

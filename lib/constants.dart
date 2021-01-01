@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Color mainColor = Color(0xFF0066F1);
 Color accentColor = Color(0xFF4903ff);
@@ -9,7 +10,7 @@ Color lightModeBackColor =
     Color(0xFFFCFCFC); //Color(0xFFEDEFFE); //Color(0xFFE4E8F1);
 Color lightModeLightBackColor = Color(0xFFECEBF0); //Color(0xFFD9DEE8);
 
-double appVersion = 1.01;
+double appVersion = 1.02;
 
 class CheckListTile extends StatelessWidget {
   String title;
@@ -110,7 +111,7 @@ Switch getCustomSwitch(bool isDarkMode, void Function(bool) onTap, bool value) {
           activeColor: mainColor,
           activeTrackColor: mainColor.withOpacity(0.5),
           inactiveThumbColor: Colors.grey,
-          inactiveTrackColor: Colors.grey[300],
+          inactiveTrackColor: Colors.grey[350],
         )
       : Switch(
           value: value,
@@ -118,28 +119,41 @@ Switch getCustomSwitch(bool isDarkMode, void Function(bool) onTap, bool value) {
           activeColor: mainColor,
           activeTrackColor: mainColor.withOpacity(0.5),
           inactiveThumbColor: Colors.grey,
-          inactiveTrackColor: Colors.grey[300],
+          inactiveTrackColor: Colors.grey[350],
         );
 }
 
+void setNavBarColor(bool isBlack) {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarIconBrightness:
+          isBlack ? Brightness.light : Brightness.dark,
+      systemNavigationBarColor: isBlack ? Colors.black : Colors.white,
+    ),
+  );
+}
+
 double backArrowSize = 20.0;
+bool shouldCheckForUpdates = true;
 
 /*
   1.00)
-    Added lists, list items and folders. 
-    Added main menu, users menu and settings dialog. 
-    Added Info and Help menus. 
-    Added export data option. 
-    Added update callback. 
+    // Added lists, list items and folders. 
+    // Added main menu, users menu and settings dialog. 
+    // Added Info and Help menus. 
+    // Added export data option. 
+    // Added update callback. 
 
   1.01)
-    Added list security (reading, changing name, editing items, changing folder, marking items as incomplete and deleting lists). 
-    Fixed login / registration bug. 
-    Set second tab as default (opens users lists instead of all lists). 
+    // Added list security (reading, changing name, editing items, changing folder, marking items as incomplete and deleting lists). 
+    // Fixed login / registration bug. 
+    // Set second tab as default (opens users lists instead of all lists). 
 
   1.02)
-    Organized help, update and feature history pages on home page. (Admin menu)
-    Fixed settings menu. 
-    Patched bug: Permission to mark all items as incomplete and delete list not working. 
-    User is now allowed to see current folder in which list is in within the menu. 
+    // Patched bug: Permission to mark all items as incomplete and delete list not working. 
+    Organized help, update and feature history pages on home page. (Admin menu). 
+    // Added support for light mode. 
+    // Fixed settings menu. Users can now change color, name and theme preference. 
+
+          User is now allowed to see current folder in which list is in within the menu. 
 */

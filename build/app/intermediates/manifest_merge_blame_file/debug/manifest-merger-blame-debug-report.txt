@@ -14,7 +14,9 @@
 14    <uses-permission android:name="android.permission.INTERNET" />
 14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:5-67
 14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:22-64
-15    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+15    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+15-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:9:5-94
+15-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:9:22-92
 16    <!-- <uses-sdk android:minSdkVersion="14" /> -->
 17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
@@ -24,30 +26,30 @@
 20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 21    -->
 22    <application
-22-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:14:5-52:19
+22-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:15:5-53:19
 23        android:name="io.flutter.app.FlutterApplication"
-23-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:15:9-57
+23-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:16:9-57
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 24-->[androidx.core:core:1.1.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\03de50801950aab64f0548832a05435c\core-1.1.0\AndroidManifest.xml:24:18-86
 25        android:debuggable="true"
 26        android:icon="@mipmap/ic_launcher"
-26-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:17:9-43
+26-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:18:9-43
 27        android:label="Checklist 2.0" >
-27-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:16:9-38
+27-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:17:9-38
 28        <activity
-28-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:18:9-46:20
+28-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:19:9-47:20
 29            android:name="com.example.firebase_todo_second.MainActivity"
-29-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:19:13-41
+29-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:20:13-41
 30            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-30-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:22:13-163
+30-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:23:13-163
 31            android:hardwareAccelerated="true"
-31-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:23:13-47
+31-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:24:13-47
 32            android:launchMode="singleTop"
-32-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:20:13-43
+32-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:21:13-43
 33            android:theme="@style/LaunchTheme"
-33-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:21:13-47
+33-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:22:13-47
 34            android:windowSoftInputMode="adjustResize" >
-34-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:24:13-55
+34-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:25:13-55
 35
 36            <!--
 37                 Specifies an Android theme to apply to this Activity as soon as
@@ -56,11 +58,11 @@
 40                 to determine the Window background behind the Flutter UI.
 41            -->
 42            <meta-data
-42-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:29:13-32:17
+42-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:30:13-33:17
 43                android:name="io.flutter.embedding.android.NormalTheme"
-43-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:30:15-70
+43-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:31:15-70
 44                android:resource="@style/NormalTheme" />
-44-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:31:15-52
+44-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:32:15-52
 45            <!--
 46                 Displays an Android View that continues showing the launch screen
 47                 Drawable until Flutter paints its first frame, then this splash
@@ -69,21 +71,21 @@
 50                 Flutter's first frame.
 51            -->
 52            <meta-data
-52-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:38:13-41:17
+52-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:39:13-42:17
 53                android:name="io.flutter.embedding.android.SplashScreenDrawable"
-53-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:39:15-79
+53-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:40:15-79
 54                android:resource="@drawable/launch_background" />
-54-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:40:15-61
+54-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:41:15-61
 55
 56            <intent-filter>
-56-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:42:13-45:29
+56-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:43:13-46:29
 57                <action android:name="android.intent.action.MAIN" />
-57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:43:17-68
-57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:43:25-66
+57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:17-68
+57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:25-66
 58
 59                <category android:name="android.intent.category.LAUNCHER" />
-59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:17-76
-59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:27-74
+59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:45:17-76
+59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:45:27-74
 60            </intent-filter>
 61        </activity>
 62        <!--
@@ -91,11 +93,11 @@
 64             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
 65        -->
 66        <meta-data
-66-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:49:9-51:33
+66-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:50:9-52:33
 67            android:name="flutterEmbedding"
-67-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:50:13-44
+67-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:51:13-44
 68            android:value="2" />
-68-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:51:13-30
+68-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:52:13-30
 69
 70        <service
 70-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19

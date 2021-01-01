@@ -51,6 +51,7 @@ class _NotesPageState extends State<NotesPage>
   bool enableOK = false;
 
   bool isDarkMode;
+  bool isGridView;
 
   TabController tabBarController;
 
@@ -100,7 +101,6 @@ class _NotesPageState extends State<NotesPage>
     );
 
     getUserID();
-    checkForUpdates(context, isDarkMode);
 
     super.initState();
   }
@@ -162,15 +162,19 @@ class _NotesPageState extends State<NotesPage>
           ) {
             if (preferenceSnapshot.hasData) {
               isDarkMode = preferenceSnapshot.data["isDarkMode"];
-              print('isDarkMode = $isDarkMode');
+              print("isDarkMode = $isDarkMode");
+              // setNavBarColor(isDarkMode);
+              if (shouldCheckForUpdates) {
+                checkForUpdates(context, isDarkMode);
+                shouldCheckForUpdates = false;
+              }
+              isGridView = preferenceSnapshot.data["isGridView"];
+              print("isGridView = $isGridView");
               return FutureBuilder(
                 future: _auth.currentUser(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     color = snapshot.data['color'];
-                    print((0.2126 * Color(color).red) +
-                        (0.7152 * Color(color).green) +
-                        (0.0722 * Color(color).blue));
                   }
                   if (isDarkMode != null) {
                     return Scaffold(
@@ -200,7 +204,21 @@ class _NotesPageState extends State<NotesPage>
                                 ],
                               ),
                               actions: [
-                                IconButton(
+                                if (isGridView != null)
+                                  IconButton(
+                                    icon: Icon(
+                                      isGridView ? Icons.list : Icons.grid_on,
+                                    ),
+                                    onPressed: () async {
+                                      await _db.updateData(
+                                        userID,
+                                        {
+                                          "isGridView": !isGridView,
+                                        },
+                                      );
+                                    },
+                                  ),
+                                /* IconButton(
                                   icon: Text(
                                     '?',
                                     style: TextStyle(
@@ -219,7 +237,7 @@ class _NotesPageState extends State<NotesPage>
                                       ),
                                     );
                                   },
-                                ),
+                                ), */
                                 IconButton(
                                   icon: Icon(
                                     Icons.copyright,
@@ -306,6 +324,7 @@ class _NotesPageState extends State<NotesPage>
                             )
                           : null,
                       key: scaffoldKey,
+                      resizeToAvoidBottomPadding: false,
                       floatingActionButton: !keyboardVisible
                           ? FloatingActionButton(
                               onPressed: () async {
@@ -1054,31 +1073,15 @@ class _NotesPageState extends State<NotesPage>
                                         controller: tabBarController,
                                         children: [
                                           MainGridDisplay(
+                                            isGridView: isGridView,
                                             isAll: true,
-                                            /* 
-                                  stream: Firestore.instance
-                                      .collection('notes')
-                                      .orderBy("name")
-                                      .snapshots(),
-                                   */
                                             controller:
                                                 allListsScrollController,
                                             isDarkMode: isDarkMode,
                                           ),
                                           MainGridDisplay(
+                                            isGridView: isGridView,
                                             isAll: false,
-                                            /* 
-                                  stream: Firestore.instance
-                                      .collection('notes')
-                                      /*
-                                      .where(
-                                        'ownerID',
-                                        isEqualTo: userID,
-                                      ) 
-                                      */
-                                      .orderBy("name")
-                                      .snapshots(),
-                                  */
                                             controller: myListsScrollController,
                                             isDarkMode: isDarkMode,
                                           ),
@@ -1098,7 +1101,7 @@ class _NotesPageState extends State<NotesPage>
                                   : currentIndex == 2
                                       ? Users(isDarkMode)
                                       : Settings(
-                                          // isDarkMode,
+                                          isDarkMode,
                                           userID,
                                         )
                           : Center(
@@ -1384,11 +1387,13 @@ class _HelpMenuState extends State<HelpMenu> {
 
 class MainGridDisplay extends StatefulWidget {
   //final Stream<QuerySnapshot> stream;
+  final bool isGridView;
   final bool isAll;
   final ScrollController controller;
   final bool isDarkMode;
   MainGridDisplay({
     //this.stream,
+    this.isGridView,
     this.isAll,
     this.controller,
     this.isDarkMode,
@@ -1399,18 +1404,22 @@ class MainGridDisplay extends StatefulWidget {
 }
 
 class _MainGridDisplayState extends State<MainGridDisplay> {
+  bool isAllItemsDone(List<DocumentSnapshot> docs) {
+    bool returnVal;
+    docs.forEach((DocumentSnapshot doc) {
+      if (!doc.data["done"]) {
+        returnVal = false;
+      }
+    });
+    if (docs.length != 0) {
+      return returnVal ?? true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    /* 
-    Stream<QuerySnapshot> stream = widget.isAll
-        ? Firestore.instance.collection('notes').orderBy("name").snapshots()
-        : Firestore.instance
-            .collection('notes')
-            .where("ownerID", isEqualTo: userID)
-            .orderBy("name")
-            .snapshots();
-     */
-
     Stream<QuerySnapshot> stream =
         Firestore.instance.collection('notes').orderBy("name").snapshots();
 
@@ -1445,81 +1454,88 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                 data: Theme.of(context).copyWith(
                   accentColor: mainColor,
                 ),
-                child: GridView.builder(
-                  controller: widget.controller,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  semanticChildCount: 2,
-                  padding: EdgeInsets.all(8),
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    String currentDocID =
-                        snapshot.data.documents[index].documentID;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 12),
-                      child: InkWell(
-                        onTap: () async {
-                          print(
-                              "security values: ${snapshot.data.documents[index].data["security"]}");
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return NotesDetail(
-                                  snapshot.data.documents[index].documentID,
-                                  snapshot.data.documents[index]["name"],
-                                  snapshot.data.documents[index]["ownerID"],
-                                  userID,
-                                  snapshot.data.documents[index]["security"],
-                                  widget.isDarkMode,
+                child: widget.isGridView
+                    ? GridView.builder(
+                        controller: widget.controller,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        semanticChildCount: 2,
+                        padding: EdgeInsets.all(8),
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          String currentDocID =
+                              snapshot.data.documents[index].documentID;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 12),
+                            child: InkWell(
+                              onTap: () async {
+                                print(
+                                    "security values: ${snapshot.data.documents[index].data["security"]}");
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NotesDetail(
+                                        /* snapshot
+                                            .data.documents[index].documentID,
+                                        snapshot.data.documents[index]["name"],
+                                        snapshot.data.documents[index]
+                                            ["ownerID"],
+                                        userID,
+                                        snapshot.data.documents[index]
+                                            ["security"], */
+                                        userID,
+                                        snapshot.data.documents[index],
+                                        widget.isDarkMode,
+                                      );
+                                    },
+                                  ),
                                 );
+                                setState(() {});
                               },
-                            ),
-                          );
-                          setState(() {});
-                        },
-                        child: Container(
-                          //TODO: SWAP HERE
-                          decoration: BoxDecoration(
-                            color: widget.isDarkMode
-                                ? lightBackColor
-                                : lightModeLightBackColor,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: NotificationListener<
-                                OverscrollIndicatorNotification>(
-                              onNotification: (overScroll) {
-                                overScroll.disallowGlow();
-                              },
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            snapshot
-                                                .data.documents[index]["name"]
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: widget.isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                        /* GestureDetector(
+                              child: Container(
+                                //TODO: SWAP HERE
+                                decoration: BoxDecoration(
+                                  color: widget.isDarkMode
+                                      ? lightBackColor
+                                      : lightModeLightBackColor,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: NotificationListener<
+                                      OverscrollIndicatorNotification>(
+                                    onNotification: (overScroll) {
+                                      overScroll.disallowGlow();
+                                    },
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  snapshot.data
+                                                      .documents[index]["name"]
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                              /* GestureDetector(
                                           child: Container(
                                             color: widget.isDarkMode
                                                 ? lightBackColor
@@ -1560,132 +1576,149 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                             });
                                           },
                                         ), */
-                                      ],
-                                    ),
-                                    SizedBox(height: 25),
-                                    StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('notes')
-                                          .document(currentDocID)
-                                          .snapshots(),
-                                      builder: (context,
-                                              AsyncSnapshot<DocumentSnapshot>
-                                                  orderSnapshot) =>
-                                          StreamBuilder<QuerySnapshot>(
-                                        stream: Firestore.instance
-                                            .collection('notes')
-                                            .document(currentDocID)
-                                            .collection('items')
-                                            .orderBy(orderSnapshot.hasData
-                                                ? orderSnapshot.data[
-                                                            'sortByName'] ==
-                                                        true
-                                                    ? "name"
-                                                    : "done"
-                                                : "name")
-                                            .snapshots(),
-                                        builder: (context,
-                                            AsyncSnapshot<QuerySnapshot>
-                                                secondSnapshot) {
-                                          List<Widget> widgetList = [];
-                                          try {
-                                            secondSnapshot.data.documents
-                                                .forEach(
-                                              (DocumentSnapshot element) {
-                                                if (element.data['name']
-                                                    .toString()
-                                                    .isNotEmpty) {
-                                                  widgetList.add(
-                                                    Text(
-                                                      element.data['name'],
-                                                      style: TextStyle(
-                                                        color: widget.isDarkMode
-                                                            ? element.data[
-                                                                        'done'] ==
-                                                                    true
-                                                                ? Colors.white
-                                                                    .withOpacity(
-                                                                        0.5)
-                                                                : Colors.white
-                                                            : element.data[
-                                                                    'done']
-                                                                ? Colors.black
-                                                                    .withOpacity(
-                                                                        0.5)
-                                                                : Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        decoration: element
-                                                                        .data[
-                                                                    'done'] ==
-                                                                true
-                                                            ? TextDecoration
-                                                                .lineThrough
-                                                            : TextDecoration
-                                                                .none,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                    ),
-                                                  );
-                                                  widgetList.add(
-                                                    SizedBox(height: 8),
-                                                  );
-                                                }
-                                              },
-                                            );
-                                            if (widgetList.isEmpty) {
-                                              widgetList = [
-                                                Text(
-                                                  'This list is empty!',
-                                                  style: TextStyle(
-                                                    color: widget.isDarkMode
-                                                        ? Colors.white
-                                                            .withOpacity(0.9)
-                                                        : Colors.black
-                                                            .withOpacity(0.9),
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                              ];
-                                            }
-                                          } catch (e) {
-                                            widgetList = [];
-                                          }
-                                          Stream<DocumentSnapshot> sortRef =
-                                              Firestore.instance
-                                                  .collection("notes")
+                                            ],
+                                          ),
+                                          SizedBox(height: 25),
+                                          StreamBuilder(
+                                            stream: Firestore.instance
+                                                .collection('notes')
+                                                .document(currentDocID)
+                                                .snapshots(),
+                                            builder: (context,
+                                                    AsyncSnapshot<
+                                                            DocumentSnapshot>
+                                                        orderSnapshot) =>
+                                                StreamBuilder<QuerySnapshot>(
+                                              stream: Firestore.instance
+                                                  .collection('notes')
                                                   .document(currentDocID)
-                                                  .snapshots();
-                                          return widgetList.isNotEmpty
-                                              ? Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: widgetList,
-                                                )
-                                              : Text(
-                                                  'Loading...',
-                                                  style: TextStyle(
-                                                    color: widget.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black
-                                                            .withOpacity(0.9),
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                );
-                                        },
+                                                  .collection('items')
+                                                  .orderBy(orderSnapshot.hasData
+                                                      ? orderSnapshot.data[
+                                                                  'sortByName'] ==
+                                                              true
+                                                          ? "name"
+                                                          : "done"
+                                                      : "name")
+                                                  .snapshots(),
+                                              builder: (context,
+                                                  AsyncSnapshot<QuerySnapshot>
+                                                      secondSnapshot) {
+                                                List<Widget> widgetList = [];
+                                                try {
+                                                  secondSnapshot.data.documents
+                                                      .forEach(
+                                                    (DocumentSnapshot element) {
+                                                      if (element.data['name']
+                                                          .toString()
+                                                          .isNotEmpty) {
+                                                        widgetList.add(
+                                                          Text(
+                                                            element
+                                                                .data['name'],
+                                                            style: TextStyle(
+                                                              color: widget
+                                                                      .isDarkMode
+                                                                  ? element.data[
+                                                                              'done'] ==
+                                                                          true
+                                                                      ? Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0.5)
+                                                                      : Colors
+                                                                          .white
+                                                                  : element.data[
+                                                                          'done']
+                                                                      ? Colors
+                                                                          .black
+                                                                          .withOpacity(
+                                                                              0.5)
+                                                                      : Colors
+                                                                          .black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w300,
+                                                              decoration: element
+                                                                              .data[
+                                                                          'done'] ==
+                                                                      true
+                                                                  ? TextDecoration
+                                                                      .lineThrough
+                                                                  : TextDecoration
+                                                                      .none,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          ),
+                                                        );
+                                                        widgetList.add(
+                                                          SizedBox(height: 8),
+                                                        );
+                                                      }
+                                                    },
+                                                  );
+                                                  if (widgetList.isEmpty) {
+                                                    widgetList = [
+                                                      Text(
+                                                        'This list is empty!',
+                                                        style: TextStyle(
+                                                          color: widget
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                                  .withOpacity(
+                                                                      0.9)
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.9),
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                      ),
+                                                    ];
+                                                  }
+                                                } catch (e) {
+                                                  widgetList = [];
+                                                }
+                                                Stream<DocumentSnapshot>
+                                                    sortRef = Firestore.instance
+                                                        .collection("notes")
+                                                        .document(currentDocID)
+                                                        .snapshots();
+                                                return widgetList.isNotEmpty
+                                                    ? Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: widgetList,
+                                                      )
+                                                    : Text(
+                                                        'Loading...',
+                                                        style: TextStyle(
+                                                          color: widget
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.9),
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                      );
+                                              },
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  /* itemBuilder: (context, int index) {
+                          );
+                        },
+                        /* itemBuilder: (context, int index) {
                           return Padding(
                             padding: const EdgeInsets.only(
                               top: 0,
@@ -1714,7 +1747,93 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                             ),
                           );
                         }, */
-                ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        itemBuilder: (context, int index) {
+                          DocumentSnapshot doc = snapshot.data.documents[index];
+                          // bool allItemsDone = getQuerySnapshot(doc.reference);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 8,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return NotesDetail(
+                                        /* 
+                                        doc.documentID,
+                                        doc.data["name"],
+                                        doc.data["ownerID"],
+                                        userID,
+                                        doc.data["security"],
+                                         */
+                                        userID,
+                                        doc,
+                                        widget.isDarkMode,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                // padding: EdgeInsets.symmetric(vertical: 12),
+                                decoration: BoxDecoration(
+                                  // borderRadius: BorderRadius.circular(12),
+                                  color: widget.isDarkMode
+                                      ? lightBackColor
+                                      : lightModeLightBackColor,
+                                ),
+                                child: StreamBuilder(
+                                    stream: doc.reference
+                                        .collection('items')
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot>
+                                            isDoneSnapshot) {
+                                      if (isDoneSnapshot.hasData) {
+                                        bool allItemsDone = isAllItemsDone(
+                                            isDoneSnapshot.data.documents);
+                                        print(allItemsDone);
+                                        return ListTile(
+                                          title: Text(
+                                            doc.data["name"],
+                                            style: !allItemsDone
+                                                ? TextStyle(
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black)
+                                                : TextStyle(
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                            .withOpacity(0.5)
+                                                        : Colors.black
+                                                            .withOpacity(0.5),
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                  ),
+                                          ),
+                                        );
+                                      } else {
+                                        /* return Center(
+                                          child: CircularProgressIndicator(),
+                                        ); */
+                                        return Container();
+                                      }
+                                    }),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: snapshot.data.documents.length,
+                      ),
               );
             } else {
               return Center(
@@ -1731,42 +1850,6 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
               child: CircularProgressIndicator(),
             );
           }
-          /* return snapshot.hasData
-                  ? ListView.builder(
-                      itemBuilder: (context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            top: 0,
-                            bottom: 20,
-                            left: 15,
-                            right: 15,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: backColor,
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 5,
-                                  spreadRadius: 0.2,
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            ),
-                            height: 100,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${snapshot.data.documents[index]["name"].toString()}',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: snapshot.data.documents.length,
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(),
-                    ); */
         },
       ),
     );
@@ -1821,6 +1904,7 @@ class _FolderDisplayStreamBuilderState
                 padding: EdgeInsets.zero,
                 itemBuilder: (content, index) {
                   return Dismissible(
+                    direction: DismissDirection.startToEnd,
                     key: Key(
                       folderSnapshot.data.documents[index]["name"],
                     ),
@@ -2008,11 +2092,15 @@ class _FolderDisplayStreamBuilderState
                                           MaterialPageRoute(
                                             builder: (content) {
                                               return NotesDetail(
+                                                /* 
                                                 e.documentID.toString(),
                                                 e.data["name"].toString(),
                                                 e.data["ownerID"].toString(),
                                                 userID,
-                                                e.data["security"],
+                                                e.data["security"], 
+                                                */
+                                                userID,
+                                                e,
                                                 widget.isDarkMode,
                                               );
                                             },
@@ -2060,8 +2148,10 @@ class _FolderDisplayStreamBuilderState
                                         context: context,
                                         builder: (context) {
                                           return EditFolderName(
-                                              folderDocID: folderSnapshot.data
-                                                  .documents[index].documentID);
+                                            folderDocID: folderSnapshot.data
+                                                .documents[index].documentID,
+                                            isDarkMode: isDarkMode,
+                                          );
                                         },
                                       );
                                     },
@@ -2466,71 +2556,74 @@ class EditFolderNameState extends State<EditFolderName> {
           fontWeight: FontWeight.w400,
         ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            onChanged: (v) {
-              setState(() {});
-            },
-            autofocus: true,
-            controller: folderEditNameController,
-            style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black),
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              hintText: 'Folder name',
-              hintStyle: TextStyle(
-                color: widget.isDarkMode
-                    ? Colors.white.withOpacity(0.4)
-                    : Colors.black.withOpacity(0.4),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: widget.isDarkMode ? Colors.white : Colors.black,
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              onChanged: (v) {
+                setState(() {});
+              },
+              autofocus: true,
+              controller: folderEditNameController,
+              style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                hintText: 'Folder name',
+                hintStyle: TextStyle(
+                  color: widget.isDarkMode
+                      ? Colors.white.withOpacity(0.4)
+                      : Colors.black.withOpacity(0.4),
                 ),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: widget.isDarkMode ? Colors.white : Colors.black,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-              disabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: widget.isDarkMode ? Colors.white : Colors.black,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: FlatButton(
-              onPressed: folderEditNameController.text == ''
-                  ? null
-                  : () async {
-                      await Firestore.instance
-                          .collection('folders')
-                          .document(widget.folderDocID)
-                          .updateData(
-                        {
-                          "name": folderEditNameController.text,
-                        },
-                      );
-                      Navigator.pop(context);
-                    },
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  color: folderEditNameController.text == ''
-                      ? widget.isDarkMode
-                          ? Colors.white.withOpacity(0.2)
-                          : Colors.black.withOpacity(0.2)
-                      : mainColor,
+                disabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: FlatButton(
+                onPressed: folderEditNameController.text == ''
+                    ? null
+                    : () async {
+                        await Firestore.instance
+                            .collection('folders')
+                            .document(widget.folderDocID)
+                            .updateData(
+                          {
+                            "name": folderEditNameController.text,
+                          },
+                        );
+                        Navigator.pop(context);
+                      },
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: folderEditNameController.text == ''
+                        ? widget.isDarkMode
+                            ? Colors.white.withOpacity(0.2)
+                            : Colors.black.withOpacity(0.2)
+                        : mainColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -2546,13 +2639,15 @@ downloadCallback(id, status, progress) {
 }
 */
 
-void checkForUpdates(context, isDarkMode) async {
+void checkForUpdates(BuildContext context, bool isDarkMode) async {
   double currentVersion = appVersion;
   Map<String, dynamic> data = await DatabaseServices().getUpdates();
   double minimumVersion = data["minimumVersion"];
   double latestVersion = data["latestVersion"];
   String downloadUrl = data["downloadUrl"];
   String backupDownloadUrl = data["backupDownloadUrl"];
+
+  print("isDarkMode = $isDarkMode");
 
   //minimumVersion =
   //    0.8; //TODO: I SWEAR TO GOD IF I DON'T REMOVE THIS I WILL HATE MYSELF FOREVER :D
@@ -2573,7 +2668,12 @@ void checkForUpdates(context, isDarkMode) async {
           onWillPop: () async {
             return false;
           },
-          child: UpdateDialog(downloadUrl, backupDownloadUrl, true, isDarkMode),
+          child: UpdateDialog(
+            downloadUrl: downloadUrl,
+            backupDownloadUrl: backupDownloadUrl,
+            isRequired: true,
+            isDarkMode: isDarkMode,
+          ),
         );
       },
     );
@@ -2584,7 +2684,11 @@ void checkForUpdates(context, isDarkMode) async {
         context: context,
         builder: (context) {
           return UpdateDialog(
-              downloadUrl, backupDownloadUrl, false, isDarkMode);
+            downloadUrl: downloadUrl,
+            backupDownloadUrl: backupDownloadUrl,
+            isRequired: false,
+            isDarkMode: isDarkMode,
+          );
         },
       );
     }
@@ -2596,12 +2700,12 @@ class UpdateDialog extends StatefulWidget {
   final String backupDownloadUrl;
   final String downloadUrl;
   final bool isDarkMode;
-  UpdateDialog(
+  UpdateDialog({
     this.downloadUrl,
     this.backupDownloadUrl,
     this.isRequired,
     this.isDarkMode,
-  );
+  });
   @override
   _UpdateDialogState createState() => _UpdateDialogState();
 }
