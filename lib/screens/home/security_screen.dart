@@ -59,7 +59,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(details[1][1]);
     return Scaffold(
       key: securityKey,
       backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
@@ -83,7 +82,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
           ),
           iconSize: backArrowSize,
           onPressed: () async {
-            Map data = {
+            /* Map data = {
               "canReadAndExport": details[0]["value"],
               "canEditName": details[1]["value"],
               "canEditFolder": details[2]["value"],
@@ -94,7 +93,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
             DatabaseServices().setSecuritySettings(
               widget.docID,
               data,
-            );
+            ); */
             Navigator.pop(context);
           },
         ),
@@ -145,10 +144,11 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 onChanged: (bool val) {
                   setState(() {
                     if (index != 0 && !(details[0]["value"])) {
-                      final SnackBar snackBar = new SnackBar(
-                        content: Text(
-                            'Please allow others to read to toggle this option!'),
-                        duration: Duration(seconds: 1),
+                      final SnackBar snackBar = CustomSnackBar(
+                        Text(
+                          'Please allow others to read to toggle this option!',
+                        ),
+                        Duration(seconds: 1),
                       );
                       securityKey.currentState.showSnackBar(
                         snackBar,
@@ -162,6 +162,19 @@ class _SecurityScreenState extends State<SecurityScreen> {
                         details[i]["value"] = false;
                       }
                     }
+
+                    Map data = {
+                      "canReadAndExport": details[0]["value"],
+                      "canEditName": details[1]["value"],
+                      "canEditFolder": details[2]["value"],
+                      "canEditItems": details[3]["value"],
+                      "canMarkIncomplete": details[4]["value"],
+                      "canDelete": details[5]["value"],
+                    };
+                    DatabaseServices().setSecuritySettings(
+                      widget.docID,
+                      data,
+                    );
                   });
                 },
               ),

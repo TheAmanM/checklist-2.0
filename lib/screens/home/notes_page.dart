@@ -62,11 +62,14 @@ class _NotesPageState extends State<NotesPage>
     setState(() {});
   }
 
+  void sendVersionNumber() async {
+    _db.sendVersionNumber(userID);
+  }
+
   Future<void> getUserID() async {
     userID = await _auth.getCurrentUserID();
     setPreferenceStream();
-    //isDarkMode = await _db.getPreferredTheme(userID);
-    //setState(() {});
+    sendVersionNumber();
   }
 
   ValueChanged<Color> onColorChanged(color) {
@@ -148,6 +151,7 @@ class _NotesPageState extends State<NotesPage>
       title: 'Checklist 2.0',
       color: mainColor,
       theme: ThemeData(
+        brightness: Brightness.dark,
         primaryColor: mainColor,
         primarySwatch: Colors.blue,
         accentColor: mainColor,
@@ -155,831 +159,911 @@ class _NotesPageState extends State<NotesPage>
       ),
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(
-          stream: preferenceStream,
-          builder: (
-            context,
-            AsyncSnapshot<DocumentSnapshot> preferenceSnapshot,
-          ) {
-            if (preferenceSnapshot.hasData) {
-              isDarkMode = preferenceSnapshot.data["isDarkMode"];
-              print("isDarkMode = $isDarkMode");
-              // setNavBarColor(isDarkMode);
-              if (shouldCheckForUpdates) {
-                checkForUpdates(context, isDarkMode);
-                shouldCheckForUpdates = false;
-              }
-              isGridView = preferenceSnapshot.data["isGridView"];
-              print("isGridView = $isGridView");
-              return FutureBuilder(
-                future: _auth.currentUser(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    color = snapshot.data['color'];
-                  }
-                  if (isDarkMode != null) {
-                    return Scaffold(
-                      appBar: currentIndex == 0
-                          ? AppBar(
-                              flexibleSpace: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      mainColor,
-                                      accentColor,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Checklists',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                if (isGridView != null)
-                                  IconButton(
-                                    icon: Icon(
-                                      isGridView ? Icons.list : Icons.grid_on,
-                                    ),
-                                    onPressed: () async {
-                                      await _db.updateData(
-                                        userID,
-                                        {
-                                          "isGridView": !isGridView,
-                                        },
-                                      );
-                                    },
-                                  ),
-                                /* IconButton(
-                                  icon: Text(
-                                    '?',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 26,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          //return Help();
-                                          return HelpMenu(isDarkMode);
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ), */
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.copyright,
-                                  ),
-                                  onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return Credits(isDarkMode);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.exit_to_app),
-                                  onPressed: () async {
-                                    bool shouldLogOut = false;
-                                    await showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        backgroundColor: isDarkMode
-                                            ? backColor
-                                            : lightModeBackColor,
-                                        content: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.8,
-                                          child: Text(
-                                            'Are you sure you want to log out?',
-                                            style: TextStyle(
-                                              color: isDarkMode
-                                                  ? Colors.white
-                                                  : Colors.black,
+        stream: _db.settingsSnapshot,
+        builder: (context,
+            AsyncSnapshot<DocumentSnapshot> isMaintainenceModeSnapshot) {
+          if (isMaintainenceModeSnapshot.hasData) {
+            bool isMaintainenceMode =
+                isMaintainenceModeSnapshot.data["isMaintainenceMode"];
+            return !(isMaintainenceMode)
+                ? StreamBuilder(
+                    stream: preferenceStream,
+                    builder: (
+                      context,
+                      AsyncSnapshot<DocumentSnapshot> preferenceSnapshot,
+                    ) {
+                      if (preferenceSnapshot.hasData) {
+                        isDarkMode = preferenceSnapshot.data["isDarkMode"];
+                        print("isDarkMode = $isDarkMode");
+                        // setNavBarColor(isDarkMode);
+                        if (shouldCheckForUpdates) {
+                          checkForUpdates(context, isDarkMode);
+                          shouldCheckForUpdates = false;
+                        }
+                        isGridView = preferenceSnapshot.data["isGridView"];
+                        print("isGridView = $isGridView");
+                        return FutureBuilder(
+                          future: _auth.currentUser(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              color = snapshot.data['color'];
+                            }
+                            if (isDarkMode != null) {
+                              return Scaffold(
+                                appBar: currentIndex == 0
+                                    ? AppBar(
+                                        flexibleSpace: Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                mainColor,
+                                                accentColor,
+                                              ],
                                             ),
                                           ),
                                         ),
-                                        actions: [
-                                          FlatButton(
-                                            child: Text(
-                                              'NO',
-                                              style: TextStyle(
-                                                color: mainColor,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              shouldLogOut = false;
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          FlatButton(
-                                            child: Text(
-                                              'YES',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            color: Colors.red,
-                                            onPressed: () {
-                                              shouldLogOut = true;
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                    if (shouldLogOut) {
-                                      AuthServices().signOut();
-                                    }
-                                  },
-                                ),
-                              ],
-                              bottom: TabBar(
-                                controller: tabBarController,
-                                unselectedLabelColor:
-                                    Colors.white.withOpacity(0.5),
-                                labelColor: Colors.white,
-                                indicatorColor: Colors.white,
-                                tabs: <Tab>[
-                                  Tab(text: 'OTHER LISTS'),
-                                  Tab(text: 'MY LISTS'),
-                                ],
-                              ),
-                            )
-                          : null,
-                      key: scaffoldKey,
-                      resizeToAvoidBottomPadding: false,
-                      floatingActionButton: !keyboardVisible
-                          ? FloatingActionButton(
-                              onPressed: () async {
-                                setState(() {
-                                  keyboardVisible = true;
-                                });
-                                listNameController.text = '';
-                                enableOK = false;
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AddList(isDarkMode);
-                                  },
-                                );
-                                setState(() {
-                                  keyboardVisible = false;
-                                });
-                                listNameController.text = '';
-                                enableOK = false;
-                              },
-                              backgroundColor: mainColor,
-                              //elevation: 0,
-                              child: Container(
-                                width: 60,
-                                height: 60,
-                                child: Icon(Icons.add, color: Colors.white),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      mainColor.withOpacity(0.6),
-                                      accentColor.withOpacity(0.6),
-                                    ],
-                                    stops: [0.0, 100.0],
-                                  ),
-                                  //color: accentColor,
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      floatingActionButtonLocation:
-                          FloatingActionButtonLocation.centerDocked,
-                      /* bottomNavigationBar: BottomNavigationBar(
-                        //backgroundColor: mainColor,
-                        selectedItemColor: Colors.white,
-                        unselectedItemColor: Colors.white.withOpacity(0.2),
-                        currentIndex: currentIndex,
-                        type: BottomNavigationBarType.fixed,
-                        onTap: (i) {
-                          setState(() {
-                            currentIndex = i;
-                          });
-                        },
-                        items: [
-                          BottomNavigationBarItem(
-                            title: Text('Home'),
-                            icon: Icon(Icons.home),
-                          ),
-                          BottomNavigationBarItem(
-                            title: Text('Users'),
-                            icon: Icon(Icons.supervised_user_circle),
-                          ),
-                          BottomNavigationBarItem(
-                            title: Text('Profile'),
-                            icon: Icon(Icons.person),
-                          ),
-                        ],
-                      ), */
-                      bottomNavigationBar: !keyboardVisible
-                          ? Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [mainColor, accentColor],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  getBottomNavBarItem(
-                                    Icons.home,
-                                    'Home',
-                                    0,
-                                    () {
-                                      currentIndex = 0;
-                                    },
-                                  ),
-                                  getBottomNavBarItem(
-                                    Icons.search,
-                                    'Search',
-                                    1,
-                                    () {
-                                      Scaffold.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'This feature has not been developed yet!',
-                                          ),
-                                          action: SnackBarAction(
-                                            label: 'OK',
-                                            onPressed: () {
-                                              Scaffold.of(context)
-                                                  .hideCurrentSnackBar();
-                                            },
-                                          ),
-                                          duration: Duration(seconds: 1),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Opacity(
-                                    opacity: 0.0,
-                                    child: Icon(Icons.edit),
-                                  ),
-                                  getBottomNavBarItem(
-                                    Icons.supervisor_account,
-                                    'Users',
-                                    2,
-                                    () {
-                                      currentIndex = 2;
-                                    },
-                                  ),
-                                  getBottomNavBarItem(
-                                    Icons.settings,
-                                    'Settings',
-                                    3,
-                                    //() => showSettingsSheet(),
-                                    () {
-                                      currentIndex = 3;
-                                    },
-                                  ),
-                                  /* IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                //showSearch(context: context, delegate: DataSearch());
-                                Scaffold.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'This feature has not been developed yet!',
-                                    ),
-                                    action: SnackBarAction(
-                                      label: 'OK',
-                                      onPressed: () {
-                                        Scaffold.of(context).hideCurrentSnackBar();
-                                      },
-                                    ),
-                                    duration: Duration(seconds: 1),
-                                  ),
-                                );
-                              },
-                              color: currentIndex == 1
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
-                              splashColor: Colors.white,
-                            ), */
-                                  /* Icon(Icons.edit, color: Colors.transparent),
-                            IconButton(
-                              icon: Icon(Icons.supervised_user_circle),
-                              onPressed: () {
-                                if (currentIndex != 2) {
-                                  setState(() {
-                                    currentIndex = 2;
-                                  });
-                                }
-                              },
-                              color: currentIndex == 2
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.settings),
-                              onPressed: () {
-                                showSettingsSheet();
-                              },
-                              color: currentIndex == 3
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
-                            ), */
-                                ],
-                              ))
-                          : null,
-                      /* appBar: AppBar(
-                      backgroundColor: mainColor,
-                      elevation: 0,
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          scaffoldKey.currentState.openDrawer();
-                        },
-                      ),
-                      actions: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.exit_to_app,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              _auth.signOut();
-                            })
-                      ],
-                    ), */
-                      drawer: StreamBuilder<DocumentSnapshot>(
-                          stream:
-                              _db.usersCollection.document(userID).snapshots(),
-                          builder: (context,
-                              AsyncSnapshot<DocumentSnapshot> streamSnapshot) {
-                            if (streamSnapshot.hasData && snapshot.hasData) {
-                              return Drawer(
-                                child: Container(
-                                  color: isDarkMode
-                                      ? backColor
-                                      : lightModeBackColor,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      UserAccountsDrawerHeader(
-                                        decoration: BoxDecoration(
-                                          //color: mainColor,
-                                          gradient: LinearGradient(
-                                            colors: [mainColor, accentColor],
-                                          ),
-                                        ),
-                                        accountEmail: Text(
-                                          snapshot.data['userEmail'] ?? '',
-                                          style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.75),
-                                          ),
-                                        ),
-                                        accountName: Text(
-                                            streamSnapshot.data['name'] ?? ''),
-                                        currentAccountPicture: CircleAvatar(
-                                          backgroundColor: color == 0
-                                              ? Colors.black
-                                              : Color(
-                                                  streamSnapshot.data['color']),
-                                          child: Text(
-                                            streamSnapshot.data['name']
-                                                    .toString()
-                                                    .substring(0, 1) ??
-                                                '',
-                                            style: TextStyle(
-                                              /* 
-                                              color: 0.2126 *
-                                                              Color(streamSnapshot
-                                                                          .data[
-                                                                      'color'])
-                                                                  .red +
-                                                          0.7152 *
-                                                              Color(streamSnapshot
-                                                                          .data[
-                                                                      'color'])
-                                                                  .red +
-                                                          0.0722 *
-                                                              Color(streamSnapshot
-                                                                          .data[
-                                                                      'color'])
-                                                                  .blue >
-                                                      240
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                                   */
-                                              color: getRealColor(
-                                                streamSnapshot.data['color'],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20, vertical: 10),
-                                        child: Row(
+                                        title: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Folders',
+                                              'Checklists',
                                               style: TextStyle(
-                                                color: isDarkMode
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 20,
+                                                color: Colors.white,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            InkWell(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: isDarkMode
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                              onTap: () async {
-                                                setState(() {
-                                                  keyboardVisible = true;
-                                                });
-                                                await showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AddFolder(
-                                                        isDarkMode);
-                                                  },
-                                                );
-                                                setState(() {
-                                                  keyboardVisible = false;
-                                                });
-                                                folderNameController.text = '';
-                                              },
-                                            ),
                                           ],
                                         ),
+                                        actions: [
+                                          if (isGridView != null)
+                                            IconButton(
+                                              icon: Icon(
+                                                isGridView
+                                                    ? Icons.list
+                                                    : Icons.grid_on,
+                                              ),
+                                              onPressed: () async {
+                                                await _db.updateData(
+                                                  userID,
+                                                  {
+                                                    "isGridView": !isGridView,
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          /* IconButton(
+                                    icon: Text(
+                                      '?',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 26,
                                       ),
-                                      SizedBox(height: 5),
-                                      Divider(
-                                        color: isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        thickness: 0.5,
-                                        height: 0.5,
-                                      ),
-                                      FolderDisplayStreamBuilder(isDarkMode),
-                                      /* Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                          icon:
-                                              Icon(Icons.settings, color: Colors.white),
-                                          onPressed: () {
-                                            //print(streamSnapshot.data['name']);
-                                            _nameController.text =
-                                                streamSnapshot.data['name'];
-                                            showSettingsSheet();
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            //return Help();
+                                            return HelpMenu(isDarkMode);
                                           },
                                         ),
-                                      ],
-                                    ) */
-                                    ],
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Drawer(
-                                child: Container(
-                                    color: isDarkMode
-                                        ? backColor
-                                        : lightModeBackColor),
-                              );
-                            }
-                          }),
-                      backgroundColor:
-                          isDarkMode ? backColor : lightModeBackColor,
-                      //backgroundColor: backColor,
-                      /* body: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppBar(
-                          backgroundColor: mainColor,
-                          elevation: 0,
-                          leading: IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              scaffoldKey.currentState.openDrawer();
-                            },
-                          ),
-                          actions: [
-                            IconButton(
-                                icon: Icon(
-                                  Icons.exit_to_app,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  _auth.signOut();
-                                })
-                          ],
-                        ),
-                        SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Container(
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height *
-                                              topContainerHeight -
-                                          56,
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [mainColor, mainColor],
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                        ),
-                                        borderRadius: BorderRadius.vertical(
-                                          bottom: Radius.circular(50),
-                                        ),
-                                      ),
-                                    ),
-                                    /* Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(Icons.exit_to_app),
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomCenter,
-                                            height: MediaQuery.of(context).size.height * 0.4 - 24,
-                                            child: FloatingActionButton(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                                size: 30,
-                                              ),
-                                              elevation: 0,
-                                              backgroundColor: mainColor,
-                                              onPressed: () {},
-                                            ),
-                                          ),
-                                        ],
-                                      ), */
-                                    Container(
-                                      height: MediaQuery.of(context).size.height *
-                                              topContainerHeight +
-                                          24 -
-                                          56,
-                                      child: Column(
-                                        children: [
-                                          Spacer(),
-                                          Center(
-                                            child: FloatingActionButton(
-                                              highlightElevation: 0,
-                                              backgroundColor: backColor,
-                                              elevation: 0,
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () {},
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              StreamBuilder(
-                                stream: Firestore.instance
-                                    .collection('notes')
-                                    .getDocuments()
-                                    .asStream(),
-                                builder: (context, snapshot) {
-                                  return snapshot.hasData
-                                      ?
-                                      /* List<Widget> gridList;
-                                                  int i = 0;
-                                                  while (i < snapshot.data.documents.length) {
-                                                    print(
-                                                        'DocumentSnapshot: ${snapshot.data.documents[i]['name']}');
-                                                    gridList.add(
-                                                      Text(
-                                                        snapshot.data.documents[0]['name']
-                                                                .toString() ??
-                                                            'Null',
-                                                      ),
-                                                    );
-                                                    i++;
-                                                  }
-                                                  return GridView.count(
-                                                    crossAxisCount: 2,
-                                                    children: gridList,
-                                                  ); */
-                                      GridView.count(
-                                          shrinkWrap: true,
-                                          crossAxisCount: 2,
-                                          children: List.generate(2, (customIndex) {
-                                            return Padding(
-                                              padding: const EdgeInsets.all(20),
-                                              child: InkWell(
-                                                onTap: () {},
-                                                child: Center(
-                                                  child: Text(
-                                                    'Item $customIndex',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .headline5,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                        )
-                                      : Center(child: CircularProgressIndicator());
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ), */
-                      /* body: currentIndex == 0
-                        ? CustomScrollView(
-                            slivers: [
-                              SliverAppBar(
-                                backgroundColor: mainColor,
-                                elevation: 0,
-                                automaticallyImplyLeading: false,
-                                leading: IconButton(
-                                  icon: Icon(Icons.menu, color: Colors.white),
-                                  onPressed: () {
-                                    scaffoldKey.currentState.openDrawer();
-                                  },
-                                ),
-                                actions: [
-                                  IconButton(
-                                    icon: Icon(Icons.exit_to_app, color: Colors.white),
-                                    onPressed: () {
-                                      _auth.signOut();
+                                      );
                                     },
-                                  ),
-                                ],
-                                /* title: Container(
-                                  color: Colors.lime,
-                                  height: 56,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
+                                  ), */
                                           IconButton(
-                                            icon: Icon(Icons.menu),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              scaffoldKey.currentState.openDrawer();
+                                            icon: Icon(
+                                              Icons.copyright,
+                                            ),
+                                            onPressed: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return Credits(isDarkMode);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.exit_to_app),
+                                            onPressed: () async {
+                                              bool shouldLogOut = false;
+                                              await showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                  backgroundColor: isDarkMode
+                                                      ? backColor
+                                                      : lightModeBackColor,
+                                                  content: Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: Text(
+                                                      'Are you sure you want to log out?',
+                                                      style: TextStyle(
+                                                        color: isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    FlatButton(
+                                                      child: Text(
+                                                        'NO',
+                                                        style: TextStyle(
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        shouldLogOut = false;
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    FlatButton(
+                                                      child: Text(
+                                                        'YES',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      color: Colors.red,
+                                                      onPressed: () {
+                                                        shouldLogOut = true;
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                              if (shouldLogOut) {
+                                                AuthServices().signOut();
+                                              }
                                             },
-                                          )
+                                          ),
                                         ],
+                                        bottom: TabBar(
+                                          controller: tabBarController,
+                                          unselectedLabelColor:
+                                              Colors.white.withOpacity(0.5),
+                                          labelColor: Colors.white,
+                                          indicatorColor: Colors.white,
+                                          tabs: <Tab>[
+                                            Tab(text: 'OTHER LISTS'),
+                                            Tab(text: 'MY LISTS'),
+                                          ],
+                                        ),
+                                      )
+                                    : null,
+                                key: scaffoldKey,
+                                resizeToAvoidBottomPadding: false,
+                                floatingActionButton: !keyboardVisible
+                                    ? FloatingActionButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            keyboardVisible = true;
+                                          });
+                                          listNameController.text = '';
+                                          enableOK = false;
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AddList(isDarkMode);
+                                            },
+                                          );
+                                          setState(() {
+                                            keyboardVisible = false;
+                                          });
+                                          listNameController.text = '';
+                                          enableOK = false;
+                                        },
+                                        backgroundColor: mainColor,
+                                        //elevation: 0,
+                                        child: Container(
+                                          width: 60,
+                                          height: 60,
+                                          child: Icon(Icons.add,
+                                              color: Colors.white),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                mainColor.withOpacity(0.6),
+                                                accentColor.withOpacity(0.6),
+                                              ],
+                                              stops: [0.0, 100.0],
+                                            ),
+                                            //color: accentColor,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                                floatingActionButtonLocation:
+                                    FloatingActionButtonLocation.centerDocked,
+                                /* bottomNavigationBar: BottomNavigationBar(
+                          //backgroundColor: mainColor,
+                          selectedItemColor: Colors.white,
+                          unselectedItemColor: Colors.white.withOpacity(0.2),
+                          currentIndex: currentIndex,
+                          type: BottomNavigationBarType.fixed,
+                          onTap: (i) {
+                            setState(() {
+                              currentIndex = i;
+                            });
+                          },
+                          items: [
+                            BottomNavigationBarItem(
+                              title: Text('Home'),
+                              icon: Icon(Icons.home),
+                            ),
+                            BottomNavigationBarItem(
+                              title: Text('Users'),
+                              icon: Icon(Icons.supervised_user_circle),
+                            ),
+                            BottomNavigationBarItem(
+                              title: Text('Profile'),
+                              icon: Icon(Icons.person),
+                            ),
+                          ],
+                        ), */
+                                bottomNavigationBar: !keyboardVisible
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                              colors: [mainColor, accentColor],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            getBottomNavBarItem(
+                                              Icons.home,
+                                              'Home',
+                                              0,
+                                              () {
+                                                currentIndex = 0;
+                                              },
+                                            ),
+                                            getBottomNavBarItem(
+                                              Icons.search,
+                                              'Search',
+                                              1,
+                                              () {
+                                                Scaffold.of(context)
+                                                    .showSnackBar(
+                                                  CustomSnackBar(
+                                                    Text(
+                                                      'This feature has not been developed yet!',
+                                                    ),
+                                                    /* action: SnackBarAction(
+                                                      label: 'OK',
+                                                      onPressed: () {
+                                                        Scaffold.of(context)
+                                                            .hideCurrentSnackBar();
+                                                      },
+                                                    ), */
+                                                    Duration(seconds: 1),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            Opacity(
+                                              opacity: 0.0,
+                                              child: Icon(Icons.edit),
+                                            ),
+                                            getBottomNavBarItem(
+                                              Icons.supervisor_account,
+                                              'Users',
+                                              2,
+                                              () {
+                                                currentIndex = 2;
+                                              },
+                                            ),
+                                            getBottomNavBarItem(
+                                              Icons.settings,
+                                              'Settings',
+                                              3,
+                                              //() => showSettingsSheet(),
+                                              () {
+                                                currentIndex = 3;
+                                              },
+                                            ),
+                                            /* IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () {
+                                  //showSearch(context: context, delegate: DataSearch());
+                                  Scaffold.of(context).showSnackBar(
+                                   CustomSnackBar(
+                                      content: Text(
+                                        'This feature has not been developed yet!',
                                       ),
-                                      IconButton(
-                                        icon: Icon(Icons.exit_to_app),
-                                        color: Colors.white,
+                                      action: SnackBarAction(
+                                        label: 'OK',
                                         onPressed: () {
-                                          _auth.signOut();
+                                          Scaffold.of(context).hideCurrentSnackBar();
                                         },
                                       ),
-                                    ],
-                                  ),
-                                ), */
-                                expandedHeight: MediaQuery.of(context).size.height *
-                                        topContainerHeight +
-                                    24,
-                                pinned: true,
-                                forceElevated: false,
-                                flexibleSpace: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [mainColor, accentColor],
+                                      duration: Duration(seconds: 1),
                                     ),
-                                  ),
-                                  child: FlexibleSpaceBar(
-                                    centerTitle: true,
-                                    title: Text('Checklists'),
-                                    titlePadding: EdgeInsets.only(
-                                        bottom: 16, left: 60, right: 60),
-                                    background: Container(
-                                      color: Colors.white,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.vertical(
-                                            bottom: Radius.circular(30)),
-                                        child: Container(
-                                          height: MediaQuery.of(context).size.height *
-                                                  topContainerHeight +
-                                              24,
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              colors: [mainColor, accentColor],
-                                            ),
-                                          ),
-                                          child: Stack(
-                                            children: [
-                                              Container(
-                                                height:
-                                                    MediaQuery.of(context).size.height *
-                                                        topContainerHeight,
-                                              ),
-                                              /* Align(
-                                          child: Container(
-                                            alignment: Alignment.bottomCenter,
-                                            height: MediaQuery.of(context).size.height *
-                                                topContainerHeight,
-                                            child: FloatingActionButton(
-                                              backgroundColor: backColor,
-                                              elevation: 0,
-                                              child: Icon(Icons.add, color: Colors.white),
-                                              onPressed: () {},
-                                            ),
-                                          ),
-                                        ), */
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //floating: true,
+                                  );
+                                },
+                                color: currentIndex == 1
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.5),
+                                splashColor: Colors.white,
+                              ), */
+                                            /* Icon(Icons.edit, color: Colors.transparent),
+                              IconButton(
+                                icon: Icon(Icons.supervised_user_circle),
+                                onPressed: () {
+                                  if (currentIndex != 2) {
+                                    setState(() {
+                                      currentIndex = 2;
+                                    });
+                                  }
+                                },
+                                color: currentIndex == 2
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.5),
                               ),
-                              SliverToBoxAdapter(child: SizedBox(height: 30)),
-                              StreamBuilder(
-                                stream: notesStream,
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                                  return SliverPadding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                                    /* sliver: SliverGrid(
-                                        gridDelegate:
-                                            SliverGridDelegateWithMaxCrossAxisExtent(
-                                          maxCrossAxisExtent: 300.0,
-                                          mainAxisSpacing: 10.0,
-                                          crossAxisSpacing: 10.0,
-                                          childAspectRatio: 1.0,
-                                        ),
-                                        delegate: SliverChildBuilderDelegate(
-                                          (BuildContext context, int index) {
-                                            return GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(20),
-                                                  child: Text(
-                                                    '${streamSnapshot.data.documents[index]["name"]}',
+                              IconButton(
+                                icon: Icon(Icons.settings),
+                                onPressed: () {
+                                  showSettingsSheet();
+                                },
+                                color: currentIndex == 3
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.5),
+                              ), */
+                                          ],
+                                        ))
+                                    : null,
+                                /* appBar: AppBar(
+                        backgroundColor: mainColor,
+                        elevation: 0,
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.menu,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            scaffoldKey.currentState.openDrawer();
+                          },
+                        ),
+                        actions: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.exit_to_app,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                _auth.signOut();
+                              })
+                        ],
+                      ), */
+                                drawer: StreamBuilder<DocumentSnapshot>(
+                                    stream: _db.usersCollection
+                                        .document(userID)
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<DocumentSnapshot>
+                                            streamSnapshot) {
+                                      if (streamSnapshot.hasData &&
+                                          snapshot.hasData) {
+                                        return Drawer(
+                                          child: Container(
+                                            color: isDarkMode
+                                                ? backColor
+                                                : lightModeBackColor,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                UserAccountsDrawerHeader(
+                                                  decoration: BoxDecoration(
+                                                    //color: mainColor,
+                                                    gradient: LinearGradient(
+                                                      colors: [
+                                                        mainColor,
+                                                        accentColor
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  accountEmail: Text(
+                                                    snapshot.data[
+                                                            'userEmail'] ??
+                                                        '',
                                                     style: TextStyle(
-                                                      color: Colors.black,
+                                                      color: Colors.white
+                                                          .withOpacity(0.75),
+                                                    ),
+                                                  ),
+                                                  accountName: Text(
+                                                      streamSnapshot
+                                                              .data['name'] ??
+                                                          ''),
+                                                  currentAccountPicture:
+                                                      CircleAvatar(
+                                                    backgroundColor: color == 0
+                                                        ? Colors.black
+                                                        : Color(streamSnapshot
+                                                            .data['color']),
+                                                    child: Text(
+                                                      streamSnapshot
+                                                              .data['name']
+                                                              .toString()
+                                                              .substring(
+                                                                  0, 1) ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        /* 
+                                                color: 0.2126 *
+                                                                Color(streamSnapshot
+                                                                            .data[
+                                                                        'color'])
+                                                                    .red +
+                                                            0.7152 *
+                                                                Color(streamSnapshot
+                                                                            .data[
+                                                                        'color'])
+                                                                    .red +
+                                                            0.0722 *
+                                                                Color(streamSnapshot
+                                                                            .data[
+                                                                        'color'])
+                                                                    .blue >
+                                                        240
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                     */
+                                                        color: getRealColor(
+                                                          streamSnapshot
+                                                              .data['color'],
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Folders',
+                                                        style: TextStyle(
+                                                          color: isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      InkWell(
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          color: isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            keyboardVisible =
+                                                                true;
+                                                          });
+                                                          await showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AddFolder(
+                                                                  isDarkMode);
+                                                            },
+                                                          );
+                                                          setState(() {
+                                                            keyboardVisible =
+                                                                false;
+                                                          });
+                                                          folderNameController
+                                                              .text = '';
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Divider(
+                                                  color: isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  thickness: 0.5,
+                                                  height: 0.5,
+                                                ),
+                                                FolderDisplayStreamBuilder(
+                                                    isDarkMode),
+                                                /* Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            icon:
+                                                Icon(Icons.settings, color: Colors.white),
+                                            onPressed: () {
+                                              //print(streamSnapshot.data['name']);
+                                              _nameController.text =
+                                                  streamSnapshot.data['name'];
+                                              showSettingsSheet();
+                                            },
+                                          ),
+                                        ],
+                                      ) */
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return Drawer(
+                                          child: Container(
+                                              color: isDarkMode
+                                                  ? backColor
+                                                  : lightModeBackColor),
+                                        );
+                                      }
+                                    }),
+                                backgroundColor:
+                                    isDarkMode ? backColor : lightModeBackColor,
+                                //backgroundColor: backColor,
+                                /* body: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppBar(
+                            backgroundColor: mainColor,
+                            elevation: 0,
+                            leading: IconButton(
+                              icon: Icon(
+                                Icons.menu,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                scaffoldKey.currentState.openDrawer();
+                              },
+                            ),
+                            actions: [
+                              IconButton(
+                                  icon: Icon(
+                                    Icons.exit_to_app,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    _auth.signOut();
+                                  })
+                            ],
+                          ),
+                          SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.height *
+                                                topContainerHeight -
+                                            56,
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [mainColor, mainColor],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                          borderRadius: BorderRadius.vertical(
+                                            bottom: Radius.circular(50),
+                                          ),
+                                        ),
+                                      ),
+                                      /* Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(Icons.exit_to_app),
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                              alignment: Alignment.bottomCenter,
+                                              height: MediaQuery.of(context).size.height * 0.4 - 24,
+                                              child: FloatingActionButton(
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                  size: 30,
+                                                ),
+                                                elevation: 0,
+                                                backgroundColor: mainColor,
+                                                onPressed: () {},
+                                              ),
+                                            ),
+                                          ],
+                                        ), */
+                                      Container(
+                                        height: MediaQuery.of(context).size.height *
+                                                topContainerHeight +
+                                            24 -
+                                            56,
+                                        child: Column(
+                                          children: [
+                                            Spacer(),
+                                            Center(
+                                              child: FloatingActionButton(
+                                                highlightElevation: 0,
+                                                backgroundColor: backColor,
+                                                elevation: 0,
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () {},
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                StreamBuilder(
+                                  stream: Firestore.instance
+                                      .collection('notes')
+                                      .getDocuments()
+                                      .asStream(),
+                                  builder: (context, snapshot) {
+                                    return snapshot.hasData
+                                        ?
+                                        /* List<Widget> gridList;
+                                                    int i = 0;
+                                                    while (i < snapshot.data.documents.length) {
+                                                      print(
+                                                          'DocumentSnapshot: ${snapshot.data.documents[i]['name']}');
+                                                      gridList.add(
+                                                        Text(
+                                                          snapshot.data.documents[0]['name']
+                                                                  .toString() ??
+                                                              'Null',
+                                                        ),
+                                                      );
+                                                      i++;
+                                                    }
+                                                    return GridView.count(
+                                                      crossAxisCount: 2,
+                                                      children: gridList,
+                                                    ); */
+                                        GridView.count(
+                                            shrinkWrap: true,
+                                            crossAxisCount: 2,
+                                            children: List.generate(2, (customIndex) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(20),
+                                                child: InkWell(
+                                                  onTap: () {},
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Item $customIndex',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline5,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                          )
+                                        : Center(child: CircularProgressIndicator());
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ), */
+                                /* body: currentIndex == 0
+                          ? CustomScrollView(
+                              slivers: [
+                                SliverAppBar(
+                                  backgroundColor: mainColor,
+                                  elevation: 0,
+                                  automaticallyImplyLeading: false,
+                                  leading: IconButton(
+                                    icon: Icon(Icons.menu, color: Colors.white),
+                                    onPressed: () {
+                                      scaffoldKey.currentState.openDrawer();
+                                    },
+                                  ),
+                                  actions: [
+                                    IconButton(
+                                      icon: Icon(Icons.exit_to_app, color: Colors.white),
+                                      onPressed: () {
+                                        _auth.signOut();
+                                      },
+                                    ),
+                                  ],
+                                  /* title: Container(
+                                    color: Colors.lime,
+                                    height: 56,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(Icons.menu),
+                                              color: Colors.white,
+                                              onPressed: () {
+                                                scaffoldKey.currentState.openDrawer();
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.exit_to_app),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            _auth.signOut();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ), */
+                                  expandedHeight: MediaQuery.of(context).size.height *
+                                          topContainerHeight +
+                                      24,
+                                  pinned: true,
+                                  forceElevated: false,
+                                  flexibleSpace: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [mainColor, accentColor],
+                                      ),
+                                    ),
+                                    child: FlexibleSpaceBar(
+                                      centerTitle: true,
+                                      title: Text('Checklists'),
+                                      titlePadding: EdgeInsets.only(
+                                          bottom: 16, left: 60, right: 60),
+                                      background: Container(
+                                        color: Colors.white,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                              bottom: Radius.circular(30)),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height *
+                                                    topContainerHeight +
+                                                24,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [mainColor, accentColor],
+                                              ),
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  height:
+                                                      MediaQuery.of(context).size.height *
+                                                          topContainerHeight,
+                                                ),
+                                                /* Align(
+                                            child: Container(
+                                              alignment: Alignment.bottomCenter,
+                                              height: MediaQuery.of(context).size.height *
+                                                  topContainerHeight,
+                                              child: FloatingActionButton(
+                                                backgroundColor: backColor,
+                                                elevation: 0,
+                                                child: Icon(Icons.add, color: Colors.white),
+                                                onPressed: () {},
+                                              ),
+                                            ),
+                                          ), */
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  //floating: true,
+                                ),
+                                SliverToBoxAdapter(child: SizedBox(height: 30)),
+                                StreamBuilder(
+                                  stream: notesStream,
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                                    return SliverPadding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      /* sliver: SliverGrid(
+                                          gridDelegate:
+                                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 300.0,
+                                            mainAxisSpacing: 10.0,
+                                            crossAxisSpacing: 10.0,
+                                            childAspectRatio: 1.0,
+                                          ),
+                                          delegate: SliverChildBuilderDelegate(
+                                            (BuildContext context, int index) {
+                                              return GestureDetector(
+                                                onTap: () {},
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(30),
+                                                  ),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(20),
+                                                    child: Text(
+                                                      '${streamSnapshot.data.documents[index]["name"]}',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            childCount: streamSnapshot.hasData
+                                                ? streamSnapshot.data.documents.length
+                                                : 0,
+                                          ),
+                                        ), */
+                                      sliver: SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  vertical: 10),
+                                              child: CheckListTile(
+                                                title:
+                                                    '${streamSnapshot.data.documents[index]["name"]}',
+                                                backgroundColor: backColor,
+                                                primaryColor: Colors.white,
+                                                onPress: () {
+                                                  print('${index + 1}');
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return NotesDetail(
+                                                          streamSnapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .documentID,
+                                                          streamSnapshot.data
+                                                              .documents[index]["name"],
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                                inkColor: Colors.black,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.limeAccent,
+                                                    blurRadius: 20,
+                                                    spreadRadius: 20,
+                                                  )
+                                                ],
                                               ),
                                             );
                                           },
@@ -987,141 +1071,149 @@ class _NotesPageState extends State<NotesPage>
                                               ? streamSnapshot.data.documents.length
                                               : 0,
                                         ),
-                                      ), */
-                                    sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                        (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: CheckListTile(
-                                              title:
-                                                  '${streamSnapshot.data.documents[index]["name"]}',
-                                              backgroundColor: backColor,
-                                              primaryColor: Colors.white,
-                                              onPress: () {
-                                                print('${index + 1}');
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      return NotesDetail(
-                                                        streamSnapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .documentID,
-                                                        streamSnapshot.data
-                                                            .documents[index]["name"],
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                              inkColor: Colors.black,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.limeAccent,
-                                                  blurRadius: 20,
-                                                  spreadRadius: 20,
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                        childCount: streamSnapshot.hasData
-                                            ? streamSnapshot.data.documents.length
-                                            : 0,
                                       ),
+                                    );
+                                  },
+                                ),
+                                SliverToBoxAdapter(
+                                  child: SizedBox(height: 20),
+                                )
+                              ],
+                            )
+                          : currentIndex == 1
+                              ? Container(
+                                  color: backColor,
+                                  child: Center(
+                                    child: Text(
+                                      'Profie',
+                                      style: TextStyle(color: Colors.white),
                                     ),
-                                  );
-                                },
-                              ),
-                              SliverToBoxAdapter(
-                                child: SizedBox(height: 20),
-                              )
-                            ],
-                          )
-                        : currentIndex == 1
-                            ? Container(
-                                color: backColor,
-                                child: Center(
+                                  ),
+                                )
+                              : currentIndex == 2
+                                  ? Users()
+                                  : Container(
+                                      color: backColor,
+                                      child: Center(
+                                        child: Text(
+                                          'Profile',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ), */
+                                body: isDarkMode != null
+                                    ? currentIndex == 0
+                                        ? !keyboardVisible
+                                            ? Theme(
+                                                data:
+                                                    Theme.of(context).copyWith(
+                                                  accentColor: mainColor,
+                                                ),
+                                                child: TabBarView(
+                                                  controller: tabBarController,
+                                                  children: [
+                                                    MainGridDisplay(
+                                                      isGridView: isGridView,
+                                                      isAll: true,
+                                                      controller:
+                                                          allListsScrollController,
+                                                      isDarkMode: isDarkMode,
+                                                    ),
+                                                    MainGridDisplay(
+                                                      isGridView: isGridView,
+                                                      isAll: false,
+                                                      controller:
+                                                          myListsScrollController,
+                                                      isDarkMode: isDarkMode,
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container(
+                                                color: isDarkMode
+                                                    ? backColor
+                                                    : lightModeBackColor,
+                                              )
+                                        : currentIndex == 1
+                                            ? showSearch(
+                                                context: context,
+                                                delegate: DataSearch(),
+                                              )
+                                            : currentIndex == 2
+                                                ? Users(isDarkMode)
+                                                : Settings(
+                                                    isDarkMode,
+                                                    userID,
+                                                  )
+                                    : Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                              );
+                            } else {
+                              print('isDarkMode currently not defined');
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    })
+                : StreamBuilder(
+                    stream: preferenceStream,
+                    builder:
+                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        bool isDarkMode = snapshot.data["isDarkMode"];
+                        return Scaffold(
+                          backgroundColor:
+                              isDarkMode ? backColor : lightModeBackColor,
+                          body: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.handyman_outlined,
+                                  size: MediaQuery.of(context).size.width * 0.6,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                SizedBox(height: 16),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                  ),
                                   child: Text(
-                                    'Profie',
-                                    style: TextStyle(color: Colors.white),
+                                    'Sorry, construction in progress!',
+                                    style: TextStyle(
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
-                              )
-                            : currentIndex == 2
-                                ? Users()
-                                : Container(
-                                    color: backColor,
-                                    child: Center(
-                                      child: Text(
-                                        'Profile',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ), */
-                      body: isDarkMode != null
-                          ? currentIndex == 0
-                              ? !keyboardVisible
-                                  ? Theme(
-                                      data: Theme.of(context).copyWith(
-                                        accentColor: mainColor,
-                                      ),
-                                      child: TabBarView(
-                                        controller: tabBarController,
-                                        children: [
-                                          MainGridDisplay(
-                                            isGridView: isGridView,
-                                            isAll: true,
-                                            controller:
-                                                allListsScrollController,
-                                            isDarkMode: isDarkMode,
-                                          ),
-                                          MainGridDisplay(
-                                            isGridView: isGridView,
-                                            isAll: false,
-                                            controller: myListsScrollController,
-                                            isDarkMode: isDarkMode,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Container(
-                                      color: isDarkMode
-                                          ? backColor
-                                          : lightModeBackColor,
-                                    )
-                              : currentIndex == 1
-                                  ? showSearch(
-                                      context: context,
-                                      delegate: DataSearch(),
-                                    )
-                                  : currentIndex == 2
-                                      ? Users(isDarkMode)
-                                      : Settings(
-                                          isDarkMode,
-                                          userID,
-                                        )
-                          : Center(
-                              child: CircularProgressIndicator(),
+                              ],
                             ),
-                    );
-                  } else {
-                    print('isDarkMode currently not defined');
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    });
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -2475,7 +2567,7 @@ class _NoteEditDeleteState extends State<NoteEditDelete> {
                         .delete();
                     Navigator.pop(context);
                     scaffoldKey.currentState.showSnackBar(
-                      SnackBar(
+                     CustomSnackBar(
                         duration: Duration(seconds: 1),
                         content: Text('Deleted note successfully!'),
                         action: SnackBarAction(
@@ -2509,15 +2601,15 @@ class _NoteEditDeleteState extends State<NoteEditDelete> {
                     });
                     Navigator.pop(context);
                     scaffoldKey.currentState.showSnackBar(
-                      SnackBar(
-                        duration: Duration(seconds: 1),
-                        content: Text('Updated list name successfully!'),
-                        action: SnackBarAction(
+                      CustomSnackBar(
+                        Text('Updated list name successfully!'),
+                        Duration(seconds: 1),
+                        /* action: SnackBarAction(
                           label: 'OK',
                           onPressed: () {
                             scaffoldKey.currentState.hideCurrentSnackBar();
                           },
-                        ),
+                        ), */
                       ),
                     );
                   },
@@ -2813,9 +2905,9 @@ class _UpdateDialogState extends State<UpdateDialog> {
               launch(widget.backupDownloadUrl);
             } else {
               Navigator.pop(context);
-              SnackBar snackbar = new SnackBar(
-                content: Text("Sorry, an unexpected error occured"),
-                duration: Duration(seconds: 1),
+              SnackBar snackbar = CustomSnackBar(
+                Text("Sorry, an unexpected error occured"),
+                Duration(seconds: 1),
               );
               scaffoldKey.currentState.showSnackBar(snackbar);
             }

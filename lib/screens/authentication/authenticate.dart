@@ -52,9 +52,9 @@ class _AuthenticateState extends State<Authenticate> {
         PlatformException exception = result["error"];
         print(exception.message);
         authScaffoldKey.currentState.showSnackBar(
-          SnackBar(
-            content: Text(exception.message),
-            duration: Duration(seconds: 1),
+          CustomSnackBar(
+            Text(exception.message),
+            Duration(seconds: 1),
           ),
         );
         setState(() {
@@ -101,9 +101,9 @@ class _AuthenticateState extends State<Authenticate> {
         setState(() {
           loading = false;
           authScaffoldKey.currentState.showSnackBar(
-            SnackBar(
-              content: Text('An unexpected error occured'),
-              duration: Duration(seconds: 1),
+            CustomSnackBar(
+              Text('An unexpected error occured'),
+              Duration(seconds: 1),
             ),
           );
         });
@@ -247,6 +247,7 @@ class _AuthenticateState extends State<Authenticate> {
                         ),
                       ),
                     TextField(
+                      keyboardType: TextInputType.emailAddress,
                       onChanged: (String v) {
                         setState(() {
                           invalidText = false;

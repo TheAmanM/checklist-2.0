@@ -61,17 +61,18 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
 
     showDialog(
       context: customContext,
-      child: AlertDialog(
-        backgroundColor: widget.darkMode ? backColor : lightModeBackColor,
-        title: Text(
-          'Data has been exported!',
-          style: TextStyle(
-            color: widget.darkMode ? Colors.white : Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: widget.darkMode ? backColor : lightModeBackColor,
+          title: Text(
+            'Data has been exported!',
+            style: TextStyle(
+              color: widget.darkMode ? Colors.white : Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-        /* content:
+          /* content:
             /* Text(
               'Exported code',
               style: TextStyle(
@@ -95,63 +96,64 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
             ),
           ),
         ), */
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 8,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 1,
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.content_copy,
-                  ),
-                  color: widget.darkMode ? Colors.white : Colors.black,
-                  onPressed: () {
-                    //Navigator.pop(context);
-                    /* ClipboardManager.copyToClipBoard(returnValue).then((_) {
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 1,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.content_copy,
+                    ),
+                    color: widget.darkMode ? Colors.white : Colors.black,
+                    onPressed: () {
+                      //Navigator.pop(context);
+                      /* ClipboardManager.copyToClipBoard(returnValue).then((_) {
                     Navigator.pop(context);
-                    final snackBar = SnackBar(
+                    final snackBar =CustomSnackBar(
                       content: Text('Copied to Clipboard!'),
                       duration: Duration(seconds: 1),
                     );
                     Scaffold.of(context).showSnackBar(snackBar); 
                   });
                     */
-                    FlutterClipboard.copy(returnValue).then((value) {
-                      final snackBar = SnackBar(
-                        content: Text('Copied to Clipboard!'),
-                        duration: Duration(seconds: 1),
-                      );
-                      Scaffold.of(context).showSnackBar(snackBar);
-                    });
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.share,
+                      FlutterClipboard.copy(returnValue).then((value) {
+                        final snackBar = CustomSnackBar(
+                          Text('Copied to Clipboard!'),
+                          Duration(seconds: 1),
+                        );
+                        Scaffold.of(context).showSnackBar(snackBar);
+                      });
+                    },
                   ),
-                  color: widget.darkMode ? Colors.white : Colors.black,
-                  onPressed: () {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Feature currently in development!'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.share,
+                    ),
+                    color: widget.darkMode ? Colors.white : Colors.black,
+                    onPressed: () {
+                      Scaffold.of(context).showSnackBar(
+                        CustomSnackBar(
+                          Text('Feature currently in development!'),
+                          Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -198,9 +200,9 @@ class _ItemSelecorScreenState extends State<ItemSelectorScreen> {
               }
               if (isEmpty) {
                 Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Nothing selected!'),
-                    duration: Duration(seconds: 1),
+                  CustomSnackBar(
+                    Text('Nothing selected!'),
+                    Duration(seconds: 1),
                   ),
                 );
               } else {

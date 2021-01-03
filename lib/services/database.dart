@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_todo_second/constants.dart';
 
 class DatabaseServices {
   final CollectionReference usersCollection =
@@ -7,6 +8,15 @@ class DatabaseServices {
       Firestore.instance.collection('notes');
   final CollectionReference foldersCollection =
       Firestore.instance.collection('folders');
+  final CollectionReference requestsCollection =
+      Firestore.instance.collection('requests');
+
+  final Stream<DocumentSnapshot> settingsSnapshot = Firestore.instance
+      .collection('settings')
+      .document('settings')
+      .snapshots();
+  final DocumentReference settingsDoc =
+      Firestore.instance.collection('settings').document('settings');
 
   Future<void> addItem(String docID, String itemName) async {
     notesCollection.document(docID).collection('items').add({
@@ -72,6 +82,12 @@ class DatabaseServices {
     return usersCollection.document(uid).snapshots();
   }
 
+  Future<void> sendVersionNumber(String userID) async {
+    usersCollection.document(userID).updateData({
+      "appVersion": appVersion,
+    });
+  }
+
   Future<int> getColor(uid) async {
     int color;
     await usersCollection.document(uid).get().then((DocumentSnapshot value) {
@@ -108,10 +124,18 @@ class DatabaseServices {
     return returnVal;
   }
 
-  Future setSecuritySettings(String documentID, Map securitySettings) {
+  Future<void> setSecuritySettings(String documentID, Map securitySettings) {
     notesCollection.document(documentID).updateData({
       "security": securitySettings,
     });
+  }
+
+  Future<void> submitFeatureBug(bool isFeature, String text) async {
+    Map<String, dynamic> data = {
+      "isFeature": isFeature,
+      "text": text,
+    };
+    await requestsCollection.add(data);
   }
 
   Stream<DocumentSnapshot> getPreferredTheme(String uid) {

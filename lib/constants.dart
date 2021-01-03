@@ -10,7 +10,7 @@ Color lightModeBackColor =
     Color(0xFFFCFCFC); //Color(0xFFEDEFFE); //Color(0xFFE4E8F1);
 Color lightModeLightBackColor = Color(0xFFECEBF0); //Color(0xFFD9DEE8);
 
-double appVersion = 1.02;
+final double appVersion = 1.02;
 
 class CheckListTile extends StatelessWidget {
   String title;
@@ -63,6 +63,37 @@ Color getColor(int num) {
       : Colors.black;
 }
  */
+
+/* class CustomSnackBar extends StatelessWidget {
+  Widget content;
+  Duration duration;
+  CustomSnackBar({this.content, this.duration});
+  @override
+  Widget build(BuildContext context) {
+    return SnackBar(
+      content: content,
+      duration: Duration(
+        seconds: 2,
+      ),
+    );
+  }
+} */
+
+SnackBar CustomSnackBar(Widget content, Duration duration) {
+  return SnackBar(
+    content: content,
+    duration: Duration(
+      seconds: 2,
+    ),
+    backgroundColor: Color(0xFF323232),
+  );
+}
+
+String versionConverter(String version) {
+  List<String> split = version.toString().split('.').toList();
+  String dot = '.';
+  return split[0] + dot + split[1][0] + dot + split[1][1];
+}
 
 Color getRealColor(int color) {
   double brightness = (0.21 * Color(color).red) +
@@ -151,9 +182,12 @@ bool shouldCheckForUpdates = true;
 
   1.02)
     // Patched bug: Permission to mark all items as incomplete and delete list not working. 
-    Organized help, update and feature history pages on home page. (Admin menu). 
+    // Security page updates immediately (on pressing switch). 
+    // Security page also does not close list upon exit. 
+    // Organized help, update and feature history pages on home page. (Admin menu). 
     // Added support for light mode. 
-    // Fixed settings menu. Users can now change color, name and theme preference. 
+    // Fixed settings menu. Users can now change color, name and theme preference (although dark mode is highly recommended). 
+    // Maintainence mode is added, which may be used to update certain aspects of app. 
 
           User is now allowed to see current folder in which list is in within the menu. 
 */
