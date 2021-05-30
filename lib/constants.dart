@@ -6,11 +6,10 @@ Color accentColor = Color(0xFF4903ff);
 
 Color backColor = Color(0xFF0E121B);
 Color lightBackColor = Color(0xFF171C26);
-Color lightModeBackColor =
-    Color(0xFFFCFCFC); //Color(0xFFEDEFFE); //Color(0xFFE4E8F1);
+Color lightModeBackColor = Color(0xFFFCFCFC); //Color(0xFFEDEFFE); //Color(0xFFE4E8F1);
 Color lightModeLightBackColor = Color(0xFFECEBF0); //Color(0xFFD9DEE8);
 
-final double appVersion = 1.02;
+final double appVersion = 1.03;
 
 class CheckListTile extends StatelessWidget {
   String title;
@@ -96,9 +95,7 @@ String versionConverter(String version) {
 }
 
 Color getRealColor(int color) {
-  double brightness = (0.21 * Color(color).red) +
-      (0.72 * Color(color).green) +
-      (0.07 * Color(color).blue);
+  double brightness = (0.21 * Color(color).red) + (0.72 * Color(color).green) + (0.07 * Color(color).blue);
   //print('$color => ${brightness.round()}');
   return brightness > 170 ? Colors.black : Colors.white;
 }
@@ -157,8 +154,7 @@ Switch getCustomSwitch(bool isDarkMode, void Function(bool) onTap, bool value) {
 void setNavBarColor(bool isBlack) {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      systemNavigationBarIconBrightness:
-          isBlack ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: isBlack ? Brightness.light : Brightness.dark,
       systemNavigationBarColor: isBlack ? Colors.black : Colors.white,
     ),
   );
@@ -190,4 +186,9 @@ bool shouldCheckForUpdates = true;
     // Maintainence mode is added, which may be used to update certain aspects of app. 
 
           User is now allowed to see current folder in which list is in within the menu. 
+
+  1.03)
+    // Patched bug: App crashed upon launching keyboard in add item menu
+    // Patched bug: Light mode, some buttons not showing, fixed
+    // Create new list dialog closes immediately upon pressing 'Create', reducing unwanted delay
 */

@@ -38,8 +38,7 @@ ScrollController myListsScrollController = new ScrollController();
 
 String userID = '';
 
-class _NotesPageState extends State<NotesPage>
-    with SingleTickerProviderStateMixin {
+class _NotesPageState extends State<NotesPage> with SingleTickerProviderStateMixin {
   AuthServices _auth = new AuthServices();
   DatabaseServices _db = new DatabaseServices();
   double sliderValue = 0;
@@ -108,8 +107,7 @@ class _NotesPageState extends State<NotesPage>
     super.initState();
   }
 
-  Widget getBottomNavBarItem(
-      IconData icon, String text, int givenIndex, Function onPress) {
+  Widget getBottomNavBarItem(IconData icon, String text, int givenIndex, Function onPress) {
     return GestureDetector(
       onTap: () {
         if (currentIndex != givenIndex) {
@@ -126,16 +124,12 @@ class _NotesPageState extends State<NotesPage>
           children: [
             Icon(
               icon,
-              color: currentIndex == givenIndex
-                  ? Colors.white
-                  : Colors.white.withOpacity(0.5),
+              color: currentIndex == givenIndex ? Colors.white : Colors.white.withOpacity(0.5),
             ),
             Text(
               text,
               style: TextStyle(
-                color: currentIndex == givenIndex
-                    ? Colors.white
-                    : Colors.white.withOpacity(0.5),
+                color: currentIndex == givenIndex ? Colors.white : Colors.white.withOpacity(0.5),
               ),
             ),
           ],
@@ -155,16 +149,19 @@ class _NotesPageState extends State<NotesPage>
         primaryColor: mainColor,
         primarySwatch: Colors.blue,
         accentColor: mainColor,
+        snackBarTheme: SnackBarThemeData(
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         // brightness: Brightness.dark,
       ),
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(
         stream: _db.settingsSnapshot,
-        builder: (context,
-            AsyncSnapshot<DocumentSnapshot> isMaintainenceModeSnapshot) {
+        builder: (context, AsyncSnapshot<DocumentSnapshot> isMaintainenceModeSnapshot) {
           if (isMaintainenceModeSnapshot.hasData) {
-            bool isMaintainenceMode =
-                isMaintainenceModeSnapshot.data["isMaintainenceMode"];
+            bool isMaintainenceMode = isMaintainenceModeSnapshot.data["isMaintainenceMode"];
             return !(isMaintainenceMode)
                 ? StreamBuilder(
                     stream: preferenceStream,
@@ -203,8 +200,7 @@ class _NotesPageState extends State<NotesPage>
                                           ),
                                         ),
                                         title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Checklists',
@@ -219,9 +215,7 @@ class _NotesPageState extends State<NotesPage>
                                           if (isGridView != null)
                                             IconButton(
                                               icon: Icon(
-                                                isGridView
-                                                    ? Icons.list
-                                                    : Icons.grid_on,
+                                                isGridView ? Icons.list : Icons.grid_on,
                                               ),
                                               onPressed: () async {
                                                 await _db.updateData(
@@ -271,23 +265,14 @@ class _NotesPageState extends State<NotesPage>
                                               bool shouldLogOut = false;
                                               await showDialog(
                                                 context: context,
-                                                builder: (context) =>
-                                                    AlertDialog(
-                                                  backgroundColor: isDarkMode
-                                                      ? backColor
-                                                      : lightModeBackColor,
+                                                builder: (context) => AlertDialog(
+                                                  backgroundColor: isDarkMode ? backColor : lightModeBackColor,
                                                   content: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
+                                                    width: MediaQuery.of(context).size.width * 0.8,
                                                     child: Text(
                                                       'Are you sure you want to log out?',
                                                       style: TextStyle(
-                                                        color: isDarkMode
-                                                            ? Colors.white
-                                                            : Colors.black,
+                                                        color: isDarkMode ? Colors.white : Colors.black,
                                                       ),
                                                     ),
                                                   ),
@@ -328,8 +313,7 @@ class _NotesPageState extends State<NotesPage>
                                         ],
                                         bottom: TabBar(
                                           controller: tabBarController,
-                                          unselectedLabelColor:
-                                              Colors.white.withOpacity(0.5),
+                                          unselectedLabelColor: Colors.white.withOpacity(0.5),
                                           labelColor: Colors.white,
                                           indicatorColor: Colors.white,
                                           tabs: <Tab>[
@@ -366,8 +350,7 @@ class _NotesPageState extends State<NotesPage>
                                         child: Container(
                                           width: 60,
                                           height: 60,
-                                          child: Icon(Icons.add,
-                                              color: Colors.white),
+                                          child: Icon(Icons.add, color: Colors.white),
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             gradient: LinearGradient(
@@ -382,8 +365,7 @@ class _NotesPageState extends State<NotesPage>
                                         ),
                                       )
                                     : Container(),
-                                floatingActionButtonLocation:
-                                    FloatingActionButtonLocation.centerDocked,
+                                floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                                 /* bottomNavigationBar: BottomNavigationBar(
                           //backgroundColor: mainColor,
                           selectedItemColor: Colors.white,
@@ -413,14 +395,10 @@ class _NotesPageState extends State<NotesPage>
                                 bottomNavigationBar: !keyboardVisible
                                     ? Container(
                                         decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                              colors: [mainColor, accentColor],
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight),
+                                          gradient: LinearGradient(colors: [mainColor, accentColor], begin: Alignment.centerLeft, end: Alignment.centerRight),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             getBottomNavBarItem(
                                               Icons.home,
@@ -435,8 +413,7 @@ class _NotesPageState extends State<NotesPage>
                                               'Search',
                                               1,
                                               () {
-                                                Scaffold.of(context)
-                                                    .showSnackBar(
+                                                Scaffold.of(context).showSnackBar(
                                                   CustomSnackBar(
                                                     Text(
                                                       'This feature has not been developed yet!',
@@ -548,60 +525,34 @@ class _NotesPageState extends State<NotesPage>
                         ],
                       ), */
                                 drawer: StreamBuilder<DocumentSnapshot>(
-                                    stream: _db.usersCollection
-                                        .document(userID)
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<DocumentSnapshot>
-                                            streamSnapshot) {
-                                      if (streamSnapshot.hasData &&
-                                          snapshot.hasData) {
+                                    stream: _db.usersCollection.document(userID).snapshots(),
+                                    builder: (context, AsyncSnapshot<DocumentSnapshot> streamSnapshot) {
+                                      if (streamSnapshot.hasData && snapshot.hasData) {
                                         return Drawer(
                                           child: Container(
-                                            color: isDarkMode
-                                                ? backColor
-                                                : lightModeBackColor,
+                                            color: isDarkMode ? backColor : lightModeBackColor,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 UserAccountsDrawerHeader(
                                                   decoration: BoxDecoration(
                                                     //color: mainColor,
                                                     gradient: LinearGradient(
-                                                      colors: [
-                                                        mainColor,
-                                                        accentColor
-                                                      ],
+                                                      colors: [mainColor, accentColor],
                                                     ),
                                                   ),
                                                   accountEmail: Text(
-                                                    snapshot.data[
-                                                            'userEmail'] ??
-                                                        '',
+                                                    snapshot.data['userEmail'] ?? '',
                                                     style: TextStyle(
-                                                      color: Colors.white
-                                                          .withOpacity(0.75),
+                                                      color: Colors.white.withOpacity(0.75),
                                                     ),
                                                   ),
-                                                  accountName: Text(
-                                                      streamSnapshot
-                                                              .data['name'] ??
-                                                          ''),
-                                                  currentAccountPicture:
-                                                      CircleAvatar(
-                                                    backgroundColor: color == 0
-                                                        ? Colors.black
-                                                        : Color(streamSnapshot
-                                                            .data['color']),
+                                                  accountName: Text(streamSnapshot.data['name'] ?? ''),
+                                                  currentAccountPicture: CircleAvatar(
+                                                    backgroundColor: color == 0 ? Colors.black : Color(streamSnapshot.data['color']),
                                                     child: Text(
-                                                      streamSnapshot
-                                                              .data['name']
-                                                              .toString()
-                                                              .substring(
-                                                                  0, 1) ??
-                                                          '',
+                                                      streamSnapshot.data['name'].toString().substring(0, 1) ?? '',
                                                       style: TextStyle(
                                                         /* 
                                                 color: 0.2126 *
@@ -624,58 +575,44 @@ class _NotesPageState extends State<NotesPage>
                                                     : Colors.white,
                                                      */
                                                         color: getRealColor(
-                                                          streamSnapshot
-                                                              .data['color'],
+                                                          streamSnapshot.data['color'],
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
+                                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                                   child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
                                                       Text(
                                                         'Folders',
                                                         style: TextStyle(
-                                                          color: isDarkMode
-                                                              ? Colors.white
-                                                              : Colors.black,
+                                                          color: isDarkMode ? Colors.white : Colors.black,
                                                           fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
                                                       InkWell(
                                                         child: Icon(
                                                           Icons.add,
-                                                          color: isDarkMode
-                                                              ? Colors.white
-                                                              : Colors.black,
+                                                          color: isDarkMode ? Colors.white : Colors.black,
                                                         ),
                                                         onTap: () async {
                                                           setState(() {
-                                                            keyboardVisible =
-                                                                true;
+                                                            keyboardVisible = true;
                                                           });
                                                           await showDialog(
                                                             context: context,
                                                             builder: (context) {
-                                                              return AddFolder(
-                                                                  isDarkMode);
+                                                              return AddFolder(isDarkMode);
                                                             },
                                                           );
                                                           setState(() {
-                                                            keyboardVisible =
-                                                                false;
+                                                            keyboardVisible = false;
                                                           });
-                                                          folderNameController
-                                                              .text = '';
+                                                          folderNameController.text = '';
                                                         },
                                                       ),
                                                     ],
@@ -683,14 +620,11 @@ class _NotesPageState extends State<NotesPage>
                                                 ),
                                                 SizedBox(height: 5),
                                                 Divider(
-                                                  color: isDarkMode
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                                  color: isDarkMode ? Colors.white : Colors.black,
                                                   thickness: 0.5,
                                                   height: 0.5,
                                                 ),
-                                                FolderDisplayStreamBuilder(
-                                                    isDarkMode),
+                                                FolderDisplayStreamBuilder(isDarkMode),
                                                 /* Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
@@ -712,15 +646,11 @@ class _NotesPageState extends State<NotesPage>
                                         );
                                       } else {
                                         return Drawer(
-                                          child: Container(
-                                              color: isDarkMode
-                                                  ? backColor
-                                                  : lightModeBackColor),
+                                          child: Container(color: isDarkMode ? backColor : lightModeBackColor),
                                         );
                                       }
                                     }),
-                                backgroundColor:
-                                    isDarkMode ? backColor : lightModeBackColor,
+                                backgroundColor: isDarkMode ? backColor : lightModeBackColor,
                                 //backgroundColor: backColor,
                                 /* body: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -1105,8 +1035,7 @@ class _NotesPageState extends State<NotesPage>
                                     ? currentIndex == 0
                                         ? !keyboardVisible
                                             ? Theme(
-                                                data:
-                                                    Theme.of(context).copyWith(
+                                                data: Theme.of(context).copyWith(
                                                   accentColor: mainColor,
                                                 ),
                                                 child: TabBarView(
@@ -1115,24 +1044,20 @@ class _NotesPageState extends State<NotesPage>
                                                     MainGridDisplay(
                                                       isGridView: isGridView,
                                                       isAll: true,
-                                                      controller:
-                                                          allListsScrollController,
+                                                      controller: allListsScrollController,
                                                       isDarkMode: isDarkMode,
                                                     ),
                                                     MainGridDisplay(
                                                       isGridView: isGridView,
                                                       isAll: false,
-                                                      controller:
-                                                          myListsScrollController,
+                                                      controller: myListsScrollController,
                                                       isDarkMode: isDarkMode,
                                                     ),
                                                   ],
                                                 ),
                                               )
                                             : Container(
-                                                color: isDarkMode
-                                                    ? backColor
-                                                    : lightModeBackColor,
+                                                color: isDarkMode ? backColor : lightModeBackColor,
                                               )
                                         : currentIndex == 1
                                             ? showSearch(
@@ -1165,13 +1090,11 @@ class _NotesPageState extends State<NotesPage>
                     })
                 : StreamBuilder(
                     stream: preferenceStream,
-                    builder:
-                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData) {
                         bool isDarkMode = snapshot.data["isDarkMode"];
                         return Scaffold(
-                          backgroundColor:
-                              isDarkMode ? backColor : lightModeBackColor,
+                          backgroundColor: isDarkMode ? backColor : lightModeBackColor,
                           body: Center(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -1179,8 +1102,7 @@ class _NotesPageState extends State<NotesPage>
                                 Icon(
                                   Icons.handyman_outlined,
                                   size: MediaQuery.of(context).size.width * 0.6,
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black,
+                                  color: isDarkMode ? Colors.white : Colors.black,
                                 ),
                                 SizedBox(height: 16),
                                 Padding(
@@ -1190,9 +1112,7 @@ class _NotesPageState extends State<NotesPage>
                                   child: Text(
                                     'Sorry, construction in progress!',
                                     style: TextStyle(
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                      color: isDarkMode ? Colors.white : Colors.black,
                                       fontSize: 20,
                                     ),
                                   ),
@@ -1218,8 +1138,7 @@ class _NotesPageState extends State<NotesPage>
   }
 
   void showSettingsSheet() async {
-    Stream<DocumentSnapshot> mainReference =
-        _db.usersCollection.document(userID).snapshots();
+    Stream<DocumentSnapshot> mainReference = _db.usersCollection.document(userID).snapshots();
     setState(() {
       keyboardVisible = true;
     });
@@ -1258,16 +1177,13 @@ class _NotesPageState extends State<NotesPage>
                               Expanded(
                                 child: TextField(
                                   style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color: isDarkMode ? Colors.white : Colors.black,
                                   ),
                                   textCapitalization: TextCapitalization.words,
                                   controller: _nameController,
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
+                                      borderSide: BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: mainColor),
@@ -1300,8 +1216,7 @@ class _NotesPageState extends State<NotesPage>
                                 //setState(() {});
                                 scaffoldKey.currentState.openDrawer();
                                 //Navigator.pop(context);
-                                await _db.updateColor(
-                                    await _auth.getCurrentUserID(), c.value);
+                                await _db.updateColor(await _auth.getCurrentUserID(), c.value);
                               },
                               enableLabel: false,
                             ),
@@ -1398,25 +1313,19 @@ class _HelpMenuState extends State<HelpMenu> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          backgroundColor: widget.isDarkMode
-                              ? backColor
-                              : lightModeBackColor,
+                          backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
                           title: Text(
                             doc.data["question"].toString(),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 20,
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                              color: widget.isDarkMode ? Colors.white : Colors.black,
                             ),
                           ),
                           content: Text(
                             doc.data["answer"].toString(),
                             style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                              color: widget.isDarkMode ? Colors.white : Colors.black,
                             ),
                           ),
                           actions: [
@@ -1512,8 +1421,7 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> stream =
-        Firestore.instance.collection('notes').orderBy("name").snapshots();
+    Stream<QuerySnapshot> stream = Firestore.instance.collection('notes').orderBy("name").snapshots();
 
     return Container(
       //TODO: SWAP HERE 2
@@ -1531,11 +1439,8 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
               }
             } else {
               for (int i = 0; i < snapshot.data.documents.length; i++) {
-                bool isCurrentUsersList =
-                    userID == snapshot.data.documents[i].data["ownerID"];
-                if (!(snapshot.data.documents[i].data["security"]
-                        ["canReadAndExport"]) ||
-                    isCurrentUsersList) {
+                bool isCurrentUsersList = userID == snapshot.data.documents[i].data["ownerID"];
+                if (!(snapshot.data.documents[i].data["security"]["canReadAndExport"]) || isCurrentUsersList) {
                   snapshot.data.documents.removeAt(i);
                   i--;
                 }
@@ -1549,21 +1454,17 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                 child: widget.isGridView
                     ? GridView.builder(
                         controller: widget.controller,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                         semanticChildCount: 2,
                         padding: EdgeInsets.all(8),
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
-                          String currentDocID =
-                              snapshot.data.documents[index].documentID;
+                          String currentDocID = snapshot.data.documents[index].documentID;
                           return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                             child: InkWell(
                               onTap: () async {
-                                print(
-                                    "security values: ${snapshot.data.documents[index].data["security"]}");
+                                print("security values: ${snapshot.data.documents[index].data["security"]}");
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -1589,39 +1490,29 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                               child: Container(
                                 //TODO: SWAP HERE
                                 decoration: BoxDecoration(
-                                  color: widget.isDarkMode
-                                      ? lightBackColor
-                                      : lightModeLightBackColor,
+                                  color: widget.isDarkMode ? lightBackColor : lightModeLightBackColor,
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
-                                  child: NotificationListener<
-                                      OverscrollIndicatorNotification>(
+                                  child: NotificationListener<OverscrollIndicatorNotification>(
                                     onNotification: (overScroll) {
                                       overScroll.disallowGlow();
                                     },
                                     child: SingleChildScrollView(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Flexible(
                                                 child: Text(
-                                                  snapshot.data
-                                                      .documents[index]["name"]
-                                                      .toString(),
+                                                  snapshot.data.documents[index]["name"].toString(),
                                                   style: TextStyle(
-                                                    color: widget.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black,
+                                                    color: widget.isDarkMode ? Colors.white : Colors.black,
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w400,
                                                   ),
@@ -1672,77 +1563,39 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                           ),
                                           SizedBox(height: 25),
                                           StreamBuilder(
-                                            stream: Firestore.instance
-                                                .collection('notes')
-                                                .document(currentDocID)
-                                                .snapshots(),
-                                            builder: (context,
-                                                    AsyncSnapshot<
-                                                            DocumentSnapshot>
-                                                        orderSnapshot) =>
-                                                StreamBuilder<QuerySnapshot>(
+                                            stream: Firestore.instance.collection('notes').document(currentDocID).snapshots(),
+                                            builder: (context, AsyncSnapshot<DocumentSnapshot> orderSnapshot) => StreamBuilder<QuerySnapshot>(
                                               stream: Firestore.instance
                                                   .collection('notes')
                                                   .document(currentDocID)
                                                   .collection('items')
                                                   .orderBy(orderSnapshot.hasData
-                                                      ? orderSnapshot.data[
-                                                                  'sortByName'] ==
-                                                              true
+                                                      ? orderSnapshot.data['sortByName'] == true
                                                           ? "name"
                                                           : "done"
                                                       : "name")
                                                   .snapshots(),
-                                              builder: (context,
-                                                  AsyncSnapshot<QuerySnapshot>
-                                                      secondSnapshot) {
+                                              builder: (context, AsyncSnapshot<QuerySnapshot> secondSnapshot) {
                                                 List<Widget> widgetList = [];
                                                 try {
-                                                  secondSnapshot.data.documents
-                                                      .forEach(
+                                                  secondSnapshot.data.documents.forEach(
                                                     (DocumentSnapshot element) {
-                                                      if (element.data['name']
-                                                          .toString()
-                                                          .isNotEmpty) {
+                                                      if (element.data['name'].toString().isNotEmpty) {
                                                         widgetList.add(
                                                           Text(
-                                                            element
-                                                                .data['name'],
+                                                            element.data['name'],
                                                             style: TextStyle(
-                                                              color: widget
-                                                                      .isDarkMode
-                                                                  ? element.data[
-                                                                              'done'] ==
-                                                                          true
-                                                                      ? Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.5)
-                                                                      : Colors
-                                                                          .white
-                                                                  : element.data[
-                                                                          'done']
-                                                                      ? Colors
-                                                                          .black
-                                                                          .withOpacity(
-                                                                              0.5)
-                                                                      : Colors
-                                                                          .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
-                                                              decoration: element
-                                                                              .data[
-                                                                          'done'] ==
-                                                                      true
-                                                                  ? TextDecoration
-                                                                      .lineThrough
-                                                                  : TextDecoration
-                                                                      .none,
+                                                              color: widget.isDarkMode
+                                                                  ? element.data['done'] == true
+                                                                      ? Colors.white.withOpacity(0.5)
+                                                                      : Colors.white
+                                                                  : element.data['done']
+                                                                      ? Colors.black.withOpacity(0.5)
+                                                                      : Colors.black,
+                                                              fontWeight: FontWeight.w300,
+                                                              decoration: element.data['done'] == true ? TextDecoration.lineThrough : TextDecoration.none,
                                                             ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .fade,
+                                                            overflow: TextOverflow.fade,
                                                           ),
                                                         );
                                                         widgetList.add(
@@ -1756,16 +1609,8 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                                       Text(
                                                         'This list is empty!',
                                                         style: TextStyle(
-                                                          color: widget
-                                                                  .isDarkMode
-                                                              ? Colors.white
-                                                                  .withOpacity(
-                                                                      0.9)
-                                                              : Colors.black
-                                                                  .withOpacity(
-                                                                      0.9),
-                                                          fontWeight:
-                                                              FontWeight.w300,
+                                                          color: widget.isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black.withOpacity(0.9),
+                                                          fontWeight: FontWeight.w300,
                                                         ),
                                                       ),
                                                     ];
@@ -1773,29 +1618,17 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                                 } catch (e) {
                                                   widgetList = [];
                                                 }
-                                                Stream<DocumentSnapshot>
-                                                    sortRef = Firestore.instance
-                                                        .collection("notes")
-                                                        .document(currentDocID)
-                                                        .snapshots();
+                                                Stream<DocumentSnapshot> sortRef = Firestore.instance.collection("notes").document(currentDocID).snapshots();
                                                 return widgetList.isNotEmpty
                                                     ? Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: widgetList,
                                                       )
                                                     : Text(
                                                         'Loading...',
                                                         style: TextStyle(
-                                                          color: widget
-                                                                  .isDarkMode
-                                                              ? Colors.white
-                                                              : Colors.black
-                                                                  .withOpacity(
-                                                                      0.9),
-                                                          fontWeight:
-                                                              FontWeight.w300,
+                                                          color: widget.isDarkMode ? Colors.white : Colors.black.withOpacity(0.9),
+                                                          fontWeight: FontWeight.w300,
                                                         ),
                                                       );
                                               },
@@ -1879,37 +1712,22 @@ class _MainGridDisplayState extends State<MainGridDisplay> {
                                 // padding: EdgeInsets.symmetric(vertical: 12),
                                 decoration: BoxDecoration(
                                   // borderRadius: BorderRadius.circular(12),
-                                  color: widget.isDarkMode
-                                      ? lightBackColor
-                                      : lightModeLightBackColor,
+                                  color: widget.isDarkMode ? lightBackColor : lightModeLightBackColor,
                                 ),
                                 child: StreamBuilder(
-                                    stream: doc.reference
-                                        .collection('items')
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot>
-                                            isDoneSnapshot) {
+                                    stream: doc.reference.collection('items').snapshots(),
+                                    builder: (context, AsyncSnapshot<QuerySnapshot> isDoneSnapshot) {
                                       if (isDoneSnapshot.hasData) {
-                                        bool allItemsDone = isAllItemsDone(
-                                            isDoneSnapshot.data.documents);
+                                        bool allItemsDone = isAllItemsDone(isDoneSnapshot.data.documents);
                                         print(allItemsDone);
                                         return ListTile(
                                           title: Text(
                                             doc.data["name"],
                                             style: !allItemsDone
-                                                ? TextStyle(
-                                                    color: widget.isDarkMode
-                                                        ? Colors.white
-                                                        : Colors.black)
+                                                ? TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black)
                                                 : TextStyle(
-                                                    color: widget.isDarkMode
-                                                        ? Colors.white
-                                                            .withOpacity(0.5)
-                                                        : Colors.black
-                                                            .withOpacity(0.5),
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
+                                                    color: widget.isDarkMode ? Colors.white.withOpacity(0.5) : Colors.black.withOpacity(0.5),
+                                                    decoration: TextDecoration.lineThrough,
                                                   ),
                                           ),
                                         );
@@ -1955,17 +1773,14 @@ class FolderDisplayStreamBuilder extends StatefulWidget {
   );
 
   @override
-  _FolderDisplayStreamBuilderState createState() =>
-      _FolderDisplayStreamBuilderState();
+  _FolderDisplayStreamBuilderState createState() => _FolderDisplayStreamBuilderState();
 }
 
-class _FolderDisplayStreamBuilderState
-    extends State<FolderDisplayStreamBuilder> {
+class _FolderDisplayStreamBuilderState extends State<FolderDisplayStreamBuilder> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream:
-          Firestore.instance.collection('folders').orderBy("name").snapshots(),
+      stream: Firestore.instance.collection('folders').orderBy("name").snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> folderSnapshot) {
         if (folderSnapshot.hasData) {
           /* List<Widget> returnList = [];
@@ -2022,17 +1837,13 @@ class _FolderDisplayStreamBuilderState
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              backgroundColor: widget.isDarkMode
-                                  ? backColor
-                                  : lightModeBackColor,
+                              backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
                               content: Container(
                                 width: MediaQuery.of(context).size.width,
                                 child: Text(
                                   'Are you sure you want to delete this folder?',
                                   style: TextStyle(
-                                    color: widget.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color: widget.isDarkMode ? Colors.white : Colors.black,
                                   ),
                                 ),
                               ),
@@ -2063,13 +1874,7 @@ class _FolderDisplayStreamBuilderState
                           },
                         );
                         if (shouldDeleteFolder) {
-                          await Firestore.instance
-                              .collection('notes')
-                              .where("folder",
-                                  isEqualTo: folderSnapshot
-                                      .data.documents[index].documentID)
-                              .getDocuments()
-                              .then(
+                          await Firestore.instance.collection('notes').where("folder", isEqualTo: folderSnapshot.data.documents[index].documentID).getDocuments().then(
                             (QuerySnapshot value) {
                               for (DocumentSnapshot d in value.documents) {
                                 d.reference.updateData(
@@ -2078,8 +1883,7 @@ class _FolderDisplayStreamBuilderState
                               }
                             },
                           );
-                          await folderSnapshot.data.documents[index].reference
-                              .delete();
+                          await folderSnapshot.data.documents[index].reference.delete();
                         }
                         return shouldDeleteFolder;
                       } else {
@@ -2089,8 +1893,7 @@ class _FolderDisplayStreamBuilderState
                     child: Theme(
                       data: ThemeData(
                         accentColor: Colors.white,
-                        unselectedWidgetColor:
-                            widget.isDarkMode ? Colors.white : Colors.black,
+                        unselectedWidgetColor: widget.isDarkMode ? Colors.white : Colors.black,
                       ),
                       /* 
 
@@ -2105,14 +1908,8 @@ class _FolderDisplayStreamBuilderState
 
                         */
                       child: StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('notes')
-                            .where('folder',
-                                isEqualTo: folderSnapshot
-                                    .data.documents[index].documentID)
-                            .snapshots(),
-                        builder: (context,
-                            AsyncSnapshot<QuerySnapshot> subFolderSnapshot) {
+                        stream: Firestore.instance.collection('notes').where('folder', isEqualTo: folderSnapshot.data.documents[index].documentID).snapshots(),
+                        builder: (context, AsyncSnapshot<QuerySnapshot> subFolderSnapshot) {
                           if (subFolderSnapshot.hasData) {
                             List<Widget> tileWidgets = [];
                             subFolderSnapshot.data.documents.forEach(
@@ -2122,9 +1919,7 @@ class _FolderDisplayStreamBuilderState
                                     title: Text(
                                       element.data['name'],
                                       style: TextStyle(
-                                        color: widget.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
+                                        color: widget.isDarkMode ? Colors.white : Colors.black,
                                       ),
                                     ),
                                     onTap: () {
@@ -2150,9 +1945,7 @@ class _FolderDisplayStreamBuilderState
                             );
                             return ExpansionTile(
                               maintainState: true,
-                              backgroundColor: widget.isDarkMode
-                                  ? lightBackColor
-                                  : lightModeLightBackColor,
+                              backgroundColor: widget.isDarkMode ? lightBackColor : lightModeLightBackColor,
                               /* children: [
                                 ListTile(
                                     title: Text('Test tile',
@@ -2206,11 +1999,7 @@ class _FolderDisplayStreamBuilderState
                                           Text(
                                             e.data['name'],
                                             style: TextStyle(
-                                              color: widget.isDarkMode
-                                                  ? Colors.white
-                                                      .withOpacity(0.8)
-                                                  : Colors.black
-                                                      .withOpacity(0.8),
+                                              color: widget.isDarkMode ? Colors.white.withOpacity(0.8) : Colors.black.withOpacity(0.8),
                                             ),
                                             overflow: TextOverflow.fade,
                                           ),
@@ -2227,21 +2016,16 @@ class _FolderDisplayStreamBuilderState
                                   GestureDetector(
                                     child: Icon(
                                       Icons.edit,
-                                      color: widget.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                      color: widget.isDarkMode ? Colors.white : Colors.black,
                                       size: 20,
                                     ),
                                     onTap: () async {
-                                      folderEditNameController.text =
-                                          await folderSnapshot
-                                              .data.documents[index]["name"];
+                                      folderEditNameController.text = await folderSnapshot.data.documents[index]["name"];
                                       showDialog(
                                         context: context,
                                         builder: (context) {
                                           return EditFolderName(
-                                            folderDocID: folderSnapshot.data
-                                                .documents[index].documentID,
+                                            folderDocID: folderSnapshot.data.documents[index].documentID,
                                             isDarkMode: isDarkMode,
                                           );
                                         },
@@ -2250,12 +2034,9 @@ class _FolderDisplayStreamBuilderState
                                   ),
                                   SizedBox(width: 15),
                                   Text(
-                                    folderSnapshot.data.documents[index]
-                                        ['name'],
+                                    folderSnapshot.data.documents[index]['name'],
                                     style: TextStyle(
-                                      color: widget.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                      color: widget.isDarkMode ? Colors.white : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -2320,12 +2101,12 @@ class _AddListState extends State<AddList> {
           ),
           onPressed: enableOK
               ? () async {
+                  Navigator.pop(context);
                   await DatabaseServices().createList(
                     listNameController.text,
                     await AuthServices().getCurrentUserID(),
                   );
                   enableOK = false;
-                  Navigator.pop(context);
                 }
               : null,
         ),
@@ -2358,25 +2139,15 @@ class _AddListState extends State<AddList> {
                   });
                 }
               },
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                 hintText: 'List name',
                 hintStyle: TextStyle(
                   color: Colors.white.withOpacity(0.4),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
-                disabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
+                disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
               ),
             ),
           ],
@@ -2423,8 +2194,7 @@ class _AddFolderState extends State<AddFolder> {
           ),
           onPressed: folderNameController.text != ''
               ? () async {
-                  await DatabaseServices()
-                      .createFolder(folderNameController.text);
+                  await DatabaseServices().createFolder(folderNameController.text);
                   Navigator.pop(context);
                   folderNameController.text = '';
                 }
@@ -2451,25 +2221,15 @@ class _AddFolderState extends State<AddFolder> {
               onChanged: (s) {
                 setState(() {});
               },
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
               decoration: InputDecoration(
                 hintText: 'Folder name',
                 hintStyle: TextStyle(
                   color: Colors.white.withOpacity(0.4),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
-                disabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
+                disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: widget.isDarkMode ? Colors.white : Colors.black)),
               ),
             ),
           ],
@@ -2515,21 +2275,17 @@ class _NoteEditDeleteState extends State<NoteEditDelete> {
             TextField(
               onChanged: (v) {
                 setState(() {
-                  enableNoteNameSaving =
-                      noteNameController.text == '' ? false : true;
+                  enableNoteNameSaving = noteNameController.text == '' ? false : true;
                 });
               },
               autofocus: true,
               controller: noteNameController,
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: 'List name',
                 hintStyle: TextStyle(
-                  color: widget.isDarkMode
-                      ? Colors.white.withOpacity(0.4)
-                      : Colors.black.withOpacity(0.4),
+                  color: widget.isDarkMode ? Colors.white.withOpacity(0.4) : Colors.black.withOpacity(0.4),
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -2593,10 +2349,7 @@ class _NoteEditDeleteState extends State<NoteEditDelete> {
                     ),
                   ),
                   onPressed: () async {
-                    await Firestore.instance
-                        .collection('notes')
-                        .document(snapshot.data.documents[index].documentID)
-                        .updateData({
+                    await Firestore.instance.collection('notes').document(snapshot.data.documents[index].documentID).updateData({
                       "name": noteNameController.text,
                     });
                     Navigator.pop(context);
@@ -2659,15 +2412,12 @@ class EditFolderNameState extends State<EditFolderName> {
               },
               autofocus: true,
               controller: folderEditNameController,
-              style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black),
+              style: TextStyle(color: widget.isDarkMode ? Colors.white : Colors.black),
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: 'Folder name',
                 hintStyle: TextStyle(
-                  color: widget.isDarkMode
-                      ? Colors.white.withOpacity(0.4)
-                      : Colors.black.withOpacity(0.4),
+                  color: widget.isDarkMode ? Colors.white.withOpacity(0.4) : Colors.black.withOpacity(0.4),
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -2692,10 +2442,7 @@ class EditFolderNameState extends State<EditFolderName> {
                 onPressed: folderEditNameController.text == ''
                     ? null
                     : () async {
-                        await Firestore.instance
-                            .collection('folders')
-                            .document(widget.folderDocID)
-                            .updateData(
+                        await Firestore.instance.collection('folders').document(widget.folderDocID).updateData(
                           {
                             "name": folderEditNameController.text,
                           },
@@ -2808,12 +2555,9 @@ class _UpdateDialogState extends State<UpdateDialog> {
 
   @override
   void initState() {
-    updateInstructions = widget.isRequired == true
-        ? "Please update the app to continue. Once the download is complete, "
-        : "The developer has released a new update! It is recommended that you update the app, and once the app is done downloading, ";
+    updateInstructions = widget.isRequired == true ? "Please update the app to continue. Once the download is complete, " : "The developer has released a new update! It is recommended that you update the app, and once the app is done downloading, ";
     isRequired = widget.isRequired;
-    updateInstructions +=
-        "please follow through the instructions, allow all permissions and don't report to the Google Play Store!";
+    updateInstructions += "please follow through the instructions, allow all permissions and don't report to the Google Play Store!";
 
     /* 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -2844,9 +2588,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
       content: Text(
         updateInstructions,
         style: TextStyle(
-          color: widget.isDarkMode
-              ? Colors.white.withOpacity(0.75)
-              : Colors.black.withOpacity(0.75),
+          color: widget.isDarkMode ? Colors.white.withOpacity(0.75) : Colors.black.withOpacity(0.75),
           fontWeight: FontWeight.w400,
           fontSize: 16,
         ),

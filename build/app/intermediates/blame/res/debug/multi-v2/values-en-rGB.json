@@ -1,10 +1,27 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Private Property\\Flutter\\firebase_todo_second\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-en-rGB\\values-en-rGB.xml",
+            "outputFile": "D:\\Projects\\Flutter\\Checklist 2.0\\checklist-2.0\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-en-rGB\\values-en-rGB.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Imtiaz\\.gradle\\caches\\transforms-2\\files-2.1\\03de50801950aab64f0548832a05435c\\core-1.1.0\\res\\values-en-rGB\\values-en-rGB.xml",
+                    "source": "C:\\Users\\Moo\\.gradle\\caches\\transforms-2\\files-2.1\\da4f6af7fb5fe839684e347d09b3d6da\\jetified-play-services-basement-17.0.0\\res\\values-en-rGB\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "251",
+                        "endColumns": "196",
+                        "endOffsets": "447"
+                    },
+                    "to": {
+                        "startLines": "10",
+                        "startColumns": "4",
+                        "startOffsets": "1245",
+                        "endColumns": "196",
+                        "endOffsets": "1437"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Moo\\.gradle\\caches\\transforms-2\\files-2.1\\03de50801950aab64f0548832a05435c\\core-1.1.0\\res\\values-en-rGB\\values-en-rGB.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Imtiaz\\.gradle\\caches\\transforms-2\\files-2.1\\dfda874e59ae708b9dea8d783cda1c4f\\play-services-base-17.0.0\\res\\values-en-rGB\\values.xml",
+                    "source": "C:\\Users\\Moo\\.gradle\\caches\\transforms-2\\files-2.1\\dfda874e59ae708b9dea8d783cda1c4f\\play-services-base-17.0.0\\res\\values-en-rGB\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -35,23 +52,6 @@
                         "startOffsets": "105,212,396,523,632,842,967,1113,1442,1660,1767,1950,2077,2282,2460,2553,2645",
                         "endColumns": "106,183,126,108,209,124,145,131,217,106,182,126,204,177,92,91,107",
                         "endOffsets": "207,391,518,627,837,962,1108,1240,1655,1762,1945,2072,2277,2455,2548,2640,2748"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Imtiaz\\.gradle\\caches\\transforms-2\\files-2.1\\2fcf0db6137cea29ffbeab8a9c7b75ec\\jetified-play-services-basement-17.0.0\\res\\values-en-rGB\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "251",
-                        "endColumns": "196",
-                        "endOffsets": "447"
-                    },
-                    "to": {
-                        "startLines": "10",
-                        "startColumns": "4",
-                        "startOffsets": "1245",
-                        "endColumns": "196",
-                        "endOffsets": "1437"
                     }
                 }
             ]

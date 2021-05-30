@@ -1,10 +1,10 @@
-#Mon Jan 04 01:13:04 PKT 2021
+#Sun May 30 16:01:01 PKT 2021
 path.2=classes3.dex
 path.1=classes2.dex
 path.0=classes.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
-base.2=D\:\\Private Property\\Flutter\\firebase_todo_second\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes3.dex
-base.1=D\:\\Private Property\\Flutter\\firebase_todo_second\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes2.dex
-base.0=D\:\\Private Property\\Flutter\\firebase_todo_second\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+base.2=D\:\\Projects\\Flutter\\Checklist 2.0\\checklist-2.0\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes3.dex
+base.1=D\:\\Projects\\Flutter\\Checklist 2.0\\checklist-2.0\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes2.dex
+base.0=D\:\\Projects\\Flutter\\Checklist 2.0\\checklist-2.0\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex

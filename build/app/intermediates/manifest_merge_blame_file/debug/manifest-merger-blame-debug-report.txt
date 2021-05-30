@@ -12,44 +12,44 @@
 12         to allow setting breakpoints, to provide hot reload, etc.
 13    -->
 14    <uses-permission android:name="android.permission.INTERNET" />
-14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:5-67
-14-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:8:22-64
+14-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:8:5-67
+14-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:8:22-64
 15    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
-15-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:9:5-94
-15-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:9:22-92
+15-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:9:5-94
+15-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:9:22-92
 16    <!-- <uses-sdk android:minSdkVersion="14" /> -->
 17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
-17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:22-76
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:22-76
 18    <!--
 19    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 21    -->
 22    <application
-22-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:15:5-53:19
+22-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:15:5-53:19
 23        android:name="io.flutter.app.FlutterApplication"
-23-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:16:9-57
+23-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:16:9-57
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-24-->[androidx.core:core:1.1.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\03de50801950aab64f0548832a05435c\core-1.1.0\AndroidManifest.xml:24:18-86
+24-->[androidx.core:core:1.1.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\03de50801950aab64f0548832a05435c\core-1.1.0\AndroidManifest.xml:24:18-86
 25        android:debuggable="true"
 26        android:icon="@mipmap/ic_launcher"
-26-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:18:9-43
+26-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:18:9-43
 27        android:label="Checklist 2.0" >
-27-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:17:9-38
+27-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:17:9-38
 28        <activity
-28-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:19:9-47:20
+28-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:19:9-47:20
 29            android:name="com.example.firebase_todo_second.MainActivity"
-29-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:20:13-41
+29-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:20:13-41
 30            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-30-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:23:13-163
+30-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:23:13-163
 31            android:hardwareAccelerated="true"
-31-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:24:13-47
+31-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:24:13-47
 32            android:launchMode="singleTop"
-32-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:21:13-43
+32-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:21:13-43
 33            android:theme="@style/LaunchTheme"
-33-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:22:13-47
+33-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:22:13-47
 34            android:windowSoftInputMode="adjustResize" >
-34-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:25:13-55
+34-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:25:13-55
 35
 36            <!--
 37                 Specifies an Android theme to apply to this Activity as soon as
@@ -58,11 +58,11 @@
 40                 to determine the Window background behind the Flutter UI.
 41            -->
 42            <meta-data
-42-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:30:13-33:17
+42-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:30:13-33:17
 43                android:name="io.flutter.embedding.android.NormalTheme"
-43-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:31:15-70
+43-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:31:15-70
 44                android:resource="@style/NormalTheme" />
-44-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:32:15-52
+44-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:32:15-52
 45            <!--
 46                 Displays an Android View that continues showing the launch screen
 47                 Drawable until Flutter paints its first frame, then this splash
@@ -71,21 +71,21 @@
 50                 Flutter's first frame.
 51            -->
 52            <meta-data
-52-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:39:13-42:17
+52-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:39:13-42:17
 53                android:name="io.flutter.embedding.android.SplashScreenDrawable"
-53-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:40:15-79
+53-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:40:15-79
 54                android:resource="@drawable/launch_background" />
-54-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:41:15-61
+54-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:41:15-61
 55
 56            <intent-filter>
-56-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:43:13-46:29
+56-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:43:13-46:29
 57                <action android:name="android.intent.action.MAIN" />
-57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:17-68
-57-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:44:25-66
+57-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:44:17-68
+57-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:44:25-66
 58
 59                <category android:name="android.intent.category.LAUNCHER" />
-59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:45:17-76
-59-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:45:27-74
+59-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:45:17-76
+59-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:45:27-74
 60            </intent-filter>
 61        </activity>
 62        <!--
@@ -93,101 +93,101 @@
 64             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
 65        -->
 66        <meta-data
-66-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:50:9-52:33
+66-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:50:9-52:33
 67            android:name="flutterEmbedding"
-67-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:51:13-44
+67-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:51:13-44
 68            android:value="2" />
-68-->D:\Private Property\Flutter\firebase_todo_second\android\app\src\main\AndroidManifest.xml:52:13-30
+68-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:52:13-30
 69
 70        <service
-70-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
+70-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-12:19
 71            android:name="com.google.firebase.components.ComponentDiscoveryService"
-71-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
+71-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
 72            android:directBootAware="true"
-72-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+72-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
 73            android:exported="false" >
-73-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:35:13-37
+73-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:35:13-37
 74            <meta-data
-74-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+74-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 75                android:name="com.google.firebase.components:io.flutter.plugins.firebaseauth.FlutterFirebaseAppRegistrar"
-75-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-122
+75-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-122
 76                android:value="com.google.firebase.components.ComponentRegistrar" />
-76-->[:firebase_auth] D:\Private Property\Flutter\firebase_todo_second\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+76-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 77            <meta-data
-77-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+77-->[:cloud_firestore] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 78                android:name="com.google.firebase.components:io.flutter.plugins.firebase.cloudfirestore.FlutterFirebaseAppRegistrar"
-78-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-133
+78-->[:cloud_firestore] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-133
 79                android:value="com.google.firebase.components.ComponentRegistrar" />
-79-->[:cloud_firestore] D:\Private Property\Flutter\firebase_todo_second\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+79-->[:cloud_firestore] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\cloud_firestore\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 80            <meta-data
-80-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
+80-->[:firebase_core] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 81                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseAppRegistrar"
-81-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-123
+81-->[:firebase_core] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:10:17-123
 82                android:value="com.google.firebase.components.ComponentRegistrar" />
-82-->[:firebase_core] D:\Private Property\Flutter\firebase_todo_second\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
+82-->[:firebase_core] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 83            <meta-data
-83-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:36:13-38:85
+83-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:36:13-38:85
 84                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
-84-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:37:17-109
+84-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:37:17-109
 85                android:value="com.google.firebase.components.ComponentRegistrar" />
-85-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:38:17-82
+85-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:38:17-82
 86            <meta-data
-86-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
+86-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
 87                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
-87-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
+87-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
 88                android:value="com.google.firebase.components.ComponentRegistrar" />
-88-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\7e2c0aabf676f283186eff5ac4d02aa2\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
+88-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
 89        </service>
 90
 91        <activity
-91-->[:url_launcher] D:\Private Property\Flutter\firebase_todo_second\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
+91-->[:url_launcher] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:8:9-11:74
 92            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-92-->[:url_launcher] D:\Private Property\Flutter\firebase_todo_second\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
+92-->[:url_launcher] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-74
 93            android:exported="false"
-93-->[:url_launcher] D:\Private Property\Flutter\firebase_todo_second\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
+93-->[:url_launcher] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:10:13-37
 94            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-94-->[:url_launcher] D:\Private Property\Flutter\firebase_todo_second\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
+94-->[:url_launcher] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
 95        <activity
-95-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:24:9-31:50
+95-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:24:9-31:50
 96            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-96-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:25:13-85
+96-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:25:13-85
 97            android:excludeFromRecents="true"
-97-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:26:13-46
+97-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:26:13-46
 98            android:exported="true"
-98-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:27:13-36
+98-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:27:13-36
 99            android:launchMode="singleTask"
-99-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:28:13-44
+99-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:28:13-44
 100            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
-100-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:29:13-102
+100-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:29:13-102
 101            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-101-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\cc93d226849c01b4060606536341a789\jetified-firebase-auth-17.0.0\AndroidManifest.xml:30:13-72
+101-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:30:13-72
 102
 103        <provider
-103-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+103-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
 104            android:name="com.google.firebase.provider.FirebaseInitProvider"
-104-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+104-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
 105            android:authorities="com.moo.firebase_todo_second.firebaseinitprovider"
-105-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+105-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
 106            android:exported="false"
-106-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+106-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
 107            android:initOrder="100" />
-107-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\4dbdbe08730e565783e5cd864f9dc488\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+107-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
 108
 109        <activity
-109-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
+109-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
 110            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-110-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
+110-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:24:13-79
 111            android:exported="false"
-111-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
+111-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:25:13-37
 112            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-112-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
+112-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
 113
 114        <meta-data
-114-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+114-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
 115            android:name="com.google.android.gms.version"
-115-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+115-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
 116            android:value="@integer/google_play_services_version" />
-116-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Imtiaz\.gradle\caches\transforms-2\files-2.1\2fcf0db6137cea29ffbeab8a9c7b75ec\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+116-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
 117    </application>
 118
 119</manifest>
