@@ -1011,7 +1011,11 @@ class _EditItemWidgetState extends State<EditItemWidget> {
           child: Text(
             'DONE',
             style: TextStyle(
-              color: enableOK ? mainColor : Colors.white.withOpacity(0.2),
+              color: enableOK
+                  ? mainColor
+                  : isDarkMode
+                      ? Colors.white.withOpacity(0.2)
+                      : Colors.black.withOpacity(0.2),
             ),
           ),
           onPressed: enableOK == true
@@ -1096,11 +1100,17 @@ class _AddItemDialogState extends State<AddItemDialog> {
           child: Text(
             'ADD',
             style: TextStyle(
-              color: addItemController.text == ''
-                  ? isDarkMode
+              // color: addItemController.text == ''
+              //     ? isDarkMode
+              //         ? Colors.white.withOpacity(0.2)
+              //         : Colors.black.withOpacity(0.2)
+              //     : mainColor,
+              // color: addItemController.text == '' ? Colors.black.withOpacity(0.2) : mainColor,
+              color: enableOK
+                  ? mainColor
+                  : isDarkMode
                       ? Colors.white.withOpacity(0.2)
-                      : Colors.black.withOpacity(0.2)
-                  : mainColor,
+                      : Colors.black.withOpacity(0.2),
             ),
           ),
           onPressed: addItemController.text != ''

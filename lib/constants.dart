@@ -8,7 +8,7 @@ Color accentColor = Color(0xFF4903ff);
 Color backColor = Color(0xFF0E121B);
 Color lightBackColor = Color(0xFF171C26);
 Color lightModeBackColor = Color(0xFFFCFCFC); //Color(0xFFEDEFFE); //Color(0xFFE4E8F1);
-Color lightModeLightBackColor = Color(0xFFECEBF0); //Color(0xFFD9DEE8);
+Color lightModeLightBackColor = Color(0xFFF7F7FB); // Color(0xFFECEBF0); //Color(0xFFD9DEE8);
 
 final double appVersion = 1.03;
 

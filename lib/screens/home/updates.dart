@@ -352,11 +352,89 @@ class _UpdatesState extends State<Updates> {
     super.initState();
   }
 
+  showReinstallDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+          actions: [
+            FlatButton(
+              child: Text(
+                'CANCEL',
+                style: TextStyle(
+                  color: mainColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              color: Colors.red,
+              child: Text(
+                'REINSTALL',
+                style: TextStyle(
+                  // color: widget.isDarkMode ? Colors.white : Colors.black,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () async {
+                // Navigator.pop(context);
+                if (await canLaunch(data["downloadUrl"])) {
+                  launch(data["backupDownloadUrl"]);
+                } else if (await canLaunch(data["backupDownloadUrl"])) {
+                  launch(data["backupDownloadUrl"]);
+                } else {
+                  Navigator.pop(context);
+                  SnackBar snackbar = CustomSnackBar(
+                    Text("Sorry, an unexpected error occured"),
+                    Duration(seconds: 1),
+                  );
+                  Scaffold.of(context).showSnackBar(snackbar);
+                }
+              },
+            ),
+          ],
+          title: Text(
+            'Reinstall Checklist 2.0?',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+              color: widget.isDarkMode ? Colors.white : Colors.black,
+            ),
+          ),
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Text(
+              'Do you want to reinstall your copy of Checklist 2.0?\n\nThis is typically done if you find a bug, and may resolve most problems. ',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height - 80;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        // backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
+        backgroundColor: widget.isDarkMode ? lightBackColor : lightModeLightBackColor,
+        elevation: 0,
+        child: Icon(
+          Icons.replay,
+          color: widget.isDarkMode ? Colors.white : Colors.black,
+        ),
+        onPressed: () {
+          showReinstallDialog(context);
+        },
+      ),
       backgroundColor: widget.isDarkMode ? backColor : lightModeBackColor,
       appBar: AppBar(
         title: Text('Updates'),
