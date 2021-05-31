@@ -380,7 +380,7 @@ class _NotesDetailState extends State<NotesDetail> {
                                                   //     seconds: 3,
                                                   //   ),
                                                   // );
-                                                  Firestore.instance.collection('notes').document(docID).delete();
+                                                  await Firestore.instance.collection('notes').document(docID).delete();
                                                   Navigator.pop(context);
                                                   // Navigator.pop(context);
                                                 },

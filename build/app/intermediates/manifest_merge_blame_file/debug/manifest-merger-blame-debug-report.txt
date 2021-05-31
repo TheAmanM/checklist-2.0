@@ -14,13 +14,11 @@
 14    <uses-permission android:name="android.permission.INTERNET" />
 14-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:8:5-67
 14-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:8:22-64
-15    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
-15-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:9:5-94
-15-->D:\Projects\Flutter\Checklist 2.0\checklist-2.0\android\app\src\main\AndroidManifest.xml:9:22-92
+15    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
 16    <!-- <uses-sdk android:minSdkVersion="14" /> -->
-17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
-17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:22-76
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/> -->
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\a4fc3fd4ebde32134bc73f5556b406e5\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:5-79
+17-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\a4fc3fd4ebde32134bc73f5556b406e5\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:13:22-76
 18    <!--
 19    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -104,9 +102,9 @@
 71            android:name="com.google.firebase.components.ComponentDiscoveryService"
 71-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:8:18-89
 72            android:directBootAware="true"
-72-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
+72-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:34:13-43
 73            android:exported="false" >
-73-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:35:13-37
+73-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:35:13-37
 74            <meta-data
 74-->[:firebase_auth] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_auth\intermediates\library_manifest\debug\AndroidManifest.xml:9:13-11:85
 75                android:name="com.google.firebase.components:io.flutter.plugins.firebaseauth.FlutterFirebaseAppRegistrar"
@@ -126,17 +124,17 @@
 82                android:value="com.google.firebase.components.ComponentRegistrar" />
 82-->[:firebase_core] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\firebase_core\intermediates\library_manifest\debug\AndroidManifest.xml:11:17-82
 83            <meta-data
-83-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:36:13-38:85
+83-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:36:13-38:85
 84                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
-84-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:37:17-109
+84-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:37:17-109
 85                android:value="com.google.firebase.components.ComponentRegistrar" />
-85-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:38:17-82
+85-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:38:17-82
 86            <meta-data
-86-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
+86-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\a4fc3fd4ebde32134bc73f5556b406e5\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:20:13-22:85
 87                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
-87-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
+87-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\a4fc3fd4ebde32134bc73f5556b406e5\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:21:17-111
 88                android:value="com.google.firebase.components.ComponentRegistrar" />
-88-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\154b38b6c9c0abf668553b65c933aadf\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
+88-->[com.google.firebase:firebase-firestore:21.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\a4fc3fd4ebde32134bc73f5556b406e5\jetified-firebase-firestore-21.3.0\AndroidManifest.xml:22:17-82
 89        </service>
 90
 91        <activity
@@ -148,30 +146,30 @@
 94            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 94-->[:url_launcher] D:\Projects\Flutter\Checklist 2.0\checklist-2.0\build\url_launcher\intermediates\library_manifest\debug\AndroidManifest.xml:11:13-71
 95        <activity
-95-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:24:9-31:50
+95-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:24:9-31:50
 96            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-96-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:25:13-85
+96-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:25:13-85
 97            android:excludeFromRecents="true"
-97-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:26:13-46
+97-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:26:13-46
 98            android:exported="true"
-98-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:27:13-36
+98-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:27:13-36
 99            android:launchMode="singleTask"
-99-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:28:13-44
+99-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:28:13-44
 100            android:permission="com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN"
-100-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:29:13-102
+100-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:29:13-102
 101            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-101-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\1b38301f0ee015a1bb6275389b4453e2\jetified-firebase-auth-17.0.0\AndroidManifest.xml:30:13-72
+101-->[com.google.firebase:firebase-auth:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ecc6956ad434e02d2fd481bb5035437e\jetified-firebase-auth-17.0.0\AndroidManifest.xml:30:13-72
 102
 103        <provider
-103-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
+103-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:26:9-30:39
 104            android:name="com.google.firebase.provider.FirebaseInitProvider"
-104-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
+104-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:27:13-77
 105            android:authorities="com.moo.firebase_todo_second.firebaseinitprovider"
-105-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
+105-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:28:13-72
 106            android:exported="false"
-106-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
+106-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:29:13-37
 107            android:initOrder="100" />
-107-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\ed9c026e833ed9008a9d1beed69ab817\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
+107-->[com.google.firebase:firebase-common:19.3.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\6909bf31895257531d7f254295d46050\jetified-firebase-common-19.3.0\AndroidManifest.xml:30:13-36
 108
 109        <activity
 109-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:23:9-26:75
@@ -183,11 +181,11 @@
 112-->[com.google.android.gms:play-services-base:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\dfda874e59ae708b9dea8d783cda1c4f\play-services-base-17.0.0\AndroidManifest.xml:26:13-72
 113
 114        <meta-data
-114-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
+114-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\5bc39ec2dd2814550d8f43f835ad410b\jetified-play-services-basement-17.0.0\AndroidManifest.xml:23:9-25:69
 115            android:name="com.google.android.gms.version"
-115-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
+115-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\5bc39ec2dd2814550d8f43f835ad410b\jetified-play-services-basement-17.0.0\AndroidManifest.xml:24:13-58
 116            android:value="@integer/google_play_services_version" />
-116-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\da4f6af7fb5fe839684e347d09b3d6da\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
+116-->[com.google.android.gms:play-services-basement:17.0.0] C:\Users\Moo\.gradle\caches\transforms-2\files-2.1\5bc39ec2dd2814550d8f43f835ad410b\jetified-play-services-basement-17.0.0\AndroidManifest.xml:25:13-66
 117    </application>
 118
 119</manifest>

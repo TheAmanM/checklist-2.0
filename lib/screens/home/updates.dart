@@ -54,10 +54,7 @@ class _UpdatesState extends State<Updates> {
   }
 
   Future<void> setData() async {
-    DocumentSnapshot doc = await Firestore.instance
-        .collection('settings')
-        .document('settings')
-        .get();
+    DocumentSnapshot doc = await Firestore.instance.collection('settings').document('settings').get();
     Map value = doc.data;
 
     setState(() {
@@ -122,9 +119,7 @@ class _UpdatesState extends State<Updates> {
                           TextSpan(
                             text: 'Click ',
                             style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                              color: widget.isDarkMode ? Colors.white : Colors.black,
                               fontSize: 20,
                             ),
                           ),
@@ -136,12 +131,9 @@ class _UpdatesState extends State<Updates> {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                ' to go from version $versionNow to $newestVersion',
+                            text: ' to go from version $versionNow to $newestVersion',
                             style: TextStyle(
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                              color: widget.isDarkMode ? Colors.white : Colors.black,
                               fontSize: 20,
                             ),
                           ),
@@ -155,6 +147,19 @@ class _UpdatesState extends State<Updates> {
                       ),
                     ),
                   ),
+                  /* if (!isReleaseMode())
+                    SizedBox(
+                      height: 8,
+                    ),
+                  if (!isReleaseMode())
+                    Text(
+                      'Your app is also in debug mode. It is recommended that you download the latest stable release.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: widget.isDarkMode ? Colors.white : Colors.black,
+                        fontSize: 20,
+                      ),
+                    ), */
                 ],
               ),
             ),
@@ -210,12 +215,9 @@ class _UpdatesState extends State<Updates> {
                           text: '',
                           children: [
                             TextSpan(
-                              text:
-                                  'Downgrade to the latest supported version ',
+                              text: 'Downgrade to the latest supported version ',
                               style: TextStyle(
-                                color: widget.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: widget.isDarkMode ? Colors.white : Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -229,9 +231,7 @@ class _UpdatesState extends State<Updates> {
                             TextSpan(
                               text: '.',
                               style: TextStyle(
-                                color: widget.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: widget.isDarkMode ? Colors.white : Colors.black,
                                 fontSize: 20,
                               ),
                             ),
@@ -240,6 +240,19 @@ class _UpdatesState extends State<Updates> {
                       ),
                     ),
                   ),
+                  /* if (!isReleaseMode())
+                    SizedBox(
+                      height: 8,
+                    ),
+                  if (!isReleaseMode())
+                    Text(
+                      'Your app is also in debug mode. It is recommended that you download the latest stable release.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: widget.isDarkMode ? Colors.white : Colors.black,
+                        fontSize: 20,
+                      ),
+                    ), */
                 ],
               ),
             ),
@@ -247,8 +260,7 @@ class _UpdatesState extends State<Updates> {
         ),
       );
     } else {
-      String displayAppVersion =
-          versionConverter(data["currentVersion"].toString());
+      String displayAppVersion = versionConverter(data["currentVersion"].toString());
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -270,6 +282,62 @@ class _UpdatesState extends State<Updates> {
                   color: widget.isDarkMode ? Colors.white : Colors.black,
                   fontSize: 20,
                 ),
+              ),
+            ),
+            /* if (!isReleaseMode())
+              SizedBox(
+                height: 8,
+              ),
+            if (!isReleaseMode())
+              GestureDetector(
+                onTap: () async {
+                  if (await canLaunch(data["downloadUrl"])) {
+                    launch(data["backupDownloadUrl"]);
+                  } else if (await canLaunch(data["backupDownloadUrl"])) {
+                    launch(data["backupDownloadUrl"]);
+                  } else {
+                    Navigator.pop(context);
+                    SnackBar snackbar = CustomSnackBar(
+                      Text("Sorry, an unexpected error occured"),
+                      Duration(seconds: 1),
+                    );
+                    Scaffold.of(context).showSnackBar(snackbar);
+                  }
+                },
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: '',
+                    children: [
+                      TextSpan(
+                        text: 'Your app is also in debug mode. It is recommended that you download the latest stable release, ',
+                        style: TextStyle(
+                          color: widget.isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'here',
+                        style: TextStyle(
+                          color: mainColor,
+                          fontSize: 20,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '.',
+                        style: TextStyle(
+                          color: widget.isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ), */
+            Text(
+              '',
+              style: TextStyle(
+                color: Colors.white,
               ),
             ),
           ],
@@ -300,6 +368,47 @@ class _UpdatesState extends State<Updates> {
           },
           iconSize: backArrowSize,
         ),
+        actions: [
+          if (!isReleaseMode())
+            /* Banner(
+              message: 'Debug',
+              location: BannerLocation.topEnd,
+              color: Colors.transparent,
+              textStyle: TextStyle(
+                color: mainColor,
+                fontSize: 12 * 0.85,
+                fontWeight: FontWeight.w900,
+                height: 1.0,
+              ),
+              // textStyle: TextStyle(color: Colors.white),
+            ), */
+            IconButton(
+              icon: Icon(Icons.bug_report),
+              /* Text(
+                'debug',
+                style: TextStyle(
+                  color: mainColor,
+                  // fontSize: 12 * 0.85,
+                  // fontWeight: FontWeight.w900,
+                  // height: 1.0,
+                ),
+              ), */
+              onPressed: () async {
+                if (await canLaunch(data["downloadUrl"])) {
+                  launch(data["backupDownloadUrl"]);
+                } else if (await canLaunch(data["backupDownloadUrl"])) {
+                  launch(data["backupDownloadUrl"]);
+                } else {
+                  Navigator.pop(context);
+                  SnackBar snackbar = CustomSnackBar(
+                    Text("Sorry, an unexpected error occured"),
+                    Duration(seconds: 1),
+                  );
+                  Scaffold.of(context).showSnackBar(snackbar);
+                }
+              },
+            )
+        ],
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

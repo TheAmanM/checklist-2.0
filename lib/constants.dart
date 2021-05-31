@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' as Foundation;
 
 Color mainColor = Color(0xFF0066F1);
 Color accentColor = Color(0xFF4903ff);
@@ -86,6 +87,14 @@ SnackBar CustomSnackBar(Widget content, Duration duration) {
     ),
     backgroundColor: Color(0xFF323232),
   );
+}
+
+bool isReleaseMode() {
+  if (Foundation.kReleaseMode) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 String versionConverter(String version) {
