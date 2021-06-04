@@ -1062,7 +1062,9 @@ class _AddItemDialogState extends State<AddItemDialog> {
               autofocus: true,
               textCapitalization: TextCapitalization.sentences,
               onChanged: (v) {
-                setState(() {});
+                setState(() {
+                  enableOK = addItemController.text != '';
+                });
               },
               controller: addItemController,
               style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
